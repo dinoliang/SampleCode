@@ -36,3 +36,19 @@ deactivate
 
 一个是基本装opencv，带contrib的是高配版，带一些收费或者专利的算法（当然opencv不收费，是指你商用的话需要收一些费吧），还有一些比较新的算法的高级版本。
 pip3 install opencv-contrib-python
+
+5. pandas
+sudo pip3 install pandas
+
+6. matplotlib
+sudo pip3 install matplotlib
+
+7. pyinstaller
+sudo pip3 install pyinstaller
+
+sudo apt install zlib1g
+sudo apt install zlib1g-dev
+
+8. ptqt or tkinyer
+
+
