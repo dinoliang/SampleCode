@@ -1,6 +1,7 @@
 import array as arr
 import numpy as np
 import time
+import csv
 
 StartTime = time.time()
 
@@ -66,13 +67,49 @@ R_STD = np.std(R_array)
 Gr_STD = np.std(Gr_array)
 Gb_STD = np.std(Gb_array)
 B_STD = np.std(B_array)
-print("R_STD", R_STD, ", Gr_STD", Gr_STD, ", Gb_STD", Gb_STD, ", B_STD", B_STD)
+
+lCsvRow = []
+lCsvRow.append("R_STD")
+lCsvRow.append(R_STD)
+lCsvRow.append("Gr_STD")
+lCsvRow.append(Gr_STD)
+lCsvRow.append("Gb_STD")
+lCsvRow.append(Gb_STD)
+lCsvRow.append("B_STD")
+lCsvRow.append(B_STD)
+
+#print("R_STD", R_STD, ", Gr_STD", Gr_STD, ", Gb_STD", Gb_STD, ", B_STD", B_STD)
+print(lCsvRow)
+
+with open('/home/dino/RawShared/Output/test.csv', 'a+') as f:
+    # create the csv writer
+    csv_writer = csv.writer(f)
+    # write a row to the csv file
+    csv_writer.writerow(lCsvRow)
 
 R_AVG = np.average(R_array)
 Gr_AVG = np.average(Gr_array)
 Gb_AVG = np.average(Gb_array)
 B_AVG = np.average(B_array)
-print("R_AVG", R_AVG, ", Gr_AVG", Gr_AVG, ", Gb_AVG", Gb_AVG, ", B_AVG", B_AVG)
+
+lCsvRow.clear()
+lCsvRow.append("R_AVG")
+lCsvRow.append(R_AVG)
+lCsvRow.append("Gr_AVG")
+lCsvRow.append(Gr_AVG)
+lCsvRow.append("Gb_AVG")
+lCsvRow.append(Gb_AVG)
+lCsvRow.append("B_AVG")
+lCsvRow.append(B_AVG)
+
+#print("R_AVG", R_AVG, ", Gr_AVG", Gr_AVG, ", Gb_AVG", Gb_AVG, ", B_AVG", B_AVG)
+print(lCsvRow)
+
+with open('/home/dino/RawShared/Output/test.csv', 'a+') as f:
+    # create the csv writer
+    csv_writer = csv.writer(f)
+    # write a row to the csv file
+    csv_writer.writerow(lCsvRow)
 
 EndTime = time.time()
 print("Durning Time(sec): ", EndTime - StartTime)

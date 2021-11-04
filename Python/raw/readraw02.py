@@ -4,12 +4,19 @@ import time
 
 StartTime = time.time()
 
-nWidth = 4000
-nHeight = 3000
+nWidth = 8000
+nHeight = 6000
+
+nFileCount = 100
+sFilePath = '/home/dino/RawShared/DtSample80006000Raw002/'
+sFileTempName = 'FrameID0_W{}_H{}_{}_{}_{0:04d}.raw'
+sFileTempTime = '20211104112051'
+sFileTempFormat = 'P10'
+sFileTempNo = ''
 
 """
 # read unsigned shout by array
-input_file = open('/mnt/hgfs/LinuxFolder/SampleRaw/DtSample40003000Raw/FrameID0_W4000_H3000_15724245_P10_0000.raw', 'rb')
+input_file = open('/mnt/hgfs/LinuxFolder/SampleRaw/DtSample80006000Raw002/FrameID0_W8000_H6000_20211104112051_P10_0000.raw', 'rb')
 
 input_array = arr.array('H')   # H : unsigned shout
 input_array.fromfile(input_file, nWidth*nHeight)   # 讀出3個
