@@ -3,6 +3,7 @@ import time
 import csv
 import datetime
 import enum
+import os
 
 StartTime = time.time()
 
@@ -25,12 +26,12 @@ class PixelColor(enum.IntEnum):
 nWidth = 8000
 nHeight = 6000
 
-bExposureRaw = True
 nFileCount = 10
 sFilePath = '/home/dino/RawShared/ExposureRaw001/'
 sFileTempTime = '20211104173158'
 sFileTempFormat = 'P10'
 
+bExposureRaw = True
 nFileExposureIM = 1
 nFileExposureID = 30
 nFileExposureCount = 10
@@ -92,12 +93,19 @@ def Cal_Information(y, PixelRowArray):
     #print(lCsvAvgRow)
 
 def ParsingPixel():
+    bDeleteExistCSV = False
     for h in range(0, nFileExposureInterval):
         if nPixelSelect != PixelSelect.AutoSplit:
             sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo)
             sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo)
             #print(sSaveOneStdFile)
             #print(sSaveOneAvgFile)
+            if not bDeleteExistCSV:
+                bDeleteExistCSV = True
+                if os.path.exists(sSaveOneStdFile):
+                    os.remove(sSaveOneStdFile)
+                if os.path.exists(sSaveOneAvgFile):
+                    os.remove(sSaveOneAvgFile)
         else:
             sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'R')
             sSaveRAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'R')
@@ -107,20 +115,43 @@ def ParsingPixel():
             sSaveGbAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'Gb')
             sSaveBStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'B')
             sSaveBAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'B')
+            if not bDeleteExistCSV:
+                bDeleteExistCSV = True
+                if os.path.exists(sSaveRStdFile):
+                    os.remove(sSaveRStdFile)
+                if os.path.exists(sSaveRAvgFile):
+                    os.remove(sSaveRAvgFile)
+                if os.path.exists(sSaveGrStdFile):
+                    os.remove(sSaveGrStdFile)
+                if os.path.exists(sSaveGrAvgFile):
+                    os.remove(sSaveGrAvgFile)
+                if os.path.exists(sSaveGbStdFile):
+                    os.remove(sSaveGbStdFile)
+                if os.path.exists(sSaveGbAvgFile):
+                    os.remove(sSaveGbAvgFile)
+                if os.path.exists(sSaveBStdFile):
+                    os.remove(sSaveBStdFile)
+                if os.path.exists(sSaveBAvgFile):
+                    os.remove(sSaveBAvgFile)
 
         for i in range(nROI_Y, nROI_Y+nROI_H):
             bNeedCal = False
+            bR_Gr = False
+            bGb_B = False
+            nCount = nFileCount
+            if bExposureRaw:
+                nCount = nFileExposureCount
 
             if nPixelSelect == PixelSelect.AllPixel:
                 # do nothing
                 #pass
                 #None
-                PixelRow_array = np.zeros((nFileCount, nROI_W))
+                PixelRow_array = np.zeros((nCount, nROI_W))
             elif nPixelSelect == PixelSelect.AutoSplit:
-                PixelRowR_array = np.zeros((nFileCount, nROI_W//2))
-                PixelRowGr_array = np.zeros((nFileCount, nROI_W//2))
-                PixelRowGb_array = np.zeros((nFileCount, nROI_W//2))
-                PixelRowB_array = np.zeros((nFileCount, nROI_W//2))
+                PixelRowR_array = np.zeros((nCount, nROI_W//2))
+                PixelRowGr_array = np.zeros((nCount, nROI_W//2))
+                PixelRowGb_array = np.zeros((nCount, nROI_W//2))
+                PixelRowB_array = np.zeros((nCount, nROI_W//2))
             elif (nPixelSelect == PixelSelect.OnlyRPixel) and (i%4!=0 and i%4!=1):
                 continue
             elif (nPixelSelect == PixelSelect.OnlyGrPixel) and (i%4!=0 and i%4!=1):
@@ -130,11 +161,10 @@ def ParsingPixel():
             elif (nPixelSelect == PixelSelect.OnlyBPixel) and (i%4!=2 and i%4!=3):
                 continue
             else:
-                PixelRow_array = np.zeros((nFileCount, nROI_W//2))
+                PixelRow_array = np.zeros((nCount, nROI_W//2))
 
             bNeedCal = True
-            bR_Gr = False
-            bGb_B = False
+
             for k in range(0, nFileCount):
                 if not bExposureRaw:
                     sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
@@ -189,6 +219,7 @@ def ParsingPixel():
                             if (nIndex%4==0 or nIndex%4==1):   #R
                                 RemoveList.append(l)
                         PixelRow_array[k] = np.delete(input_array, RemoveList)
+                        #print(PixelRow_array[k])
                 elif nPixelSelect == PixelSelect.OnlyGbPixel:
                     if (i%4==2 or i%4==3):
                         for l in range(0, nROI_W):
