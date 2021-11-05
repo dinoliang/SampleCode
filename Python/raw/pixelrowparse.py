@@ -10,21 +10,27 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 100
-sFilePath = '/home/dino/RawShared/DtSample80006000Raw002/'
-sFileTempTime = '20211104112051'
+nFileCount = 10
+sFilePath = '/home/dino/RawShared/ExposureRaw001/'
+sFileTempTime = '20211104173158'
 sFileTempFormat = 'P10'
 
-nROI_X = 0
-nROI_Y = 0
-nROI_W = 8000
-nROI_H = 1
+nFileExposureIM = 1
+nFileExposureID = 30
+nFileExposureCount = 10
+
+nROI_X = 3900
+nROI_Y = 2900
+nROI_W = 200
+nROI_H = 200
 
 sSavePath = '/home/dino/RawShared/Output/'
 #######################################################
 
-
-sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}.raw'
+# Normal
+#sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}.raw'
+# Exposure
+sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
 sSaveStdFile = 'test_std_{}.csv'
 sSaveAvgFile = 'test_avg_{}.csv'
 
@@ -33,7 +39,7 @@ lCsvStdRow = []
 lCsvAvgRow = []
 
 NowDate = datetime.datetime.now()
-TimeInfo = '{}{}{}{}{}{}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
+TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
 #print(TimeInfo)
 sSaveStdFile = sSavePath+sSaveStdFile.format(TimeInfo)
 sSaveAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo)
@@ -45,20 +51,26 @@ def Save_CSV(FileName, RowInfo):
         # create the csv writer
         csv_writer = csv.writer(f)
         # write a row to the csv file
+        #print(RowInfo)
         csv_writer.writerow(RowInfo)
 
 def Cal_Information(y, PixelRowArray):
-    Pixel_STD = np.std(PixelRowArray, 1)
-    Pixel_AVG = np.average(PixelRowArray, 1)
+    Pixel_STD = np.std(PixelRowArray, 0)
+    Pixel_AVG = np.average(PixelRowArray, 0)
     #print('Pixel [{}]: STD:{} AVG:{}'.format(y, Pixel_STD, Pixel_AVG))
-    lCsvStdRow.append(Pixel_STD)
-    lCsvAvgRow.append(Pixel_AVG)
+    #lCsvStdRow.append(Pixel_STD)
+    #lCsvAvgRow.append(Pixel_AVG)
+    lCsvStdRow.extend(Pixel_STD.tolist())
+    #print(lCsvStdRow)
+    lCsvAvgRow.extend(Pixel_AVG.tolist())
+    #print(lCsvAvgRow)
 
 for i in range(nROI_Y, nROI_Y+nROI_H):
     lCsvStdRow.clear()
     lCsvAvgRow.clear()
     for k in range(0, nFileCount):
-        sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
+        #sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
+        sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k+((nFileExposureIM-1)*nFileExposureCount), nFileExposureIM, nFileExposureID)
         #print('File: ' + sFileTemp)
         nPixelOffset = nWidth * i + nROI_X * 2
         #print(nPixelOffset)
