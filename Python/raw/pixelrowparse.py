@@ -23,6 +23,7 @@ class PixelColor(enum.IntEnum):
 
 
 #######################################################
+### Change the parameters to match the settings
 nWidth = 8000
 nHeight = 6000
 
@@ -31,20 +32,21 @@ sFilePath = '/home/dino/RawShared/ExposureRaw001/'
 sFileTempTime = '20211104173158'
 sFileTempFormat = 'P10'
 
-bExposureRaw = True
+bExposureRaw = True # True/False
 nFileExposureIM = 1
 nFileExposureID = 30
 nFileExposureCount = 10
-nFileExposureInterval = 1
+nFileExposureInterval = 9
 
 nROI_X = 3900
 nROI_Y = 2900
 nROI_W = 200
-nROI_H = 1
+nROI_H = 200
 
 sSavePath = '/home/dino/RawShared/Output/'
 
 nPixelSelect = PixelSelect.OnlyGrPixel
+### Change the parameters to match the settings
 #######################################################
 
 
@@ -160,9 +162,6 @@ def ParsingPixel():
                 nCount = nFileExposureCount
 
             if nPixelSelect == PixelSelect.AllPixel:
-                # do nothing
-                #pass
-                #None
                 PixelRow_array = np.zeros((nCount, nROI_W))
             elif nPixelSelect == PixelSelect.AutoSplit:
                 PixelRowR_array = np.zeros((nCount, nROI_W//2))
@@ -197,9 +196,6 @@ def ParsingPixel():
                 RemoveList = []
                 RemoveList2 = []
                 if nPixelSelect == PixelSelect.AllPixel:
-                    # do nothing
-                    #pass
-                    #None
                     PixelRow_array[k] = input_array
                 elif nPixelSelect == PixelSelect.AutoSplit:
                     if (i%4==0 or i%4==1):  #R+Gr
@@ -294,4 +290,4 @@ if __name__ == "__main__":
     ParsingPixel()
 
 EndTime = time.time()
-print("Durning Time(sec): ", EndTime - StartTime)
+print("Durning Program Time(sec): ", EndTime - StartTime)
