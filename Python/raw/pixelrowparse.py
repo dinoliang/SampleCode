@@ -2,8 +2,17 @@ import numpy as np
 import time
 import csv
 import datetime
+import enum
 
 StartTime = time.time()
+
+class PixelSelect(enum.IntEnum):
+    AllPixel = 0
+    OnlyRPixel = 1
+    OnlyGrPixel = 2
+    OnlyGbPixel = 3
+    OnlyBPixel = 4
+    AutoSplit = 5
 
 
 #######################################################
@@ -26,11 +35,7 @@ nROI_H = 200
 
 sSavePath = '/home/dino/RawShared/Output/'
 
-bAllPixel = True
-bOnlyRPixel = False
-bOnlyGrPixel = False
-bOnlyGbPixel = False
-bOnlyBPixel = False
+nPixelSelect = PixelSelect.AllPixel
 #######################################################
 
 # Normal
@@ -40,7 +45,7 @@ sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
 sSaveStdFile = 'test_std_{}.csv'
 sSaveAvgFile = 'test_avg_{}.csv'
 
-PixelRow_array = np.zeros((nFileCount, nROI_W))
+#PixelRow_array = np.zeros((nFileCount, nROI_W))
 lCsvStdRow = []
 lCsvAvgRow = []
 
@@ -77,18 +82,18 @@ def ParsingPixel():
         lCsvStdRow.clear()
         lCsvAvgRow.clear()
         bNeedCal = False
-        if bAllPixel:
+        if nPixelSelect == PixelSelect.AllPixel:
             # do nothing
             #pass
             #None
             PixelRow_array = np.zeros((nFileCount, nROI_W))
-        elif bOnlyRPixel and (i%4!=0 and i%4!=1):
+        elif (nPixelSelect == PixelSelect.OnlyRPixel) and (i%4!=0 and i%4!=1):
             continue
-        elif bOnlyGrPixel and (i%4!=0 and i%4!=1):
+        elif (nPixelSelect == PixelSelect.OnlyGrPixel) and (i%4!=0 and i%4!=1):
             continue
-        elif bOnlyGbPixel and (i%4!=2 and i%4!=3):
+        elif (nPixelSelect == PixelSelect.OnlyGbPixel) and (i%4!=2 and i%4!=3):
             continue
-        elif bOnlyBPixel and (i%4!=2 and i%4!=3):
+        elif (nPixelSelect == PixelSelect.OnlyBPixel) and (i%4!=2 and i%4!=3):
             continue
         else:
             PixelRow_array = np.zeros((nFileCount, nROI_W//2))
@@ -105,33 +110,33 @@ def ParsingPixel():
             input_file.close()
             
             RemoveList = []
-            if bAllPixel:
+            if nPixelSelect == PixelSelect.AllPixel:
                 # do nothing
                 #pass
                 #None
                 PixelRow_array[k] = input_array
-            elif bOnlyRPixel:
+            elif nPixelSelect == PixelSelect.OnlyRPixel:
                 if (i%4==0 or i%4==1):
                     for l in range(0, nROI_W):
                         nIndex = nROI_X + l
                         if (nIndex%4==2 or nIndex%4==3):   #Gr
                             RemoveList.append(l)
                     PixelRow_array[k] = np.delete(input_array, RemoveList)
-            elif bOnlyGrPixel:
+            elif nPixelSelect == PixelSelect.OnlyGrPixel:
                 if (i%4==0 or i%4==1):
                     for l in range(0, nROI_W):
                         nIndex = nROI_X + l
                         if (nIndex%4==0 or nIndex%4==1):   #R
                             RemoveList.append(l)
                     PixelRow_array[k] = np.delete(input_array, RemoveList)
-            elif bOnlyGbPixel:
+            elif nPixelSelect == PixelSelect.OnlyGbPixel:
                 if (i%4==2 or i%4==3):
                     for l in range(0, nROI_W):
                         nIndex = nROI_X + l
                         if (nIndex%4==2 or nIndex%4==3):   #B
                             RemoveList.append(l)
                     PixelRow_array[k] = np.delete(input_array, RemoveList)
-            elif bOnlyBPixel:
+            elif nPixelSelect == PixelSelect.OnlyBPixel:
                 if (i%4==2 or i%4==3):
                     for l in range(0, nROI_W):
                         nIndex = nROI_X + l
