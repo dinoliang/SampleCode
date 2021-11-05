@@ -56,47 +56,51 @@ def Save_CSV(FileName, RowInfo):
         #print(RowInfo)
         csv_writer.writerow(RowInfo)
 
-for i in range(0, nFileExposureIntervalNum):
-    nFileIndex = nFileExposureIM + i*nFileExposureInterval
-    if nPixelSelect == PixelSelect.AllPixel:
-        sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'All')
-        sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'All')
-    elif (nPixelSelect == PixelSelect.OnlyRPixel):
-        sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'R')
-        sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'R')
-    elif (nPixelSelect == PixelSelect.OnlyGrPixel):
-        sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gr')
-        sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gr')
-    elif (nPixelSelect == PixelSelect.OnlyGbPixel):
-        sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gb')
-        sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gb')
-    elif (nPixelSelect == PixelSelect.OnlyBPixel):
-        sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'B')
-        sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'B')
-    #print(sStdFileName)
+def OrganizePixel():
+    for i in range(0, nFileExposureIntervalNum):
+        nFileIndex = nFileExposureIM + i*nFileExposureInterval
+        if nPixelSelect == PixelSelect.AllPixel:
+            sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'All')
+            sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'All')
+        elif (nPixelSelect == PixelSelect.OnlyRPixel):
+            sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'R')
+            sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'R')
+        elif (nPixelSelect == PixelSelect.OnlyGrPixel):
+            sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gr')
+            sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gr')
+        elif (nPixelSelect == PixelSelect.OnlyGbPixel):
+            sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gb')
+            sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'Gb')
+        elif (nPixelSelect == PixelSelect.OnlyBPixel):
+            sStdFileName = sFilePath + sStdFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'B')
+            sAvgFileName = sFilePath + sAvgFileTempName.format(sFileTempTime, nFileIndex, nFileExposureID, 'B')
+        #print(sStdFileName)
 
-    lCsvRow = []
-    with open(sStdFileName, 'r') as csvfile:
-        reader = csv.reader(csvfile)
-        lCsvRow = [row[nY] for row in reader]
-        #print(lCsvRow)
-    lCsvStdRow.append(lCsvRow[nX])
+        lCsvRow = []
+        with open(sStdFileName, 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            lCsvRow = [row[nY] for row in reader]
+            #print(lCsvRow)
+        lCsvStdRow.append(lCsvRow[nX])
 
-    lCsvRow.clear()
-    with open(sAvgFileName, 'r') as csvfile:
-        reader = csv.reader(csvfile)
-        lCsvRow = [row[nY] for row in reader]
-        #print(lCsvRow)
-    lCsvAvgRow.append(lCsvRow[nX])
+        lCsvRow.clear()
+        with open(sAvgFileName, 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            lCsvRow = [row[nY] for row in reader]
+            #print(lCsvRow)
+        lCsvAvgRow.append(lCsvRow[nX])
 
-#print(lCsvStdRow)
-#print(lCsvAvgRow)
-if os.path.exists(sSaveStdFile):
-    os.remove(sSaveStdFile)
-Save_CSV(sSaveStdFile, lCsvStdRow)
-if os.path.exists(sSaveAvgFile):
-    os.remove(sSaveAvgFile)
-Save_CSV(sSaveAvgFile, lCsvAvgRow)
+    #print(lCsvStdRow)
+    #print(lCsvAvgRow)
+    if os.path.exists(sSaveStdFile):
+        os.remove(sSaveStdFile)
+    Save_CSV(sSaveStdFile, lCsvStdRow)
+    if os.path.exists(sSaveAvgFile):
+        os.remove(sSaveAvgFile)
+    Save_CSV(sSaveAvgFile, lCsvAvgRow)
+
+if __name__ == "__main__":
+    OrganizePixel()
 
 EndTime = time.time()
 print("Durning Time(sec): ", EndTime - StartTime)
