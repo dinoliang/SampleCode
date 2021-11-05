@@ -35,33 +35,31 @@ bExposureRaw = True
 nFileExposureIM = 1
 nFileExposureID = 30
 nFileExposureCount = 10
-nFileExposureInterval = 9
+nFileExposureInterval = 1
 
 nROI_X = 3900
 nROI_Y = 2900
 nROI_W = 200
-nROI_H = 200
+nROI_H = 1
 
 sSavePath = '/home/dino/RawShared/Output/'
 
-nPixelSelect = PixelSelect.AutoSplit
+nPixelSelect = PixelSelect.OnlyGrPixel
 #######################################################
 
 
 if not bExposureRaw:
     # Normal
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}.raw'
+    sSaveStdFile = 'STD_{}.csv'
+    sSaveAvgFile = 'AVG_{}.csv'
     nFileExposureInterval = 1
+    nPixelSelect = PixelSelect.AllPixel
 else:
     # Exposure
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
-
-if nPixelSelect != PixelSelect.AutoSplit:
-    sSaveStdFile = 'STD_{}.csv'
-    sSaveAvgFile = 'AVG_{}.csv'
-else:
     sSaveStdFile = 'STD_{}_{}_{}_{}.csv'
-    sSaveAvgFile = 'AVG_{}_{}_{}_{}.csv'
+    sSaveAvgFile = 'AVG_{}_{}_{}_{}.csv'    
 
 #PixelRow_array = np.zeros((nFileCount, nROI_W))
 lCsvStdRow = []
@@ -96,8 +94,26 @@ def ParsingPixel():
     bDeleteExistCSV = False
     for h in range(0, nFileExposureInterval):
         if nPixelSelect != PixelSelect.AutoSplit:
-            sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo)
-            sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo)
+            if not bExposureRaw:
+                sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo)
+                sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo)
+            else:
+                if nPixelSelect == PixelSelect.AllPixel:
+                    sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'All')
+                    sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'All')
+                elif (nPixelSelect == PixelSelect.OnlyRPixel):
+                    sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'R')
+                    sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'R')
+                elif (nPixelSelect == PixelSelect.OnlyGrPixel):
+                    sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'Gr')
+                    sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'Gr')
+                elif (nPixelSelect == PixelSelect.OnlyGbPixel):
+                    sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'Gb')
+                    sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'Gb')
+                elif (nPixelSelect == PixelSelect.OnlyBPixel):
+                    sSaveOneStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'B')
+                    sSaveOneAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'B')
+                
             #print(sSaveOneStdFile)
             #print(sSaveOneAvgFile)
             if not bDeleteExistCSV:
@@ -106,6 +122,7 @@ def ParsingPixel():
                     os.remove(sSaveOneStdFile)
                 if os.path.exists(sSaveOneAvgFile):
                     os.remove(sSaveOneAvgFile)
+
         else:
             sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'R')
             sSaveRAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, h+nFileExposureIM, nFileExposureID, 'R')
