@@ -54,18 +54,19 @@ else:
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
 
 if nPixelSelect != PixelSelect.AutoSplit:
-    sSaveStdFile = 'test_std_{}.csv'
-    sSaveAvgFile = 'test_avg_{}.csv'
+    sSaveStdFile = 'STD_{}.csv'
+    sSaveAvgFile = 'AVG_{}.csv'
 else:
-    sSaveStdFile = 'test_std_{}_{}.csv'
-    sSaveAvgFile = 'test_avg_{}_{}.csv'
+    sSaveStdFile = 'STD_{}_{}_{}_{}.csv'
+    sSaveAvgFile = 'AVG_{}_{}_{}_{}.csv'
 
 #PixelRow_array = np.zeros((nFileCount, nROI_W))
 lCsvStdRow = []
 lCsvAvgRow = []
 
 NowDate = datetime.datetime.now()
-TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
+#TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
+TimeInfo = sFileTempTime
 #print(TimeInfo)
 
 def Save_CSV(FileName, RowInfo):
@@ -95,14 +96,14 @@ def ParsingPixel():
         #print(sSaveOneStdFile)
         #print(sSaveOneAvgFile)
     else:
-        sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, 'R')
-        sSaveRAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, 'R')
-        sSaveGrStdFile = sSavePath+sSaveStdFile.format(TimeInfo, 'Gr')
-        sSaveGrAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, 'Gr')
-        sSaveGbStdFile = sSavePath+sSaveStdFile.format(TimeInfo, 'Gb')
-        sSaveGbAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, 'Gb')
-        sSaveBStdFile = sSavePath+sSaveStdFile.format(TimeInfo, 'B')
-        sSaveBAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, 'B')
+        sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'R')
+        sSaveRAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'R')
+        sSaveGrStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'Gr')
+        sSaveGrAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'Gr')
+        sSaveGbStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'Gb')
+        sSaveGbAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'Gb')
+        sSaveBStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'B')
+        sSaveBAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nFileExposureIM, nFileExposureID, 'B')
 
     for i in range(nROI_Y, nROI_Y+nROI_H):
         bNeedCal = False
