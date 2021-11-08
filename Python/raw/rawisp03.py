@@ -9,8 +9,6 @@ from PIL import Image
 #from skimage import io
 from matplotlib import pyplot as plt
 
-from scipy.interpolate import griddata
-
 StartTime = time.time()
 
 class RawFormat(enum.IntEnum):
@@ -186,7 +184,7 @@ def Get_GImage(RawArray, bayerFormat):
 def ReMosaic(RawArray):
     #print(np.size(RawArray, 0))
     #print(np.size(RawArray, 1))
-    for i in range(3000, g_nHeight, 4):
+    for i in range(0, g_nHeight, 4):
         RawArray[[i+1,i+2],:] = RawArray[[i+2,i+1],:]
     for i in range(0, g_nWidth, 4):
         RawArray[:,[i+1,i+2]] = RawArray[:,[i+2,i+1]]
