@@ -31,12 +31,15 @@ class RawBayer(enum.IntEnum):
 g_nWidth = 8000
 g_nHeight = 6000
 
-g_InputPath = '/home/dino/RawShared/DtSample80006000Raw002/'
-g_InputFile = 'FrameID0_W8000_H6000_20211104112051_P10_0000.raw'
+g_InputPath = '//home/dino/RawShared/Temp/'
+g_InputFile = 'FrameID0_W8000_H6000_20211108160758_P10_0000.raw'
 
 g_rawBayer = RawBayer.Q_RGGB
 
 #######################################################
+
+NowDate = datetime.datetime.now()
+TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
 
 def Get_R_B_Image(RawArray, bayerFormat, bRImg):
     Img = RawArray//4
@@ -238,8 +241,8 @@ if __name__ == "__main__":
     #print(np.size(OutputImage, 0))
     #print(np.size(OutputImage, 1))
     #print(np.size(OutputImage, 2))
-    ImageData.save('/home/dino/RawShared/Temp/out.bmp')
-    image = Image.open('/home/dino/RawShared/Temp/out.bmp')
+    ImageData.save('/home/dino/RawShared/Temp/out_{}.bmp'.format(TimeInfo))
+    image = Image.open('/home/dino/RawShared/Temp/out_{}.bmp'.format(TimeInfo))
     plt.imshow(image)
     plt.show()
     #plt.imshow(OutputImage)
