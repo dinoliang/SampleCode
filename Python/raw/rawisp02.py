@@ -9,6 +9,8 @@ from PIL import Image
 #from skimage import io
 from matplotlib import pyplot as plt
 
+from scipy.interpolate import griddata
+
 StartTime = time.time()
 
 class RawFormat(enum.IntEnum):
