@@ -38,6 +38,32 @@ g_InputFile = 'FrameID0_W8000_H6000_20211108160758_P10_0000.raw'
 
 g_rawBayer = RawBayer.Q_RGGB
 
+#ISP BLC
+g_bISP_DeNoise = False
+g_bISP_AWB = False
+#https://www.pathpartnertech.com/camera-tuning-understanding-the-image-signal-processor-and-isp-tuning/
+#Color Correction
+#Lens shading correction
+#Defect pixel correction (BPC)
+#Gamma correction
+#Local tone mapping
+#Auto Exposure (AEC)
+#Auto Focus
+#https://www.gushiciku.cn/pl/p7wM/zh-tw
+#black level compensation (BLC)
+#lens shading correction
+#bad pixel correction
+#demosaic#
+#Bayer denoise
+#awb
+#color correction
+#gamma correction
+#Convert color space
+#DeNoise
+#edge enhance
+#enhance color、contrast
+#output YUV or RGB
+
 #######################################################
 
 NowDate = datetime.datetime.now()
@@ -105,10 +131,11 @@ def ISP(RawArray):
     StageTime = time.time()
     print("Durning Stage Time(sec): ", StageTime - StartTime)
 
-    #DeNoiseImg = DeNoise(DeMosaicImg)
-    #RGBImage = DeNoiseImg
-    #StageTime = time.time()
-    #print("Durning Stage Time(sec): ", StageTime - StartTime)
+    if g_bISP_DeNoise:
+        DeNoiseImg = DeNoise(DeMosaicImg)
+        RGBImage = DeNoiseImg
+        StageTime = time.time()
+        print("Durning Stage Time(sec): ", StageTime - StartTime)
 
     return RGBImage
 
