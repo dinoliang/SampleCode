@@ -85,14 +85,16 @@ def OrganizePixel():
                 with open(sStdFileName, 'r') as csvfile:
                     reader = csv.reader(csvfile)
                     lCsvRow = [row[g] for row in reader]
-                    #print(lCsvRow)
+                    #print('STD: ', lCsvRow)
+                #print('STD: ', lCsvRow[h])
                 lCsvStdRow.append(lCsvRow[h])
 
                 lCsvRow.clear()
                 with open(sAvgFileName, 'r') as csvfile:
                     reader = csv.reader(csvfile)
                     lCsvRow = [row[g] for row in reader]
-                    #print(lCsvRow)
+                    #print('AVG: ', lCsvRow)
+                #print('AVG: ', lCsvRow[h])
                 lCsvAvgRow.append(lCsvRow[h])
 
             #print(lCsvStdRow)

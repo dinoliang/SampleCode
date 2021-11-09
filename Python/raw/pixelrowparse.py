@@ -28,8 +28,8 @@ nWidth = 8000
 nHeight = 6000
 
 nFileCount = 10
-sFilePath = '/home/dino/RawShared/ExposureRaw001/'
-sFileTempTime = '20211104173158'
+sFilePath = '/home/dino/RawShared/20211109075608/'
+sFileTempTime = '20211109075608'
 sFileTempFormat = 'P10'
 
 bExposureRaw = True # True/False
@@ -39,10 +39,10 @@ nFileExposureCount = 10
 nFileExposureInterval = 1
 nFileExposureIntervalNum = 9
 
-nROI_X = 3900
-nROI_Y = 2900
-nROI_W = 200
-nROI_H = 200
+nROI_X = 4000
+nROI_Y = 3000
+nROI_W = 8
+nROI_H = 8
 
 sSavePath = '/home/dino/RawShared/Output/'
 
@@ -183,7 +183,7 @@ def ParsingPixel():
 
             bNeedCal = True
 
-            for k in range(0, nFileCount):
+            for k in range(0, nCount):
                 if not bExposureRaw:
                     sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
                 else:
@@ -234,6 +234,7 @@ def ParsingPixel():
                             nIndex = nROI_X + l
                             if (nIndex%4==0 or nIndex%4==1):   #R
                                 RemoveList.append(l)
+                        #print(input_array)
                         PixelRow_array[k] = np.delete(input_array, RemoveList)
                         #print(PixelRow_array[k])
                 elif nPixelSelect == PixelSelect.OnlyGbPixel:
@@ -260,6 +261,8 @@ def ParsingPixel():
                     Cal_Information(i, PixelRow_array)
                     Save_CSV(sSaveOneStdFile, lCsvStdRow)
                     Save_CSV(sSaveOneAvgFile, lCsvAvgRow)
+                    #print(lCsvStdRow)
+                    #print(lCsvAvgRow)
                 else:
                     if bR_Gr:
                         lCsvStdRow.clear()

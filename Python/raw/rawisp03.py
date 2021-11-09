@@ -9,6 +9,8 @@ from PIL import Image
 #from skimage import io
 from matplotlib import pyplot as plt
 
+import cv2
+
 StartTime = time.time()
 
 class RawFormat(enum.IntEnum):
@@ -43,141 +45,11 @@ TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.m
 
 def Get_R_B_Image(RawArray, bayerFormat, bRImg):
     Img = RawArray//4
-
-    nInitX = 0
-    nInitY = 0
-    if bayerFormat == RawBayer.RGGB:
-        if bRImg == True:
-            nInitX = 0
-            nInitY = 0
-        else:
-            nInitX = 1
-            nInitY = 1
-    elif bayerFormat == RawBayer.GRBG:
-        if bRImg == True:
-            nInitX = 0
-            nInitY = 1
-        else:
-            nInitX = 1
-            nInitY = 2
-    elif bayerFormat == RawBayer.GBRG:
-        if bRImg == True:
-            nInitX = 1
-            nInitY = 0
-        else:
-            nInitX = 0
-            nInitY = 1
-    elif bayerFormat == RawBayer.BGGR:
-        if bRImg == True:
-            nInitX = 1
-            nInitY = 1
-        else:
-            nInitX = 0
-            nInitY = 0
-
-    for i in range(0, g_nHeight):
-        for j in range(0, g_nWidth):
-            nCount = 0
-            nTotoal = 0
-
-            if (i)%2 == nInitX and (j)%2 == nInitY:
-                continue
-            else:
-                if i-1 >= 0 and (i-1)%2 == nInitX and (j)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i-1,j]
-                elif j-1 >= 0 and (i)%2 == nInitX and (j-1)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i,j-1]
-                elif i+1 < g_nHeight and (i+1)%2 == nInitX and (j)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i+1,j]
-                elif j+1 < g_nWidth and (i)%2 == nInitX and (j+1)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i,j+1]
-                elif i-1 >= 0 and j-1 >= 0 and (i-1)%2 == nInitX and (j-1)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i-1,j-1]
-                elif i-1 >= 0 and j+1 < g_nWidth and (i-1)%2 == nInitX and (j+1)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i-1,j+1]
-                elif i+1 < g_nHeight and j-1 >= 0 and (i+1)%2 == nInitX and (j-1)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i+1,j-1]
-                elif i+1 < g_nHeight and j+1 < g_nWidth and (i+1)%2 == nInitX and (j+1)%2 == nInitY:
-                    nCount += 1
-                    nTotoal += Img[i+1,j+1]
-
-            if nCount > 0 and nTotoal > 0:
-                Img[i,j] = nTotoal // nCount;
-
     return Img
 
 
 def Get_GImage(RawArray, bayerFormat):
     Img = RawArray//4
-
-    nInitX0 = 0
-    nInitY0 = 0
-    nInitX1 = 0
-    nInitY1 = 0
-    if bayerFormat == RawBayer.RGGB or bayerFormat == RawBayer.BGGR:
-        nInitX0 = 0
-        nInitY0 = 1
-        nInitX1 = 1
-        nInitY1 = 0
-    else:
-        nInitX0 = 0
-        nInitY0 = 0
-        nInitX1 = 1
-        nInitY1 = 1
-
-    for i in range(0, g_nHeight):
-        for j in range(0, g_nWidth):
-            nCount = 0
-            nTotoal = 0
-
-            if (i)%2 == nInitX0 and (j)%2 == nInitY0:
-                continue
-            elif (i)%2 == nInitX1 and (j)%2 == nInitY1:
-                continue
-            else:
-                if i-1 >= 0 and \
-                (((i-1)%2 == nInitX0 and (j)%2 == nInitY0) or ((i-1)%2 == nInitX1 and (j)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i-1,j]
-                elif j-1 >= 0 and \
-                (((i)%2 == nInitX0 and (j-1)%2 == nInitY0) or ((i)%2 == nInitX1 and (j-1)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i,j-1]
-                elif i+1 < g_nHeight and \
-                (((i+1)%2 == nInitX0 and (j)%2 == nInitY0) or ((i+1)%2 == nInitX1 and (j)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i+1,j]
-                elif j+1 < g_nWidth and \
-                (((i)%2 == nInitX0 and (j+1)%2 == nInitY0) or ((i)%2 == nInitX1 and (j+1)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i,j+1]
-                elif i-1 >= 0 and j-1 >= 0 and \
-                (((i-1)%2 == nInitX0 and (j-1)%2 == nInitY0) or ((i-1)%2 == nInitX1 and (j-1)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i-1,j-1]
-                elif i-1 >= 0 and j+1 < g_nWidth and \
-                (((i-1)%2 == nInitX0 and (j+1)%2 == nInitY0) or ((i-1)%2 == nInitX1 and (j+1)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i-1,j+1]
-                elif i+1 < g_nHeight and j-1 >= 0 and \
-                (((i+1)%2 == nInitX0 and (j-1)%2 == nInitY0) or ((i+1)%2 == nInitX1 and (j-1)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i+1,j-1]
-                elif i+1 < g_nHeight and j+1 < g_nWidth and \
-                (((i+1)%2 == nInitX0 and (j+1)%2 == nInitY0) or ((i+1)%2 == nInitX1 and (j+1)%2 == nInitY1)):
-                    nCount += 1
-                    nTotoal += Img[i+1,j+1]
-
-            if nCount > 0 and nTotoal > 0:
-                Img[i,j] = nTotoal // nCount;
-
     return Img
 
 
