@@ -64,10 +64,19 @@ g_bISP_AWB = False
 #enhance color、contrast
 #output YUV or RGB
 
+g_bSave = True
+g_SavingFileName = '20211108160758_P10_0000.bmp'
+
+g_bDisplay = True
+
 #######################################################
 
 NowDate = datetime.datetime.now()
 TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
+
+def SaveTiff(RawImage):
+    cv2.imwrite(g_InputPath + g_SavingFileName, RawImage)
+
 
 def ReMosaic(RawArray):
     #print(np.size(RawArray, 0))
@@ -158,11 +167,17 @@ if __name__ == "__main__":
     ISPTime = time.time()
     print("Durning ISP Time(sec): ", ISPTime - StartTime)
     
+    if g_bSave:
+        SaveTiff(OutputImage)
+
     #Displayed the image
-    cv2.namedWindow("ISP Img",0);
-    cv2.resizeWindow("ISP Img", 64, 48);
-    cv2.imshow("ISP Img", OutputImage)
-    cv2.waitKey(0)
+    if g_bDisplay:
+        cv2.namedWindow("ISP Img",0);
+        cv2.resizeWindow("ISP Img", 64, 48);
+        cv2.imshow("ISP Img", OutputImage)
+        cv2.waitKey(0)
+
+    
         
 
 EndTime = time.time()
