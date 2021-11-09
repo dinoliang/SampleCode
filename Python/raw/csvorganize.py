@@ -18,11 +18,11 @@ class PixelSelect(enum.IntEnum):
 ### Change the parameters to match the settings
 nX = 0
 nY = 0
-nWidth = 100
-nHeight = 100
+nWidth = 4
+nHeight = 4
 
 sFilePath = '/home/dino/RawShared/Output/'
-sFileTempTime = '20211104173158'
+sFileTempTime = '20211109110205'
 
 nFileExposureIM = 1
 nFileExposureID = 30
@@ -107,7 +107,7 @@ def OrganizePixel():
             Save_CSV(sSaveAvgFile, lCsvAvgRow)
 
             PixelTime = time.time()
-            print("Durning Pixel Time(sec): ", PixelTime - StartTime)
+            print("Durning Pixel[{}:{}] Time(sec): {}".format(g, h, PixelTime - StartTime))
 
 if __name__ == "__main__":
     OrganizePixel()
