@@ -43,12 +43,7 @@ g_rawBayer = RawBayer.Q_RGGB
 NowDate = datetime.datetime.now()
 TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
 
-def Get_R_B_Image(RawArray, bayerFormat, bRImg):
-    Img = RawArray//4
-    return Img
-
-
-def Get_GImage(RawArray, bayerFormat):
+def Get_RGBImage(RawArray, bayerFormat):
     Img = RawArray//4
     return Img
 
@@ -63,16 +58,12 @@ def ReMosaic(RawArray):
 
 
 def DeMosaic(RawArray, bayerFormat):
-    RGBImage = np.zeros((g_nHeight, g_nWidth, 3))
-    RGBImage[:, :, 0] = Get_R_B_Image(RawArray, bayerFormat, True)
-    RGBImage[:, :, 1] = Get_GImage(RawArray, bayerFormat)
-    RGBImage[:, :, 2] = Get_R_B_Image(RawArray, bayerFormat, False)
-    #print(RGBImage[0:1,:,0])
-    #print(RGBImage[0:1,:,1])
-    #print(RGBImage[0:1,:,2])
+    RGBRaw = Get_RGBImage(RawArray, bayerFormat)
+    RGBRaw = RGBRaw.astype(np.uint8)
 
-    RGBImage = RGBImage.astype(np.uint8)
-    return RGBImage
+    DeMosaicImg = cv2.cvtColor(RGBRaw, cv2.COLOR_BAYER_RG2RGB)
+
+    return DeMosaicImg
 
 
 def ISP(RawArray):
@@ -89,6 +80,7 @@ def ISP(RawArray):
             bayerFormat = RawBayer.BGGR
 
     RGBImage = DeMosaic(RawArray, bayerFormat)
+
     return RGBImage
 
 
@@ -109,17 +101,13 @@ if __name__ == "__main__":
     OutputImage = ISP(input_array)
     ISPTime = time.time()
     print("Durning ISP Time(sec): ", ISPTime - StartTime)
-    ImageData = Image.fromarray(OutputImage)
-    #print(np.size(OutputImage, 0))
-    #print(np.size(OutputImage, 1))
-    #print(np.size(OutputImage, 2))
-    ImageData.save('/home/dino/RawShared/Temp/out_{}.bmp'.format(TimeInfo))
-    image = Image.open('/home/dino/RawShared/Temp/out_{}.bmp'.format(TimeInfo))
-    plt.imshow(image)
-    plt.show()
-    #plt.imshow(OutputImage)
-    #plt.show()
     
+    #Displayed the image
+    cv2.namedWindow("ISP Img",0);
+    cv2.resizeWindow("ISP Img", 64, 48);
+    cv2.imshow("ISP Img", OutputImage)
+    cv2.waitKey(0)
+        
 
 EndTime = time.time()
 print("Durning Time(sec): ", EndTime - StartTime)
