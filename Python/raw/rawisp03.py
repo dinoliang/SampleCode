@@ -43,11 +43,6 @@ g_rawBayer = RawBayer.Q_RGGB
 NowDate = datetime.datetime.now()
 TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
 
-def Get_RGBImage(RawArray, bayerFormat):
-    Img = RawArray//4
-    return Img
-
-
 def ReMosaic(RawArray):
     #print(np.size(RawArray, 0))
     #print(np.size(RawArray, 1))
@@ -55,21 +50,43 @@ def ReMosaic(RawArray):
         RawArray[[i+1,i+2],:] = RawArray[[i+2,i+1],:]
     for i in range(0, g_nWidth, 4):
         RawArray[:,[i+1,i+2]] = RawArray[:,[i+2,i+1]]
+    return RawArray
 
 
 def DeMosaic(RawArray, bayerFormat):
-    RGBRaw = Get_RGBImage(RawArray, bayerFormat)
+    RGBRaw = RawArray // 4
     RGBRaw = RGBRaw.astype(np.uint8)
+    #print('RGBRaw[0,0], RGBRaw[0,1] ', RGBRaw[0,0], RGBRaw[0,1])
 
-    DeMosaicImg = cv2.cvtColor(RGBRaw, cv2.COLOR_BAYER_RG2RGB)
+    if bayerFormat == RawBayer.RGGB:
+        cvtColorFormat = cv2.COLOR_BAYER_RG2RGB
+    elif bayerFormat == RawBayer.GRBG:
+        cvtColorFormat = cv2.COLOR_BAYER_GR2RGB
+    elif bayerFormat == RawBayer.GBRG:
+        cvtColorFormat = cv2.COLOR_BAYER_GB2RGB
+    elif bayerFormat == RawBayer.BGGR:
+        cvtColorFormat = cv2.COLOR_BAYER_BG2RGB
+
+    DeMosaicImg = cv2.cvtColor(RGBRaw, cvtColorFormat)
 
     return DeMosaicImg
+
+def DeNoise(RawImg):
+    '''
+    cv2.fastNlMeansDenoising() - works with a single grayscale images
+    cv2.fastNlMeansDenoisingColored() - works with a color image.
+    cv2.fastNlMeansDenoisingMulti() - works with image sequence captured in short period of time (grayscale images)
+    cv2.fastNlMeansDenoisingColoredMulti() - same as above, but for color images.
+    '''
+    DeDeNoiseImg = cv2.fastNlMeansDenoisingColored(RawImg, None, 10, 10, 7, 21)
+
+    return DeDeNoiseImg
 
 
 def ISP(RawArray):
     bayerFormat = g_rawBayer
     if g_rawBayer >= RawBayer.Q_RGGB or g_rawBayer <= RawBayer.Q_BGGR :
-        ReMosaic(RawArray)
+        ReMosaicImg = ReMosaic(RawArray)
         if g_rawBayer == RawBayer.Q_RGGB:
             bayerFormat = RawBayer.RGGB
         elif g_rawBayer == RawBayer.Q_GRBG:
@@ -78,8 +95,20 @@ def ISP(RawArray):
             bayerFormat = RawBayer.GBRG
         elif g_rawBayer == RawBayer.Q_BGGR:
             bayerFormat = RawBayer.BGGR
+    else:
+        ReMosaicImg = RawArray
+    StageTime = time.time()
+    print("Durning Stage Time(sec): ", StageTime - StartTime)
 
-    RGBImage = DeMosaic(RawArray, bayerFormat)
+    DeMosaicImg = DeMosaic(ReMosaicImg, bayerFormat)
+    RGBImage = DeMosaicImg
+    StageTime = time.time()
+    print("Durning Stage Time(sec): ", StageTime - StartTime)
+
+    #DeNoiseImg = DeNoise(DeMosaicImg)
+    #RGBImage = DeNoiseImg
+    #StageTime = time.time()
+    #print("Durning Stage Time(sec): ", StageTime - StartTime)
 
     return RGBImage
 
