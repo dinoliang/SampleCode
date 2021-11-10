@@ -46,7 +46,7 @@ nROI_H = 8
 
 sSavePath = '/home/dino/RawShared/Output/'
 
-nPixelSelect = PixelSelect.AutoSplit
+nPixelSelect = PixelSelect.OnlyGrPixel
 ### Change the parameters to match the settings
 #######################################################
 
