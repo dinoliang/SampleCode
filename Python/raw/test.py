@@ -6,6 +6,7 @@ import csv
 StartTime = time.time()
 
 if __name__ == "__main__":
+    '''
     np_array = np.random.randint(low=667,high=726,size=100)
     print(np_array)
     array_STD = np.std(np_array)
@@ -18,6 +19,8 @@ if __name__ == "__main__":
     array_AVG = np.average(np_array2)
     print('STD: ', array_STD)
     print('AVG: ', array_AVG)
+    '''
+    pass
 
 
 EndTime = time.time()

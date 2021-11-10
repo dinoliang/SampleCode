@@ -1,3 +1,7 @@
+#######################################################
+### Get one row data to calculate.
+### Calculate one pixel std and avg.
+
 import numpy as np
 import time
 import csv

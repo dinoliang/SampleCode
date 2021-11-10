@@ -1,3 +1,7 @@
+#######################################################
+### One pixel std and avg.
+### Save one pixel to one total csv
+
 import numpy as np
 import time
 import csv
