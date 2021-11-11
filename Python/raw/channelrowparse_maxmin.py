@@ -28,8 +28,8 @@ nFileExposureCount = 10
 nFileExposureInterval = 1
 nFileExposureIntervalNum = 1
 
-nROI_X = 3998
-nROI_Y = 2998
+nROI_X = 1444#3998
+nROI_Y = 337#2998
 nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
@@ -243,8 +243,8 @@ def ParsingPixel():
 
             #input_file = open(sFileTemp, 'rb')
             #input_array = np.fromfile(input_file, dtype=np.uint16, count=-1, sep="", offset=0)
-            #print('Frame{} Max: {}'.format(k, np.max(input_array)))
-            #print('Frame{} Min: {}'.format(k, np.min(input_array)))
+            #print('Frame{} Index:{} Max: {}'.format(k, np.argmax(input_array), np.max(input_array)))
+            #print('Frame{} Index:{} Min: {}'.format(k, np.argmin(input_array), np.min(input_array)))
             #input_file.close()
 
             for i in range(nROI_Y, nROI_Y+nROI_H):
