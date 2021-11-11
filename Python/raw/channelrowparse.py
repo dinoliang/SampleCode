@@ -28,10 +28,10 @@ nFileExposureCount = 10
 nFileExposureInterval = 1
 nFileExposureIntervalNum = 9
 
-nROI_X = 3900
-nROI_Y = 2900
-nROI_W = 200    #multiple of 4
-nROI_H = 200    #multiple of 4
+nROI_X = 3500
+nROI_Y = 2500
+nROI_W = 1000    #multiple of 4
+nROI_H = 1000    #multiple of 4
 
 sSavePath = '/home/dino/RawShared/Output/'
 
@@ -98,10 +98,8 @@ def Cal_Information(y, nCount, ChannelArray, sColor):
 
 
 def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExpIndex, sSaveOrgFile):
-    #lCsvStdRow.clear()
-    #lCsvAvgRow.clear()
-    #Save_CSV(sSaveRStdFile, lCsvStdRow)
-    #Save_CSV(sSaveRAvgFile, lCsvAvgRow)
+    #print(ChannelArray)
+    #print('')
     lRawInfo = []
     lRawInfo.clear()
     lRawInfo = ['', 'Ch1_AVG', 'Ch1_STD', 'Ch2_AVG', 'Ch2_STD', 'Ch3_AVG', 'Ch3_STD', 'Ch4_AVG', 'Ch4_STD']
@@ -111,6 +109,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
             lRawInfo.clear()
             lRawInfo.append('Frame{}'.format(i))
             for j in range(0, 4):
+                #print(ChannelArray[i,j])
                 Channel_AVG = np.average(ChannelArray[i,j])
                 lRawInfo.append(Channel_AVG.tolist())
                 Channel_STD = np.std(ChannelArray[i,j])
@@ -124,6 +123,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
             lRawInfo.append('FrameTotal')
             for j in range(0, 4):
                 ChannelAllPixel = ChannelArray[:,j,:].flatten()
+                #print(ChannelAllPixel)
                 Channel_AVG = np.average(ChannelAllPixel)
                 lRawOrglInfo.append(Channel_AVG.tolist())
                 lRawInfo.append(Channel_AVG.tolist())
@@ -141,8 +141,10 @@ def ParsingPixel():
 
     nR_Gb_Len = nROI_W//4 * nROI_H//4
     nGr_B_Len = nROI_W//4 * nROI_H//4
-    print(nR_Gb_Len)
-    print(nGr_B_Len)
+    #print(nR_Gb_Len)
+    #print(nGr_B_Len)
+
+    nWOffset = nROI_X % 4
 
     sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
     sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
@@ -235,64 +237,65 @@ def ParsingPixel():
                 input_file.close()
                 #print('input_array: ', input_array)
                 
+                
                 if i%4==0:  #R1~2+Gr1~2
                     for l in range(0, nROI_W):
-                        if l%4==0: #R1
-                            print('h:{}, i:{}, k:{}, Index:{}, l:{}'.format(h, i, k, nR0Index, l))
+                        if (l+nWOffset)%4==0: #R1
+                            #print('h:{}, i:{}, k:{}, Index:{}, l:{}'.format(h, i, k, nR0Index, l))
                             ChannelR_array[k,0,nR0Index] = input_array[l]
                             nR0Index += 1
-                        elif l%4==1: #R2
+                        elif (l+nWOffset)%4==1: #R2
                             ChannelR_array[k,1,nR1Index] = input_array[l]
                             nR1Index += 1
-                        elif l%4==2: #Gr1
+                        elif (l+nWOffset)%4==2: #Gr1
                             ChannelGr_array[k,0,nGr0Index] = input_array[l]
                             nGr0Index += 1
-                        elif l%4==3: #Gr2
+                        elif (l+nWOffset)%4==3: #Gr2
                             ChannelGr_array[k,1,nGr1Index] = input_array[l]
                             nGr1Index += 1
                     bR_Gr = True
                 elif i%4==1:  #R3~4+Gr3~4
                     for l in range(0, nROI_W):
-                        if l%4==0: #R3
+                        if (l+nWOffset)%4==0: #R3
                             ChannelR_array[k,2,nR2Index] = input_array[l]
                             nR2Index += 1
-                        elif l%4==1: #R4
+                        elif (l+nWOffset)%4==1: #R4
                             ChannelR_array[k,3,nR3Index] = input_array[l]
                             nR3Index += 1
-                        elif l%4==2: #Gr3
+                        elif (l+nWOffset)%4==2: #Gr3
                             ChannelGr_array[k,2,nGr2Index] = input_array[l]
                             nGr2Index += 1
-                        elif l%4==3: #Gr4
+                        elif (l+nWOffset)%4==3: #Gr4
                             ChannelGr_array[k,3,nGr3Index] = input_array[l]
                             nGr3Index += 1
                     bR_Gr = True
                 elif i%4==2:  #Gb1~2+B1~2
                     for l in range(0, nROI_W):
-                        if l%4==0: #Gb1
+                        if (l+nWOffset)%4==0: #Gb1
                             ChannelGb_array[k,0,nGb0Index] = input_array[l]
                             nGb0Index += 1
-                        elif l%4==1: #Gb2
+                        elif (l+nWOffset)%4==1: #Gb2
                             ChannelGb_array[k,1,nGb1Index] = input_array[l]
                             nGb1Index += 1
-                        elif l%4==2: #B1
+                        elif (l+nWOffset)%4==2: #B1
                             ChannelB_array[k,0,nB0Index] = input_array[l]
                             nB0Index += 1
-                        elif l%4==3: #B2
+                        elif (l+nWOffset)%4==3: #B2
                             ChannelB_array[k,1,nB1Index] = input_array[l]
                             nB1Index += 1
                     bGb_B = True
                 elif i%4==3:  #Gb3~4+B3~4
                     for l in range(0, nROI_W):
-                        if l%4==0: #Gb3
+                        if (l+nWOffset)%4==0: #Gb3
                             ChannelGb_array[k,2,nGb2Index] = input_array[l]
                             nGb2Index += 1
-                        elif l%4==1: #Gb4
+                        elif (l+nWOffset)%4==1: #Gb4
                             ChannelGb_array[k,3,nGb3Index] = input_array[l]
                             nGb3Index += 1
-                        elif l%4==2: #B3
+                        elif (l+nWOffset)%4==2: #B3
                             ChannelB_array[k,2,nB2Index] = input_array[l]
                             nB2Index += 1
-                        elif l%4==3: #B4
+                        elif (l+nWOffset)%4==3: #B4
                             ChannelB_array[k,3,nB3Index] = input_array[l]
                             nB3Index += 1
                     bGb_B = True
@@ -322,6 +325,9 @@ def ParsingPixel():
             Cal_Save_AllInformation(i, nCount, ChannelB_array, 'B', sSaveBFile, nExposureIntervalIndex, sSaveOrgBFile)
             #Save_CSV(sSaveBStdFile, lCsvStdRow)
             #Save_CSV(sSaveBAvgFile, lCsvAvgRow)
+
+        nEachIntervalTime = time.time()
+        print("Durning Each Interval Time(sec): {}".format(nEachIntervalTime - StartTime))
   
 
 if __name__ == "__main__":
