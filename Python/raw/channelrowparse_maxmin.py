@@ -16,22 +16,22 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 10
-sFilePath = '/home/dino/RawShared/ExposureRaw002/'
-sFileTempTime = '20211109110205'
+nFileCount = 100
+sFilePath = '/home/dino/RawShared/20211111_fulldark/'
+sFileTempTime = '20211111160205'
 sFileTempFormat = 'P10'
 
-bExposureRaw = True # True/False
+bExposureRaw = False # True/False
 nFileExposureIM = 1
 nFileExposureID = 30
 nFileExposureCount = 10
 nFileExposureInterval = 1
-nFileExposureIntervalNum = 9
+nFileExposureIntervalNum = 1
 
-nROI_X = 3992
-nROI_Y = 2992
-nROI_W = 16    #multiple of 4
-nROI_H = 16    #multiple of 4
+nROI_X = 3998
+nROI_Y = 2998
+nROI_W = 4    #multiple of 4
+nROI_H = 4    #multiple of 4
 
 sSavePath = '/home/dino/RawShared/Output/'
 
@@ -44,14 +44,13 @@ if not bExposureRaw:
     sSaveStdFile = 'STD_{}.csv'
     sSaveAvgFile = 'AVG_{}.csv'
     nFileExposureIntervalNum = 1
-    nPixelSelect = PixelSelect.AllPixel
 else:
     # Exposure
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
     sSaveStdFile = 'STD_{}_{}_{}_{}.csv'
     sSaveAvgFile = 'AVG_{}_{}_{}_{}.csv'
 
-sSaveTempFile = '{}_{}_{}_{}.csv'
+sSaveTempFile = '{}_{}_{}_{}.csv' 
 sSaveOrganizeTempFile = '{}_{}_{}.csv'
 
 #PixelRow_array = np.zeros((nFileCount, nROI_W))
@@ -117,6 +116,12 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
                 lRawInfo.append(Channel_STD.tolist())
             Save_CSV(sSaveFileName, lRawInfo)
         elif i == nCount: # Total
+            lRawMin = []
+            lRawMin.clear()
+            lRawMin.append('Min:')
+            lRawMax = []
+            lRawMax.clear()
+            lRawMax.append('Max:')
             lRawOrglInfo = []
             lRawOrglInfo.clear()
             lRawOrglInfo.append('Exp{}'.format(nExpIndex))
@@ -125,6 +130,12 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
             for j in range(0, 4):
                 ChannelAllPixel = ChannelArray[:,j,:].flatten()
                 #print(ChannelAllPixel)
+                #print('Min: ', np.min(ChannelAllPixel))
+                #print('Max: ', np.max(ChannelAllPixel))
+                lRawMin.append(np.min(ChannelAllPixel))
+                lRawMin.append('')
+                lRawMax.append(np.max(ChannelAllPixel))
+                lRawMax.append('')
                 Channel_AVG = np.average(ChannelAllPixel)
                 lRawOrglInfo.append(Channel_AVG.tolist())
                 lRawInfo.append(Channel_AVG.tolist())
@@ -132,6 +143,8 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
                 lRawOrglInfo.append(Channel_STD.tolist())
                 lRawInfo.append(Channel_STD.tolist())
             Save_CSV(sSaveFileName, lRawInfo)
+            Save_CSV(sSaveFileName, lRawMin)
+            Save_CSV(sSaveFileName, lRawMax)
             Save_CSV(sSaveOrgFile, lRawOrglInfo)
 
 
@@ -227,6 +240,12 @@ def ParsingPixel():
                 sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, nContinueFileIndex, nExposureIntervalIndex, nFileExposureID)
             #if k == 0:
             #    print('File: ' + sFileTemp)
+
+            #input_file = open(sFileTemp, 'rb')
+            #input_array = np.fromfile(input_file, dtype=np.uint16, count=-1, sep="", offset=0)
+            #print('Frame{} Max: {}'.format(k, np.max(input_array)))
+            #print('Frame{} Min: {}'.format(k, np.min(input_array)))
+            #input_file.close()
 
             for i in range(nROI_Y, nROI_Y+nROI_H):
                 bNeedCal = False

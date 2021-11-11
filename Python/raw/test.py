@@ -52,6 +52,23 @@ def test2D_2():
     print(np.std(X))
 
 
+def np_append_test():
+    '''
+    arr = np.array([[[]]])
+    arr = np.append(arr, '1')
+    '''
+    '''
+    arr = np.empty((0,0,0))
+    data_array = np.zeros((3, 5, 6), dtype=np.int)
+    arr = np.append(arr, data_array)
+    print(arr)
+    '''
+    empty_array = np.empty((0,0,0))
+    empty_array = np. append(empty_array, np. array([[16, 26, 36, 46], [17, 27, 37, 47]]), axis=0)
+    print('2D Numpy array:')
+    print(empty_array)
+
+
 if __name__ == "__main__":
     '''
     testSTD_AVG()
@@ -60,7 +77,10 @@ if __name__ == "__main__":
     #test3D()
     test3D_2()
     '''
+    '''
     test2D_2()
+    '''
+    np_append_test()
 
 
 EndTime = time.time()
