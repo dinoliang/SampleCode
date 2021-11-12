@@ -1,3 +1,7 @@
 # VSCode surrounding
+__pycache__/
+*.py[cod]
+*$py.class
+
 Python/raw/__pycache__/
 Python/raw/__pycache__/*
