@@ -40,9 +40,10 @@ g_InputFile = 'FrameID0_W8000_H6000_20211108160758_P10_0000.raw'
 
 g_rawBayer = RawBayer.Q_RGGB
 
-#ISP BLC
+#ISP 
 g_bISP_DeNoise = False
 g_bISP_AWB = False
+g_bISP_Sharp = False
 #https://www.pathpartnertech.com/camera-tuning-understanding-the-image-signal-processor-and-isp-tuning/
 #Color Correction
 #Lens shading correction
@@ -119,6 +120,14 @@ def DeNoise(RawImg):
 
     return DeDeNoiseImg
 
+def SharpImage(RawImg):
+    kernel = np.array([[0, -1, 0],
+                   [-1, 5,-1],
+                   [0, -1, 0]])
+    image_sharp = cv2.filter2D(src=RawImg, ddepth=-1, kernel=kernel)
+
+    return image_sharp
+
 
 def ISP(RawArray):
     bayerFormat = g_rawBayer
@@ -143,17 +152,23 @@ def ISP(RawArray):
     print("Durning DeMosaic Stage Time(sec): ", StageTime - StartTime)
 
     if g_bISP_DeNoise:
-        DeNoiseImg = DeNoise(DeMosaicImg)
+        DeNoiseImg = DeNoise(RGBImage)
         RGBImage = DeNoiseImg
         StageTime = time.time()
         print("Durning DeNoise Stage Time(sec): ", StageTime - StartTime)
 
     if g_bISP_AWB:
-        AWBImg = ispawb001.white_balance_1(DeMosaicImg)
+        AWBImg = ispawb001.white_balance_1(RGBImage)
         #AWBImg = ispawb001.GW(DeMosaicImg)
         RGBImage = AWBImg
         StageTime = time.time()
         print("Durning AWB Stage Time(sec): ", StageTime - StartTime)
+
+    if g_bISP_Sharp:
+        SharpImg = SharpImage(RGBImage)
+        RGBImage = SharpImg
+        StageTime = time.time()
+        print("Durning Sharp Stage Time(sec): ", StageTime - StartTime)
 
     return RGBImage
 
@@ -185,6 +200,8 @@ if __name__ == "__main__":
         cv2.resizeWindow("ISP Img", 64, 48);
         cv2.imshow("ISP Img", OutputImage)
         cv2.waitKey(0)
+
+    cv2.destroyAllWindows()
 
     
         
