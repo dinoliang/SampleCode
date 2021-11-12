@@ -154,6 +154,9 @@ def ParsingPixel():
     if bExposureRaw:
         nCount = nFileExposureCount
 
+    #print('nROI_X: ', nROI_X)
+    #print('nROI_Y: ', nROI_Y)
+
     #Get the numbers of every channel
     nR_Gb_Len = nROI_W//4 * nROI_H//4
     nGr_B_Len = nROI_W//4 * nROI_H//4
@@ -373,6 +376,19 @@ def ParsingPixel():
         nEachIntervalTime = time.time()
         print("Durning Each Interval Time(sec): {}".format(nEachIntervalTime - StartTime))
   
+
+def TransMain(nSetWidth, nSetHeight, nSetX, nSetY, nSetROI_W, nSetROI_H):
+    listVarOfGlobals = globals()
+    listVarOfGlobals['nWidth']      = nSetWidth
+    listVarOfGlobals['nHeight']     = nSetHeight
+    listVarOfGlobals['nROI_X']      = nSetX
+    listVarOfGlobals['nROI_Y']      = nSetY
+    listVarOfGlobals['nROI_W']      = nSetROI_W
+    listVarOfGlobals['nROI_H']      = nSetROI_H
+
+    ParsingPixel()
+    pass
+
 
 if __name__ == "__main__":
     ParsingPixel()
