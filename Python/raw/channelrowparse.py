@@ -43,15 +43,16 @@ if not bExposureRaw:
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}.raw'
     sSaveStdFile = 'STD_{}.csv'
     sSaveAvgFile = 'AVG_{}.csv'
+    sSaveTempFile = '{}_Single_{}.csv'
+    sSaveOrganizeTempFile = '{}_{}.csv'
     nFileExposureIntervalNum = 1
 else:
     # Exposure
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
     sSaveStdFile = 'STD_{}_{}_{}_{}.csv'
     sSaveAvgFile = 'AVG_{}_{}_{}_{}.csv'
-
-sSaveTempFile = '{}_{}_{}_{}.csv'
-sSaveOrganizeTempFile = '{}_{}_{}.csv'
+    sSaveTempFile = '{}_{}_{}_{}.csv'
+    sSaveOrganizeTempFile = '{}_{}_{}.csv'
 
 #PixelRow_array = np.zeros((nFileCount, nROI_W))
 lCsvStdRow = []
@@ -149,10 +150,16 @@ def ParsingPixel():
     nWOffset = nROI_X % 4
 
     #Set the save orgnize file (Orgnize result)
-    sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
-    sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
-    sSaveOrgGbFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
-    sSaveOrgBFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
+    if not bExposureRaw:
+        sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
+        sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
+        sSaveOrgGbFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
+        sSaveOrgBFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
+    else:
+        sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
+        sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
+        sSaveOrgGbFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
+        sSaveOrgBFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
     if os.path.exists(sSaveOrgRFile):
         os.remove(sSaveOrgRFile)
     if os.path.exists(sSaveOrgGrFile):
@@ -178,7 +185,10 @@ def ParsingPixel():
         ChannelB_array = np.zeros((nCount, 4, nGr_B_Len))
         
         #The exposure time index
-        nExposureIntervalIndex = h*nFileExposureInterval+nFileExposureIM
+        if not bExposureRaw:
+            nExposureIntervalIndex = 0
+        else:
+            nExposureIntervalIndex = h*nFileExposureInterval+nFileExposureIM
         '''
         #Set the every channel saving file (R/Gr/Gb/B) (Std&Avg)
         sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
@@ -208,10 +218,16 @@ def ParsingPixel():
         '''
             
         #Set the every channel saving file (R/Gr/Gb/B) (Total)
-        sSaveRFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
-        sSaveGrFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
-        sSaveGbFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
-        sSaveBFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
+        if not bExposureRaw:
+            sSaveRFile = sSavePath+sSaveTempFile.format(TimeInfo, 'R')
+            sSaveGrFile = sSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
+            sSaveGbFile = sSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
+            sSaveBFile = sSavePath+sSaveTempFile.format(TimeInfo, 'B')
+        else:
+            sSaveRFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
+            sSaveGrFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
+            sSaveGbFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
+            sSaveBFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
         if os.path.exists(sSaveRFile):
             os.remove(sSaveRFile)
         if os.path.exists(sSaveGrFile):
