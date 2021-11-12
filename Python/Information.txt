@@ -62,6 +62,14 @@ sudo apt install qttools5-dev-tools
 sudo apt install qt5-default
 
 Start: designer (/usr/lib/x86_64-linux-gnu/qt5/bin/designer)
+pyqt5 designer:
+pyuic5 UI.ui -o UI.py
+
+vs code配置
+添加pyqt integration插件
+File > Preferences > Settings，搜索pyqt integration
+找到Pyqt-integration > Qtdesigner:path，里面输入designer的路径/usr/lib/x86_64-linux-gnu/qt5/bin/designer
+
 
 9. pyinstaller
 
