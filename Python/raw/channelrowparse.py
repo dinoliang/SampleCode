@@ -44,7 +44,6 @@ if not bExposureRaw:
     sSaveStdFile = 'STD_{}.csv'
     sSaveAvgFile = 'AVG_{}.csv'
     nFileExposureIntervalNum = 1
-    nPixelSelect = PixelSelect.AllPixel
 else:
     # Exposure
     sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
@@ -140,13 +139,16 @@ def ParsingPixel():
     if bExposureRaw:
         nCount = nFileExposureCount
 
+    #Get the numbers of every channel
     nR_Gb_Len = nROI_W//4 * nROI_H//4
     nGr_B_Len = nROI_W//4 * nROI_H//4
     #print(nR_Gb_Len)
     #print(nGr_B_Len)
 
+    #Get the leftest pixel offset
     nWOffset = nROI_X % 4
 
+    #Set the save orgnize file (Orgnize result)
     sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
     sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
     sSaveOrgGbFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
@@ -167,16 +169,18 @@ def ParsingPixel():
     Save_CSV(sSaveOrgGbFile, lRawInfo)
     Save_CSV(sSaveOrgBFile, lRawInfo)
         
+    #Every exposure interval
     for h in range(0, nFileExposureIntervalNum):
-        bR_Gr = False
-        bGb_B = False
-
+        #4 Quad channel (1~4) of 4Channel (R/Gr/Gb/B)
         ChannelR_array = np.zeros((nCount, 4, nR_Gb_Len))
         ChannelGr_array = np.zeros((nCount, 4, nGr_B_Len))
         ChannelGb_array = np.zeros((nCount, 4, nR_Gb_Len))
         ChannelB_array = np.zeros((nCount, 4, nGr_B_Len))
         
+        #The exposure time index
         nExposureIntervalIndex = h*nFileExposureInterval+nFileExposureIM
+        '''
+        #Set the every channel saving file (R/Gr/Gb/B) (Std&Avg)
         sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
         sSaveRAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
         sSaveGrStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
@@ -201,7 +205,9 @@ def ParsingPixel():
             os.remove(sSaveBStdFile)
         if os.path.exists(sSaveBAvgFile):
             os.remove(sSaveBAvgFile)
+        '''
             
+        #Set the every channel saving file (R/Gr/Gb/B) (Total)
         sSaveRFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
         sSaveGrFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
         sSaveGbFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
@@ -215,11 +221,13 @@ def ParsingPixel():
         if os.path.exists(sSaveBFile):
             os.remove(sSaveBFile)
 
+        #Every file of one exposure time index
         for k in range(0, nCount):
             nR0Index, nR1Index, nR2Index, nR3Index = 0, 0, 0, 0
             nGr0Index, nGr1Index, nGr2Index, nGr3Index = 0, 0, 0, 0
             nGb0Index, nGb1Index, nGb2Index, nGb3Index = 0, 0, 0, 0
             nB0Index, nB1Index, nB2Index, nB3Index = 0, 0, 0, 0
+            #Set the source file
             if not bExposureRaw:
                 sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
             else:
@@ -228,16 +236,17 @@ def ParsingPixel():
             #if k == 0:
             #    print('File: ' + sFileTemp)
 
+            #Every row
             for i in range(nROI_Y, nROI_Y+nROI_H):
                 bNeedCal = False
 
                 nPixelOffset = nWidth * i * 2 + nROI_X * 2
                 #print('nPixelOffset: ', nPixelOffset)
                 input_file = open(sFileTemp, 'rb')
+                #Get all pixel of one range row
                 input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W, sep="", offset=nPixelOffset)
                 input_file.close()
                 #print('input_array: ', input_array)
-                
                 
                 if i%4==0:  #R1~2+Gr1~2
                     for l in range(0, nROI_W):
@@ -254,7 +263,6 @@ def ParsingPixel():
                         elif (l+nWOffset)%4==3: #Gr2
                             ChannelGr_array[k,1,nGr1Index] = input_array[l]
                             nGr1Index += 1
-                    bR_Gr = True
                 elif i%4==1:  #R3~4+Gr3~4
                     for l in range(0, nROI_W):
                         if (l+nWOffset)%4==0: #R3
@@ -269,7 +277,6 @@ def ParsingPixel():
                         elif (l+nWOffset)%4==3: #Gr4
                             ChannelGr_array[k,3,nGr3Index] = input_array[l]
                             nGr3Index += 1
-                    bR_Gr = True
                 elif i%4==2:  #Gb1~2+B1~2
                     for l in range(0, nROI_W):
                         if (l+nWOffset)%4==0: #Gb1
@@ -284,7 +291,6 @@ def ParsingPixel():
                         elif (l+nWOffset)%4==3: #B2
                             ChannelB_array[k,1,nB1Index] = input_array[l]
                             nB1Index += 1
-                    bGb_B = True
                 elif i%4==3:  #Gb3~4+B3~4
                     for l in range(0, nROI_W):
                         if (l+nWOffset)%4==0: #Gb3
@@ -299,33 +305,32 @@ def ParsingPixel():
                         elif (l+nWOffset)%4==3: #B4
                             ChannelB_array[k,3,nB3Index] = input_array[l]
                             nB3Index += 1
-                    bGb_B = True
 
-        if bR_Gr:
-            #print(h)
-            #lCsvStdRow.clear()
-            #lCsvAvgRow.clear()
-            Cal_Save_AllInformation(i, nCount, ChannelR_array, 'R', sSaveRFile, nExposureIntervalIndex, sSaveOrgRFile)
-            #Save_CSV(sSaveRStdFile, lCsvStdRow)
-            #Save_CSV(sSaveRAvgFile, lCsvAvgRow)
-
-            #lCsvStdRow.clear()
-            #lCsvAvgRow.clear()
-            Cal_Save_AllInformation(i, nCount, ChannelGr_array, 'Gr', sSaveGrFile, nExposureIntervalIndex, sSaveOrgGrFile)
-            #Save_CSV(sSaveGrStdFile, lCsvStdRow)
-            #Save_CSV(sSaveGrAvgFile, lCsvAvgRow)
-        if bGb_B:
-            #lCsvStdRow.clear()
-            #lCsvAvgRow.clear()
-            Cal_Save_AllInformation(i, nCount, ChannelGb_array, 'Gb', sSaveGbFile, nExposureIntervalIndex, sSaveOrgGbFile)
-            #Save_CSV(sSaveGbStdFile, lCsvStdRow)
-            #Save_CSV(sSaveGbAvgFile, lCsvAvgRow)
-
-            #lCsvStdRow.clear()
-            #lCsvAvgRow.clear()
-            Cal_Save_AllInformation(i, nCount, ChannelB_array, 'B', sSaveBFile, nExposureIntervalIndex, sSaveOrgBFile)
-            #Save_CSV(sSaveBStdFile, lCsvStdRow)
-            #Save_CSV(sSaveBAvgFile, lCsvAvgRow)
+        #Save the R information
+        #print(h)
+        #lCsvStdRow.clear()
+        #lCsvAvgRow.clear()
+        #Save_CSV(sSaveRStdFile, lCsvStdRow)
+        #Save_CSV(sSaveRAvgFile, lCsvAvgRow)
+        Cal_Save_AllInformation(i, nCount, ChannelR_array, 'R', sSaveRFile, nExposureIntervalIndex, sSaveOrgRFile)
+        #Save the G information
+        #lCsvStdRow.clear()
+        #lCsvAvgRow.clear()
+        #Save_CSV(sSaveGrStdFile, lCsvStdRow)
+        #Save_CSV(sSaveGrAvgFile, lCsvAvgRow)
+        Cal_Save_AllInformation(i, nCount, ChannelGr_array, 'Gr', sSaveGrFile, nExposureIntervalIndex, sSaveOrgGrFile)
+        #Save the Gb information
+        #lCsvStdRow.clear()
+        #lCsvAvgRow.clear()
+        #Save_CSV(sSaveGbStdFile, lCsvStdRow)
+        #Save_CSV(sSaveGbAvgFile, lCsvAvgRow)
+        Cal_Save_AllInformation(i, nCount, ChannelGb_array, 'Gb', sSaveGbFile, nExposureIntervalIndex, sSaveOrgGbFile)
+        #Save the B information
+        #lCsvStdRow.clear()
+        #lCsvAvgRow.clear()
+        #Save_CSV(sSaveBStdFile, lCsvStdRow)
+        #Save_CSV(sSaveBAvgFile, lCsvAvgRow)
+        Cal_Save_AllInformation(i, nCount, ChannelB_array, 'B', sSaveBFile, nExposureIntervalIndex, sSaveOrgBFile)
 
         nEachIntervalTime = time.time()
         print("Durning Each Interval Time(sec): {}".format(nEachIntervalTime - StartTime))
