@@ -11,6 +11,8 @@ from matplotlib import pyplot as plt
 
 import cv2
 
+import ispawb001
+
 StartTime = time.time()
 
 class RawFormat(enum.IntEnum):
@@ -133,18 +135,25 @@ def ISP(RawArray):
     else:
         ReMosaicImg = RawArray
     StageTime = time.time()
-    print("Durning Stage Time(sec): ", StageTime - StartTime)
+    print("Durning ReMosaic Stage Time(sec): ", StageTime - StartTime)
 
     DeMosaicImg = DeMosaic(ReMosaicImg, bayerFormat)
     RGBImage = DeMosaicImg
     StageTime = time.time()
-    print("Durning Stage Time(sec): ", StageTime - StartTime)
+    print("Durning DeMosaic Stage Time(sec): ", StageTime - StartTime)
 
     if g_bISP_DeNoise:
         DeNoiseImg = DeNoise(DeMosaicImg)
         RGBImage = DeNoiseImg
         StageTime = time.time()
-        print("Durning Stage Time(sec): ", StageTime - StartTime)
+        print("Durning DeNoise Stage Time(sec): ", StageTime - StartTime)
+
+    if g_bISP_AWB:
+        AWBImg = ispawb001.white_balance_1(DeMosaicImg)
+        #AWBImg = ispawb001.GW(DeMosaicImg)
+        RGBImage = AWBImg
+        StageTime = time.time()
+        print("Durning AWB Stage Time(sec): ", StageTime - StartTime)
 
     return RGBImage
 
