@@ -379,12 +379,27 @@ def ParsingPixel():
 
 def TransMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H):
     listVarOfGlobals = globals()
-    listVarOfGlobals['nWidth']      = nWidth
-    listVarOfGlobals['nHeight']     = nHeight
-    listVarOfGlobals['nROI_X']      = nX
-    listVarOfGlobals['nROI_Y']      = nY
-    listVarOfGlobals['nROI_W']      = nROI_W
-    listVarOfGlobals['nROI_H']      = nROI_H
+    listVarOfGlobals['nWidth']                      = nWidth
+    listVarOfGlobals['nHeight']                     = nHeight
+
+    listVarOfGlobals['nFileCount']                  = 100
+    listVarOfGlobals['sFilePath']                   = '/home/dino/RawShared/20211111_fulldark/'
+    listVarOfGlobals['sFileTempTime']               = '20211111160205'
+    listVarOfGlobals['sFileTempFormat']             = 'P10'
+
+    listVarOfGlobals['bExposureRaw']                = False # True/False
+    listVarOfGlobals['nFileExposureIM']             = 1
+    listVarOfGlobals['nFileExposureID']             = 30
+    listVarOfGlobals['nFileExposureCount']          = 10
+    listVarOfGlobals['nFileExposureInterval']       = 1
+    listVarOfGlobals['nFileExposureIntervalNum']    = 1
+
+    listVarOfGlobals['nROI_X']                      = nX
+    listVarOfGlobals['nROI_Y']                      = nY
+    listVarOfGlobals['nROI_W']                      = nROI_W
+    listVarOfGlobals['nROI_H']                      = nROI_H
+
+    listVarOfGlobals['sSavePath']                   = '/home/dino/RawShared/Output/'
 
     ParsingPixel()
     pass
