@@ -13,7 +13,7 @@ if __name__ == "__main__":
     testmain.nROI_X = 3998
     testmain.nROI_Y = 2998
     '''
-    testmain.TransMain(8000, 6000, 3998, 2998, 4, 4)
+    testmain.TransMain(nWidth=8000, nHeight=6000, nX=3998, nY=2998, nROI_W=4, nROI_H=4)
     pass
 
 

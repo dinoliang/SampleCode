@@ -377,14 +377,14 @@ def ParsingPixel():
         print("Durning Each Interval Time(sec): {}".format(nEachIntervalTime - StartTime))
   
 
-def TransMain(nSetWidth, nSetHeight, nSetX, nSetY, nSetROI_W, nSetROI_H):
+def TransMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H):
     listVarOfGlobals = globals()
-    listVarOfGlobals['nWidth']      = nSetWidth
-    listVarOfGlobals['nHeight']     = nSetHeight
-    listVarOfGlobals['nROI_X']      = nSetX
-    listVarOfGlobals['nROI_Y']      = nSetY
-    listVarOfGlobals['nROI_W']      = nSetROI_W
-    listVarOfGlobals['nROI_H']      = nSetROI_H
+    listVarOfGlobals['nWidth']      = nWidth
+    listVarOfGlobals['nHeight']     = nHeight
+    listVarOfGlobals['nROI_X']      = nX
+    listVarOfGlobals['nROI_Y']      = nY
+    listVarOfGlobals['nROI_W']      = nROI_W
+    listVarOfGlobals['nROI_H']      = nROI_H
 
     ParsingPixel()
     pass
