@@ -44,12 +44,24 @@ def test3D_2():
 def test2D_2():
     np.random.seed(123)
     X = np.random.randint(0, 5, [4, 2])
-    print(X)
-    print(X.sum(axis=0))
-    print(X.sum(axis=1))
-    print(np.std(X, 0))
-    print(np.std(X, 1))
-    print(np.std(X))
+    print('X: \n', X)
+    print('X.shape: ', X.shape)
+    print('X.dtype: ', X.dtype)
+    print('np.size(X): ', np.size(X))
+    print('np.size(X, 0): ', np.size(X, 0))
+    print('np.size(X, 1): ', np.size(X, 1))
+    print('np.prod(X.shape): ', np.prod(X.shape))
+    print('X.sum(axis=0): ', X.sum(axis=0))
+    print('X.sum(axis=1): ', X.sum(axis=1))
+    print('np.std(X, 0): ', np.std(X, 0))
+    print('np.std(X, 1): ', np.std(X, 1))
+    print('np.std(X): ', np.std(X))
+    print('X.T: \n', X.T)
+
+
+def testText():
+    print('Hello', end='')
+    print('World')
 
 
 def np_append_test():
@@ -87,7 +99,12 @@ if __name__ == "__main__":
     '''
     test2D_2()
     '''
+    '''
     np_append_test()
+    '''
+    '''
+    testText()
+    '''
 
 
 EndTime = time.time()

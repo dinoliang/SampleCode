@@ -243,9 +243,11 @@ def ParsingPixel():
 
             #input_file = open(sFileTemp, 'rb')
             #input_array = np.fromfile(input_file, dtype=np.uint16, count=-1, sep="", offset=0)
+            #input_array = input_array.reshape((nHeight, nWidth))
             #print('Frame{} Index:{} Max: {}'.format(k, np.argmax(input_array), np.max(input_array)))
             #print('Frame{} Index:{} Min: {}'.format(k, np.argmin(input_array), np.min(input_array)))
-            #print('Frame{} >70: {}'.format(k, np.where(input_array > 70)))
+            #arr_condition = np.where(input_array > 70)
+            #print('Frame{} Size:{} >70: {}'.format(k, np.size(arr_condition), arr_condition))
             #input_file.close()
 
             for i in range(nROI_Y, nROI_Y+nROI_H):
