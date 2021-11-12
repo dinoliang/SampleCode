@@ -2,6 +2,8 @@ import array as arr
 import numpy as np
 import time
 import csv
+import scipy.misc
+import matplotlib.pyplot as plt
 
 StartTime = time.time()
 
@@ -121,26 +123,30 @@ def numpy_condition_003():
     print(n)
 
 
+def Matplotlib_Show():
+    #lena=scipy.misc.lena()
+    ascent=scipy.misc.ascent()
+    plt.gray()
+    plt.imshow(ascent)
+    plt.show()
+
+
 if __name__ == "__main__":
-    '''
-    testSTD_AVG()
-    '''
-    '''
+    #testSTD_AVG()
+
     #test3D()
-    test3D_2()
-    '''
-    '''
-    test2D_2()
-    '''
-    '''
-    np_append_test()
-    '''
-    '''
-    testText()
-    '''
-    '''
-    numpy_condition_003()
-    '''
+    #test3D_2()
+
+    #test2D_2()
+
+    #np_append_test()
+
+    #testText()
+
+    #numpy_condition_003()
+
+    Matplotlib_Show()
+    pass
 
 
 EndTime = time.time()
