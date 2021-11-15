@@ -4,8 +4,39 @@ import time
 import csv
 import scipy.misc
 import matplotlib.pyplot as plt
+import os
 
 StartTime = time.time()
+
+def testFileInfo():
+    path = '/home/dino/RawShared/20211111_fulldark/FrameID0_W8000_H6000_20211111160205_P10_0000.raw'
+    sFileName = os.path.basename(path)
+    print(sFileName)
+    sDirName = os.path.dirname(path)
+    print(sDirName)
+
+    #print(sFileName.split('_', 1))
+    print(sFileName.split('_'))
+    print(len(sFileName.split('_')))
+    sFileTime = sFileName.split('_')[3]
+    print(sFileTime)
+
+    sFileWidth = sFileName.split('_')[1]
+    print(sFileWidth.find('W'))
+    if (sFileWidth.find('W') >= 0):
+        sWidth = sFileWidth[sFileWidth.find('W')+1::]
+        print(sWidth)
+        print(int(sWidth))
+        print(float(sWidth))
+
+    path2 = '/home/dino/RawShared/ExposureRaw002/FrameID0_W8000_H6000_20211109110205_P10_0000_1_30.raw'
+    sFileName2 = os.path.basename(path2)
+    print(sFileName2)
+    sDirName2 = os.path.dirname(path2)
+    print(sDirName2)
+    print(sFileName2.split('_'))
+    print(len(sFileName2.split('_')))
+
 
 def testSTD_AVG():
     np_array = np.random.randint(low=667,high=726,size=100)
@@ -145,7 +176,9 @@ if __name__ == "__main__":
 
     #numpy_condition_003()
 
-    Matplotlib_Show()
+    #Matplotlib_Show()
+
+    testFileInfo()
     pass
 
 
