@@ -16,27 +16,33 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 10
-sFilePath = '/home/dino/RawShared/ExposureRaw002/'
-sFileTempTime = '20211109110205'
+nFileCount = 200
+sFilePath = '/home/dino/RawShared/2021111908/480/'
+#sFileTempTime = '20211119082056'    #60
+sFileTempTime = '20211119105917'   #480
 sFileTempFormat = 'P10'
 
 bExposureRaw = True # True/False
 nFileExposureIM = 1
-nFileExposureID = 30
-nFileExposureCount = 10
+nFileExposureID = 480
+nFileExposureCount = 200
 nFileExposureInterval = 1
-nFileExposureIntervalNum = 9
+nFileExposureIntervalNum = 8
+nFileExposureCalCount = 200
 
-nROI_X = 3992
-nROI_Y = 2992
-nROI_W = 16    #multiple of 4
-nROI_H = 16    #multiple of 4
+nROI_X = 2000
+nROI_Y = 4500
+nROI_W = 4    #multiple of 4
+nROI_H = 4    #multiple of 4
 
-sSavePath = '/home/dino/RawShared/Output/'
+sSavePath = '/home/dino/RawShared/Output/2021111908_002/2000_4500/480/'
 
 ### Change the parameters to match the settings
 #######################################################
+
+bDeleteMaxMin = True
+nDeleteMaxCount = 10
+nDeleteMinCount = 10
 
 if not bExposureRaw:
     # Normal
@@ -111,9 +117,13 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
             lRawInfo.append('Frame{}'.format(i))
             for j in range(0, 4):
                 #print(ChannelArray[i,j])
-                Channel_AVG = np.average(ChannelArray[i,j])
+                ChannelAllPixel = ChannelArray[i,j].flatten()
+                #print(ChannelAllPixel)
+                #Channel_AVG = np.average(ChannelArray[i,j])
+                Channel_AVG = np.average(ChannelAllPixel)
                 lRawInfo.append(Channel_AVG.tolist())
-                Channel_STD = np.std(ChannelArray[i,j])
+                #Channel_STD = np.std(ChannelArray[i,j])
+                Channel_STD = np.std(ChannelAllPixel)
                 lRawInfo.append(Channel_STD.tolist())
             Save_CSV(sSaveFileName, lRawInfo)
         elif i == nCount: # Total
@@ -123,12 +133,30 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
             lRawInfo.clear()
             lRawInfo.append('FrameTotal')
             for j in range(0, 4):
+                #print("({},{},{})".format(i, j, sColor))
                 ChannelAllPixel = ChannelArray[:,j,:].flatten()
                 #print(ChannelAllPixel)
+
+                #mask = np.logical_or(ChannelAllPixel == ChannelAllPixel.max(keepdims = 1), ChannelAllPixel == ChannelAllPixel.min(keepdims = 1))
+                #ChannelAllPixel_masked = np.ma.masked_array(ChannelAllPixel, mask = mask)
+                #print(ChannelAllPixel_masked)
+
+                if ( bDeleteMaxMin and (np.size(ChannelAllPixel)//10 >= nDeleteMaxCount+nDeleteMinCount) ):
+                    MaxIndex = np.argpartition(ChannelAllPixel.ravel(), (0-nDeleteMaxCount))[(0-nDeleteMaxCount):]
+                    i2d = np.unravel_index(MaxIndex, ChannelAllPixel.shape)
+                    ChannelAllPixel = np.delete(ChannelAllPixel, i2d)
+                    MinIndex = np.argpartition(ChannelAllPixel.ravel(), nDeleteMinCount)[:nDeleteMinCount]
+                    i2d = np.unravel_index(MinIndex, ChannelAllPixel.shape)
+                    ChannelAllPixel = np.delete(ChannelAllPixel, i2d)
+                    #print(np.size(ChannelAllPixel))
+                
+                #print(ChannelAllPixel)
                 Channel_AVG = np.average(ChannelAllPixel)
+                #print(Channel_AVG)
                 lRawOrglInfo.append(Channel_AVG.tolist())
                 lRawInfo.append(Channel_AVG.tolist())
                 Channel_STD = np.std(ChannelAllPixel)
+                #print(Channel_STD)
                 lRawOrglInfo.append(Channel_STD.tolist())
                 lRawInfo.append(Channel_STD.tolist())
             Save_CSV(sSaveFileName, lRawInfo)
@@ -138,7 +166,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
 def ParsingPixel():
     nCount = nFileCount
     if bExposureRaw:
-        nCount = nFileExposureCount
+        nCount = nFileExposureCalCount
 
     #Get the numbers of every channel
     nR_Gb_Len = nROI_W//4 * nROI_H//4
@@ -274,6 +302,8 @@ def ParsingPixel():
                             ChannelR_array[k,1,nR1Index] = input_array[l]
                             nR1Index += 1
                         elif (l+nWOffset)%4==2: #Gr1
+                            #if nGr0Index == 0:
+                            #    print('{}: {}'.format(k, input_array[l]))
                             ChannelGr_array[k,0,nGr0Index] = input_array[l]
                             nGr0Index += 1
                         elif (l+nWOffset)%4==3: #Gr2
