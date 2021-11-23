@@ -16,33 +16,58 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 200
-sFilePath = '/home/dino/RawShared/2021111908/480/'
+nFileCount = 100
+sFilePath = '/home/dino/RawShared/2021112310/360/'
 #sFileTempTime = '20211119082056'    #60
-sFileTempTime = '20211119105917'   #480
+#sFileTempTime = '20211119105917'   #480
+#2021112216
+#sFileTempTime = '20211122160009'    #50 (1/45)
+#sFileTempTime = '20211122160259'    #100 (1/45)
+#sFileTempTime = '20211122160618'    #150 (1/45)
+#sFileTempTime = '20211122160931'    #200 (1/45)
+#sFileTempTime = '20211122161227'    #250 (1/45)
+#sFileTempTime = '20211122161525'    #300 (1/45)
+#sFileTempTime = '20211122161906'    #350 (1/45)
+#sFileTempTime = '20211122162312'    #400 (1/45)
+#sFileTempTime = '20211122162603'    #450 (1/45)
+#sFileTempTime = '20211122162906'    #500 (1/45)
+#sFileTempTime = '20211122163502'    #550 (1/45)
+#sFileTempTime = '20211122163806'    #600 (1/45)
+#sFileTempTime = '20211122164056'    #650 (1/45)
+#sFileTempTime = '20211122164349'    #700 (1/45)
+#sFileTempTime = '20211122164658'    #750 (1/45)
+#sFileTempTime = '20211122165050'    #800 (1/45)
+#sFileTempTime = '20211122165548'    #850 (1/45)
+#sFileTempTime = '20211122170111'    #900 (1/45)
+#sFileTempTime = '20211122170431'    #950 (1/45)
+#sFileTempTime = '20211122170726'    #1000 (1/45)
+#2021112310
+sFileTempTime = '20211123103147'
 sFileTempFormat = 'P10'
 
 bExposureRaw = True # True/False
-nFileExposureIM = 1
-nFileExposureID = 480
-nFileExposureCount = 200
+nFileExposureIM = 4
+nFileExposureID = 360
+nFileExposureCount = 100
 nFileExposureInterval = 1
-nFileExposureIntervalNum = 8
-nFileExposureCalCount = 200
+nFileExposureIntervalNum = 15
+nFileExposureCalCount = 100
+nFileExposureCalBegin = 1
 
-nROI_X = 2000
-nROI_Y = 4500
+nROI_X = 4000
+nROI_Y = 3000
 nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
-sSavePath = '/home/dino/RawShared/Output/2021111908_002/2000_4500/480/'
+bSaveCSV = False
+sSavePath = '/home/dino/RawShared/Output/2021112310/360_Del3/4000_3000/'
 
 ### Change the parameters to match the settings
 #######################################################
 
 bDeleteMaxMin = True
-nDeleteMaxCount = 10
-nDeleteMinCount = 10
+nDeleteMaxCount = 5
+nDeleteMinCount = 5
 
 if not bExposureRaw:
     # Normal
@@ -70,6 +95,8 @@ TimeInfo = sFileTempTime
 #print(TimeInfo)
 
 def Save_CSV(FileName, RowInfo):
+    if not bSaveCSV:
+        return
     with open(FileName, 'a+') as f:
         # create the csv writer
         csv_writer = csv.writer(f)
@@ -136,7 +163,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
                 #print("({},{},{})".format(i, j, sColor))
                 ChannelAllPixel = ChannelArray[:,j,:].flatten()
                 #print(ChannelAllPixel)
-
+                
                 #mask = np.logical_or(ChannelAllPixel == ChannelAllPixel.max(keepdims = 1), ChannelAllPixel == ChannelAllPixel.min(keepdims = 1))
                 #ChannelAllPixel_masked = np.ma.masked_array(ChannelAllPixel, mask = mask)
                 #print(ChannelAllPixel_masked)
@@ -149,6 +176,18 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
                     i2d = np.unravel_index(MinIndex, ChannelAllPixel.shape)
                     ChannelAllPixel = np.delete(ChannelAllPixel, i2d)
                     #print(np.size(ChannelAllPixel))
+
+                ##Dino test
+                #if sColor == 'Gr' and j == 2:
+                #    print(ChannelAllPixel)
+                #    print(ChannelAllPixel.max())
+                #    print(ChannelAllPixel.min())
+                #    #with open('/home/dino/RawShared/Output/Temp/20211123.csv', 'a+') as f:
+                #    #    # create the csv writer
+                #    #    csv_writer = csv.writer(f)
+                #    #    # write a row to the csv file
+                #    #    #print(RowInfo)
+                #   #    csv_writer.writerow(ChannelAllPixel.tolist())
                 
                 #print(ChannelAllPixel)
                 Channel_AVG = np.average(ChannelAllPixel)
@@ -275,7 +314,7 @@ def ParsingPixel():
             if not bExposureRaw:
                 sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
             else:
-                nContinueFileIndex = k+((h+nFileExposureIM-1)*nFileExposureCount)
+                nContinueFileIndex = k+((h+nFileExposureCalBegin-1)*nFileExposureCount)
                 sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, nContinueFileIndex, nExposureIntervalIndex, nFileExposureID)
             #if k == 0:
             #    print('File: ' + sFileTemp)
@@ -379,7 +418,7 @@ def ParsingPixel():
         Cal_Save_AllInformation(i, nCount, ChannelB_array, 'B', sSaveBFile, nExposureIntervalIndex, sSaveOrgBFile)
 
         nEachIntervalTime = time.time()
-        print("Durning Each Interval Time(sec): {}".format(nEachIntervalTime - StartTime))
+        print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
   
 
 if __name__ == "__main__":
