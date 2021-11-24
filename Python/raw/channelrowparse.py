@@ -16,8 +16,10 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 100
-sFilePath = '/home/dino/RawShared/2021112310/360/'
+nFileCount = 200
+sFilePath = '/home/dino/RawShared/2021112408/700/'
+#sFilePath = '/home/dino/IMX586_Raw/2021112408/400/'
+#2021111908:
 #sFileTempTime = '20211119082056'    #60
 #sFileTempTime = '20211119105917'   #480
 #2021112216
@@ -42,10 +44,12 @@ sFilePath = '/home/dino/RawShared/2021112310/360/'
 #sFileTempTime = '20211122170431'    #950 (1/45)
 #sFileTempTime = '20211122170726'    #1000 (1/45)
 #2021112310
-sFileTempTime = '20211123103147'
+#sFileTempTime = '20211123103147'
+#2021112408
+sFileTempTime = '20211124101611'
 sFileTempFormat = 'P10'
 
-bExposureRaw = True # True/False
+bExposureRaw = False # True/False
 nFileExposureIM = 4
 nFileExposureID = 360
 nFileExposureCount = 100
@@ -59,15 +63,15 @@ nROI_Y = 3000
 nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
-bSaveCSV = False
-sSavePath = '/home/dino/RawShared/Output/2021112310/360_Del3/4000_3000/'
+bSaveCSV = True
+sSavePath = '/home/dino/RawShared/Output/2021112408_200/400/'
 
 ### Change the parameters to match the settings
 #######################################################
 
-bDeleteMaxMin = True
-nDeleteMaxCount = 5
-nDeleteMinCount = 5
+bDeleteMaxMin = False
+nDeleteMaxCount = 3
+nDeleteMinCount = 3
 
 if not bExposureRaw:
     # Normal
