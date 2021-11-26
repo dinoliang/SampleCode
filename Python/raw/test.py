@@ -10,9 +10,10 @@ StartTime = time.time()
 
 def testFolderFile01():
     # 指定要列出所有檔案的目錄
-    mypath = "/var/log"
+    mypath = "/home/dino/IMX586_Raw2/2021112513"
     # 取得所有檔案與子目錄名稱
     files = os.listdir(mypath)
+    print("檔案數量:", len(files))
     # 以迴圈處理
     for f in files:
         # 產生檔案的絕對路徑
@@ -27,22 +28,22 @@ def testFolderFile01():
 
 def testFolderFile02():
     # 指定要列出所有檔案的目錄
-    mypath = "/var/log"
-
+    mypath = "/home/dino/IMX586_Raw2/2021112513"
     # 遞迴列出所有子目錄與檔案
     for root, dirs, files in os.walk(mypath):
         print("路徑：", root)
         print("  目錄：", dirs)
+        print("檔案數量:", len(files))
         print("  檔案：", files)
     return
 
 
 def testFolderFile03():
     # 指定要列出所有檔案的目錄
-    mypath = "/var/log"
-
+    mypath = "/home/dino/IMX586_Raw2/2021112513"
     # 遞迴列出所有檔案的絕對路徑
     for root, dirs, files in os.walk(mypath):
+        print("檔案數量:", len(files))
         for f in files:
             fullpath = os.path.join(root, f)
             print(fullpath)
@@ -196,8 +197,8 @@ def numpy_condition_003():
 
 
 def Matplotlib_Show():
-    #lena=scipy.misc.lena()
-    ascent=scipy.misc.ascent()
+    #lena = scipy.misc.lena()
+    ascent = scipy.misc.ascent()
     plt.gray()
     plt.imshow(ascent)
     plt.show()
@@ -220,9 +221,9 @@ if __name__ == "__main__":
     #Matplotlib_Show()
 
     #testFileInfo()
-    testFolderFile01()
+    #testFolderFile01()
     #testFolderFile02()
-    #testFolderFile03()
+    testFolderFile03()
 
     pass
 
