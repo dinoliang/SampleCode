@@ -17,8 +17,8 @@ nWidth = 8000
 nHeight = 6000
 
 nFileCount = 200
-sFilePath = '/home/dino/RawShared/2021112513/400/'
-sFileTempTime = '20211125140939'
+sFilePath = '/home/dino/IMX586_Raw2/2021112513/100/'
+sFileTempTime = '20211125151816'
 sFileTempFormat = 'P10'
 
 bExposureRaw = False # True/False
@@ -35,8 +35,9 @@ nROI_Y = 3000
 nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
-bSaveCSV = True
-sSavePath = '/home/dino/RawShared/Output/2021112513/4000_3000/400/'
+bSaveCSV = False
+#sSavePath = '/home/dino/RawShared/Output/2021112513/4000_3000/400/'
+sSavePath = '/home/dino/RawShared/Output/Temp/'
 
 bDeleteMaxMin = False
 nDeleteMaxCount = 3
