@@ -17,36 +17,8 @@ nWidth = 8000
 nHeight = 6000
 
 nFileCount = 200
-sFilePath = '/home/dino/RawShared/2021112408/700/'
-#sFilePath = '/home/dino/IMX586_Raw/2021112408/400/'
-#2021111908:
-#sFileTempTime = '20211119082056'    #60
-#sFileTempTime = '20211119105917'   #480
-#2021112216
-#sFileTempTime = '20211122160009'    #50 (1/45)
-#sFileTempTime = '20211122160259'    #100 (1/45)
-#sFileTempTime = '20211122160618'    #150 (1/45)
-#sFileTempTime = '20211122160931'    #200 (1/45)
-#sFileTempTime = '20211122161227'    #250 (1/45)
-#sFileTempTime = '20211122161525'    #300 (1/45)
-#sFileTempTime = '20211122161906'    #350 (1/45)
-#sFileTempTime = '20211122162312'    #400 (1/45)
-#sFileTempTime = '20211122162603'    #450 (1/45)
-#sFileTempTime = '20211122162906'    #500 (1/45)
-#sFileTempTime = '20211122163502'    #550 (1/45)
-#sFileTempTime = '20211122163806'    #600 (1/45)
-#sFileTempTime = '20211122164056'    #650 (1/45)
-#sFileTempTime = '20211122164349'    #700 (1/45)
-#sFileTempTime = '20211122164658'    #750 (1/45)
-#sFileTempTime = '20211122165050'    #800 (1/45)
-#sFileTempTime = '20211122165548'    #850 (1/45)
-#sFileTempTime = '20211122170111'    #900 (1/45)
-#sFileTempTime = '20211122170431'    #950 (1/45)
-#sFileTempTime = '20211122170726'    #1000 (1/45)
-#2021112310
-#sFileTempTime = '20211123103147'
-#2021112408
-sFileTempTime = '20211124101611'
+sFilePath = '/home/dino/RawShared/2021112513/400/'
+sFileTempTime = '20211125140939'
 sFileTempFormat = 'P10'
 
 bExposureRaw = False # True/False
@@ -64,14 +36,13 @@ nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
 bSaveCSV = True
-sSavePath = '/home/dino/RawShared/Output/2021112408_200/400/'
-
-### Change the parameters to match the settings
-#######################################################
+sSavePath = '/home/dino/RawShared/Output/2021112513/4000_3000/400/'
 
 bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
+### Change the parameters to match the settings
+#######################################################
 
 if not bExposureRaw:
     # Normal
@@ -182,16 +153,16 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
                     #print(np.size(ChannelAllPixel))
 
                 ##Dino test
-                #if sColor == 'Gr' and j == 2:
+                #if sColor == 'Gr' and j == 1:
                 #    print(ChannelAllPixel)
                 #    print(ChannelAllPixel.max())
                 #    print(ChannelAllPixel.min())
-                #    #with open('/home/dino/RawShared/Output/Temp/20211123.csv', 'a+') as f:
-                #    #    # create the csv writer
-                #    #    csv_writer = csv.writer(f)
-                #    #    # write a row to the csv file
-                #    #    #print(RowInfo)
-                #   #    csv_writer.writerow(ChannelAllPixel.tolist())
+                #    with open('/home/dino/RawShared/Output/Temp/20211124.csv', 'w+') as f:
+                #        # create the csv writer
+                #        csv_writer = csv.writer(f)
+                #        # write a row to the csv file
+                #        #print(RowInfo)
+                #        csv_writer.writerow(ChannelAllPixel.tolist())
                 
                 #print(ChannelAllPixel)
                 Channel_AVG = np.average(ChannelAllPixel)

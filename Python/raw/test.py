@@ -8,6 +8,47 @@ import os
 
 StartTime = time.time()
 
+def testFolderFile01():
+    # 指定要列出所有檔案的目錄
+    mypath = "/var/log"
+    # 取得所有檔案與子目錄名稱
+    files = os.listdir(mypath)
+    # 以迴圈處理
+    for f in files:
+        # 產生檔案的絕對路徑
+        fullpath = os.path.join(mypath, f)
+        # 判斷 fullpath 是檔案還是目錄
+        if os.path.isfile(fullpath):
+            print("檔案：", f)
+        elif os.path.isdir(fullpath):
+            print("目錄：", f)
+    return
+
+
+def testFolderFile02():
+    # 指定要列出所有檔案的目錄
+    mypath = "/var/log"
+
+    # 遞迴列出所有子目錄與檔案
+    for root, dirs, files in os.walk(mypath):
+        print("路徑：", root)
+        print("  目錄：", dirs)
+        print("  檔案：", files)
+    return
+
+
+def testFolderFile03():
+    # 指定要列出所有檔案的目錄
+    mypath = "/var/log"
+
+    # 遞迴列出所有檔案的絕對路徑
+    for root, dirs, files in os.walk(mypath):
+        for f in files:
+            fullpath = os.path.join(root, f)
+            print(fullpath)
+    return
+
+
 def testFileInfo():
     path = '/home/dino/RawShared/20211111_fulldark/FrameID0_W8000_H6000_20211111160205_P10_0000.raw'
     sFileName = os.path.basename(path)
@@ -178,7 +219,11 @@ if __name__ == "__main__":
 
     #Matplotlib_Show()
 
-    testFileInfo()
+    #testFileInfo()
+    testFolderFile01()
+    #testFolderFile02()
+    #testFolderFile03()
+
     pass
 
 
