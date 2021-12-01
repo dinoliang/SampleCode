@@ -17,15 +17,15 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 200
-sFilePath = '/home/dino/RawShared/2021111810/{}/'
+nFileCount = 10
+#sFilePath = '/home/dino/RawShared/2021111810/{}/'
 #sFilePath = '/home/dino/RawShared/2021112914/600/{}/'
-#sFilePath = '/home/dino/RawShared/2021113014/AngularSample/{}/'
+sFilePath = '/home/dino/RawShared/2021113014/AngularSample/{}/'
 
 #LightIntensity
-g_sFilePathFolder = [
-                    '20211118093237', '20211118094433', '20211118094925', '20211118095420', '20211118095940' \
-                    ]
+#g_sFilePathFolder = [
+#                    '20211118093237', '20211118094433', '20211118094925', '20211118095420', '20211118095940' \
+#                    ]
 
 #ExposureTime
 #g_sFilePathFolder = [
@@ -34,18 +34,17 @@ g_sFilePathFolder = [
 #                    ]
                     
 #AngulerResponse
-#g_sFilePathFolder = [
-#                    '-35', '-34', '-33', '-32', '-31', '-30', \
-#                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-#                    '0', \
-#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-#                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-#                    '+31', '+32', '+33', '+34', '+35' \
-#                    ]
-
+g_sFilePathFolder = [
+                    '-35', '-34', '-33', '-32', '-31', '-30', \
+                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+                    '0', \
+                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+                    '+31', '+32', '+33', '+34', '+35' \
+                    ]
 
 
 bExposureRaw = False # True/False
@@ -53,18 +52,19 @@ nFileExposureIM = 25
 nFileExposureID = 600
 nFileExposureInterval = 1
 
-nROI_X = 4000
-nROI_Y = 3000
-nROI_W = 4    #multiple of 4
-nROI_H = 4    #multiple of 4
+nROI_X = 3950
+nROI_Y = 2950
+nROI_W = 100    #multiple of 4
+nROI_H = 100    #multiple of 4
 
 g_re_FilePattern = "[a-zA-Z0-9_]+(.raw)"
 
 bSaveCSV = True
-sFileTempTime = '2021113015'
-sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
+sFileTempTime = '2021112914'
+#sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021113014/AngularSample/{}/'
+sSavePath = '/home/dino/RawShared/Output/2021113014_ROI100/AngularSample/{}/'
 
 bShowDebugOutput = False
 
@@ -72,8 +72,8 @@ bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
 
-bCalROIChannel = False
-bSaveCSV_ROI = False
+bCalROIChannel = True
+bSaveCSV_ROI = True
 ### Change the parameters to match the settings
 #######################################################
 
@@ -83,7 +83,7 @@ if not bExposureRaw:
     sSaveOrganizeTempFile = '{}_{}.csv'
 else:
     # Exposure
-    sSaveTempFile = '{}_{}_{}_{}.csv'
+    sSaveTempFile = '{}_{}_{}.csv'
     sSaveOrganizeTempFile = '{}_{}_{}.csv'
 
 #PixelRow_array = np.zeros((nFileCount, nROI_W))
@@ -140,12 +140,15 @@ def Cal_Information(y, nCount, ChannelArray, sColor):
         #print(lCsvAvgRow)
 
 
-def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExpIndex, sSaveOrgFile):
+def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, sSaveOrgFile):
     #print(ChannelArray)
     #print('')
     lRawInfo = []
     lRawInfo.clear()
-    lRawInfo = ['', 'Ch1_AVG', 'Ch1_STD', 'Ch2_AVG', 'Ch2_STD', 'Ch3_AVG', 'Ch3_STD', 'Ch4_AVG', 'Ch4_STD']
+    if not bSaveCSV_ROI:
+        lRawInfo = ['', 'Ch1_AVG', 'Ch1_STD', 'Ch2_AVG', 'Ch2_STD', 'Ch3_AVG', 'Ch3_STD', 'Ch4_AVG', 'Ch4_STD']
+    else:
+        lRawInfo = ['', 'Ch_AVG', 'Ch_STD']
     Save_CSV(sSaveFileName, lRawInfo)
     for i in range(0, nCount+1):
         if i < nCount:
@@ -167,7 +170,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
         elif i == nCount: # Total
             lRawOrglInfo = []
             lRawOrglInfo.clear()
-            lRawOrglInfo.append('Exp{}'.format(nExpIndex))
+            lRawOrglInfo.append('{}'.format(g_sFilePathFolder[y]))
             lRawInfo.clear()
             lRawInfo.append('FrameTotal')
             for j in range(0, 4):
@@ -189,18 +192,6 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
                     i2d = np.unravel_index(MinIndex, ChannelAllPixel.shape)
                     ChannelAllPixel = np.delete(ChannelAllPixel, i2d)
                     #print(np.size(ChannelAllPixel))
-
-                ##Dino test
-                #if sColor == 'Gr' and j == 1:
-                #    print(ChannelAllPixel)
-                #    print(ChannelAllPixel.max())
-                #    print(ChannelAllPixel.min())
-                #    with open('/home/dino/RawShared/Output/Temp/20211124.csv', 'w+') as f:
-                #        # create the csv writer
-                #        csv_writer = csv.writer(f)
-                #        # write a row to the csv file
-                #        #print(RowInfo)
-                #        csv_writer.writerow(ChannelAllPixel.tolist())
                 
                 #print(ChannelAllPixel)
                 Channel_AVG = np.average(ChannelAllPixel)
@@ -219,7 +210,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
             if bCalROIChannel:
                 lRawROIInfo = []
                 lRawROIInfo.clear()
-                lRawROIInfo.append('ROI_Exp{}'.format(nExpIndex))
+                lRawROIInfo.append('{}'.format(g_sFilePathFolder[y]))
 
                 ChannelAllPixel = ChannelArray[:,:,:].flatten()
                 if bShowDebugOutput:
@@ -284,12 +275,6 @@ def ParsingPixel():
         ChannelGr_array = np.zeros((nCount, 4, nGr_B_Len))
         ChannelGb_array = np.zeros((nCount, 4, nR_Gb_Len))
         ChannelB_array = np.zeros((nCount, 4, nGr_B_Len))
-        
-        #The exposure time index
-        if not bExposureRaw:
-            nExposureIntervalIndex = 0
-        else:
-            nExposureIntervalIndex = h*nFileExposureInterval+nFileExposureIM
             
         #Set the every channel saving file (R/Gr/Gb/B) (Total)
         sTempSavePath = sSavePath.format(x)
@@ -299,10 +284,10 @@ def ParsingPixel():
             sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
             sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
         else:
-            sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
-            sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
-            sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
-            sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
+            sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'R')
+            sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gr')
+            sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gb')
+            sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'B')
         if os.path.exists(sSaveRFile):
             os.remove(sSaveRFile)
         if os.path.exists(sSaveGrFile):
@@ -312,9 +297,13 @@ def ParsingPixel():
         if os.path.exists(sSaveBFile):
             os.remove(sSaveBFile)
 
+        
         k = 0
         for root, dirs, files in os.walk(sTempFilePath):
             for sFile in files:
+                if k >= nCount:
+                    continue
+
                 nR0Index, nR1Index, nR2Index, nR3Index = 0, 0, 0, 0
                 nGr0Index, nGr1Index, nGr2Index, nGr3Index = 0, 0, 0, 0
                 nGb0Index, nGb1Index, nGb2Index, nGb3Index = 0, 0, 0, 0
@@ -406,25 +395,25 @@ def ParsingPixel():
         #lCsvAvgRow.clear()
         #Save_CSV(sSaveRStdFile, lCsvStdRow)
         #Save_CSV(sSaveRAvgFile, lCsvAvgRow)
-        Cal_Save_AllInformation(h, nCount, ChannelR_array, 'R', sSaveRFile, nExposureIntervalIndex, sSaveOrgRFile)
+        Cal_Save_AllInformation(h, nCount, ChannelR_array, 'R', sSaveRFile, sSaveOrgRFile)
         #Save the G information
         #lCsvStdRow.clear()
         #lCsvAvgRow.clear()
         #Save_CSV(sSaveGrStdFile, lCsvStdRow)
         #Save_CSV(sSaveGrAvgFile, lCsvAvgRow)
-        Cal_Save_AllInformation(h, nCount, ChannelGr_array, 'Gr', sSaveGrFile, nExposureIntervalIndex, sSaveOrgGrFile)
+        Cal_Save_AllInformation(h, nCount, ChannelGr_array, 'Gr', sSaveGrFile, sSaveOrgGrFile)
         #Save the Gb information
         #lCsvStdRow.clear()
         #lCsvAvgRow.clear()
         #Save_CSV(sSaveGbStdFile, lCsvStdRow)
         #Save_CSV(sSaveGbAvgFile, lCsvAvgRow)
-        Cal_Save_AllInformation(h, nCount, ChannelGb_array, 'Gb', sSaveGbFile, nExposureIntervalIndex, sSaveOrgGbFile)
+        Cal_Save_AllInformation(h, nCount, ChannelGb_array, 'Gb', sSaveGbFile, sSaveOrgGbFile)
         #Save the B information
         #lCsvStdRow.clear()
         #lCsvAvgRow.clear()
         #Save_CSV(sSaveBStdFile, lCsvStdRow)
         #Save_CSV(sSaveBAvgFile, lCsvAvgRow)
-        Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, nExposureIntervalIndex, sSaveOrgBFile)
+        Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, sSaveOrgBFile)
 
         h = h + 1
         nEachIntervalTime = time.time()
