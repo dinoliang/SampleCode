@@ -8,6 +8,7 @@ import csv
 import datetime
 import enum
 import os
+import re
 
 StartTime = time.time()
 
@@ -16,29 +17,54 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 10
-sFilePath = '/home/dino/RawShared/2021113014/AngleSample/+27/'
-#sFilePath = '/home/dino/RawShared/2021112914/600/'
-sFileTempTime = '20211130154901'
-sFileTempFormat = 'P10'
+nFileCount = 200
+sFilePath = '/home/dino/RawShared/2021111810/{}/'
+#sFilePath = '/home/dino/RawShared/2021112914/600/{}/'
+#sFilePath = '/home/dino/RawShared/2021113014/AngularSample/{}/'
+
+#LightIntensity
+g_sFilePathFolder = [
+                    '20211118093237', '20211118094433', '20211118094925', '20211118095420', '20211118095940' \
+                    ]
+
+#ExposureTime
+#g_sFilePathFolder = [
+#                    '25', '26', '27', '28', '29', '30', \
+#                    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40'
+#                    ]
+                    
+#AngulerResponse
+#g_sFilePathFolder = [
+#                    '-35', '-34', '-33', '-32', '-31', '-30', \
+#                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+#                    '0', \
+#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+#                    '+31', '+32', '+33', '+34', '+35' \
+#                    ]
+
+
 
 bExposureRaw = False # True/False
 nFileExposureIM = 25
 nFileExposureID = 600
-nFileExposureCount = 200
 nFileExposureInterval = 1
-nFileExposureIntervalNum = 2
-nFileExposureCalCount = 200
-nFileExposureCalBegin = 1
 
 nROI_X = 4000
 nROI_Y = 3000
 nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
+g_re_FilePattern = "[a-zA-Z0-9_]+(.raw)"
+
 bSaveCSV = True
-#sSavePath = '/home/dino/RawShared/Output/2021112513/4000_3000/400/'
-sSavePath = '/home/dino/RawShared/Output/2021113014/AngleSample/+27/'
+sFileTempTime = '2021113015'
+sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
+#sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
+#sSavePath = '/home/dino/RawShared/Output/Temp/2021113014/AngularSample/{}/'
 
 bShowDebugOutput = False
 
@@ -46,24 +72,17 @@ bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
 
-bCalROIChannel = True
-bSaveCSV_ROI = True
+bCalROIChannel = False
+bSaveCSV_ROI = False
 ### Change the parameters to match the settings
 #######################################################
 
 if not bExposureRaw:
     # Normal
-    sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}.raw'
-    #sSaveStdFile = 'STD_{}.csv'
-    #sSaveAvgFile = 'AVG_{}.csv'
     sSaveTempFile = '{}_Single_{}.csv'
     sSaveOrganizeTempFile = '{}_{}.csv'
-    nFileExposureIntervalNum = 1
 else:
     # Exposure
-    sFileTempName = 'FrameID0_W{0:d}_H{1:d}_{2:s}_{3:s}_{4:04d}_{5:d}_{6:d}.raw'
-    #sSaveStdFile = 'STD_{}_{}_{}_{}.csv'
-    #sSaveAvgFile = 'AVG_{}_{}_{}_{}.csv'
     sSaveTempFile = '{}_{}_{}_{}.csv'
     sSaveOrganizeTempFile = '{}_{}_{}.csv'
 
@@ -75,6 +94,14 @@ NowDate = datetime.datetime.now()
 #TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
 TimeInfo = sFileTempTime
 #print(TimeInfo)
+
+def Check_File(sFileName, rePattern):
+    if re.fullmatch(rePattern, sFileName):
+        #print("Is right file..")
+        return True
+    #else:
+    #    print("Not right file..")
+    return False
 
 def Save_CSV(FileName, RowInfo):
     if not bSaveCSV:
@@ -210,8 +237,6 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, nExp
 
 def ParsingPixel():
     nCount = nFileCount
-    if bExposureRaw:
-        nCount = nFileExposureCalCount
 
     #Get the numbers of every channel
     nR_Gb_Len = nROI_W//4 * nROI_H//4
@@ -223,16 +248,17 @@ def ParsingPixel():
     nWOffset = nROI_X % 4
 
     #Set the save orgnize file (Orgnize result)
+    sTempSavePath = sSavePath.format('Total')
     if not bExposureRaw:
-        sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
-        sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
-        sSaveOrgGbFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
-        sSaveOrgBFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
+        sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
+        sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
+        sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
+        sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
     else:
-        sSaveOrgRFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
-        sSaveOrgGrFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
-        sSaveOrgGbFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
-        sSaveOrgBFile = sSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
+        sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
+        sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
+        sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
+        sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
     if os.path.exists(sSaveOrgRFile):
         os.remove(sSaveOrgRFile)
     if os.path.exists(sSaveOrgGrFile):
@@ -248,9 +274,11 @@ def ParsingPixel():
     Save_CSV(sSaveOrgGrFile, lRawInfo)
     Save_CSV(sSaveOrgGbFile, lRawInfo)
     Save_CSV(sSaveOrgBFile, lRawInfo)
+
+    h = 0
+    for x in g_sFilePathFolder:
+        sTempFilePath = sFilePath.format(x)
         
-    #Every exposure interval
-    for h in range(0, nFileExposureIntervalNum):
         #4 Quad channel (1~4) of 4Channel (R/Gr/Gb/B)
         ChannelR_array = np.zeros((nCount, 4, nR_Gb_Len))
         ChannelGr_array = np.zeros((nCount, 4, nGr_B_Len))
@@ -262,45 +290,19 @@ def ParsingPixel():
             nExposureIntervalIndex = 0
         else:
             nExposureIntervalIndex = h*nFileExposureInterval+nFileExposureIM
-        '''
-        #Set the every channel saving file (R/Gr/Gb/B) (Std&Avg)
-        sSaveRStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
-        sSaveRAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
-        sSaveGrStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
-        sSaveGrAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
-        sSaveGbStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
-        sSaveGbAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
-        sSaveBStdFile = sSavePath+sSaveStdFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
-        sSaveBAvgFile = sSavePath+sSaveAvgFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
-        if os.path.exists(sSaveRStdFile):
-            os.remove(sSaveRStdFile)
-        if os.path.exists(sSaveRAvgFile):
-            os.remove(sSaveRAvgFile)
-        if os.path.exists(sSaveGrStdFile):
-            os.remove(sSaveGrStdFile)
-        if os.path.exists(sSaveGrAvgFile):
-            os.remove(sSaveGrAvgFile)
-        if os.path.exists(sSaveGbStdFile):
-            os.remove(sSaveGbStdFile)
-        if os.path.exists(sSaveGbAvgFile):
-            os.remove(sSaveGbAvgFile)
-        if os.path.exists(sSaveBStdFile):
-            os.remove(sSaveBStdFile)
-        if os.path.exists(sSaveBAvgFile):
-            os.remove(sSaveBAvgFile)
-        '''
             
         #Set the every channel saving file (R/Gr/Gb/B) (Total)
+        sTempSavePath = sSavePath.format(x)
         if not bExposureRaw:
-            sSaveRFile = sSavePath+sSaveTempFile.format(TimeInfo, 'R')
-            sSaveGrFile = sSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
-            sSaveGbFile = sSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
-            sSaveBFile = sSavePath+sSaveTempFile.format(TimeInfo, 'B')
+            sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'R')
+            sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
+            sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
+            sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
         else:
-            sSaveRFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
-            sSaveGrFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
-            sSaveGbFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
-            sSaveBFile = sSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
+            sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'R')
+            sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gr')
+            sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'Gb')
+            sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nExposureIntervalIndex, nFileExposureID, 'B')
         if os.path.exists(sSaveRFile):
             os.remove(sSaveRFile)
         if os.path.exists(sSaveGrFile):
@@ -310,92 +312,93 @@ def ParsingPixel():
         if os.path.exists(sSaveBFile):
             os.remove(sSaveBFile)
 
-        #Every file of one exposure time index
-        for k in range(0, nCount):
-            nR0Index, nR1Index, nR2Index, nR3Index = 0, 0, 0, 0
-            nGr0Index, nGr1Index, nGr2Index, nGr3Index = 0, 0, 0, 0
-            nGb0Index, nGb1Index, nGb2Index, nGb3Index = 0, 0, 0, 0
-            nB0Index, nB1Index, nB2Index, nB3Index = 0, 0, 0, 0
-            #Set the source file
-            if not bExposureRaw:
-                sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, k)
-            else:
-                nContinueFileIndex = k+((h+nFileExposureCalBegin-1)*nFileExposureCount)
-                sFileTemp = sFilePath+sFileTempName.format(nWidth, nHeight, sFileTempTime, sFileTempFormat, nContinueFileIndex, nExposureIntervalIndex, nFileExposureID)
-            #if k == 0:
-            #    print('File: ' + sFileTemp)
+        k = 0
+        for root, dirs, files in os.walk(sTempFilePath):
+            for sFile in files:
+                nR0Index, nR1Index, nR2Index, nR3Index = 0, 0, 0, 0
+                nGr0Index, nGr1Index, nGr2Index, nGr3Index = 0, 0, 0, 0
+                nGb0Index, nGb1Index, nGb2Index, nGb3Index = 0, 0, 0, 0
+                nB0Index, nB1Index, nB2Index, nB3Index = 0, 0, 0, 0
 
-            #Every row
-            for i in range(nROI_Y, nROI_Y+nROI_H):
-                bNeedCal = False
+                sFileTemp = sFile
+                rePattern = g_re_FilePattern
+                if not Check_File(sFileTemp, rePattern):
+                    continue
 
-                nPixelOffset = nWidth * i * 2 + nROI_X * 2
-                #print('nPixelOffset: ', nPixelOffset)
-                input_file = open(sFileTemp, 'rb')
-                #Get all pixel of one range row
-                input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W, sep="", offset=nPixelOffset)
-                input_file.close()
-                #print('input_array: ', input_array)
-                
-                if i%4==0:  #R1~2+Gr1~2
-                    for l in range(0, nROI_W):
-                        if (l+nWOffset)%4==0: #R1
-                            #print('h:{}, i:{}, k:{}, Index:{}, l:{}'.format(h, i, k, nR0Index, l))
-                            ChannelR_array[k,0,nR0Index] = input_array[l]
-                            nR0Index += 1
-                        elif (l+nWOffset)%4==1: #R2
-                            ChannelR_array[k,1,nR1Index] = input_array[l]
-                            nR1Index += 1
-                        elif (l+nWOffset)%4==2: #Gr1
-                            #if nGr0Index == 0:
-                            #    print('{}: {}'.format(k, input_array[l]))
-                            ChannelGr_array[k,0,nGr0Index] = input_array[l]
-                            nGr0Index += 1
-                        elif (l+nWOffset)%4==3: #Gr2
-                            ChannelGr_array[k,1,nGr1Index] = input_array[l]
-                            nGr1Index += 1
-                elif i%4==1:  #R3~4+Gr3~4
-                    for l in range(0, nROI_W):
-                        if (l+nWOffset)%4==0: #R3
-                            ChannelR_array[k,2,nR2Index] = input_array[l]
-                            nR2Index += 1
-                        elif (l+nWOffset)%4==1: #R4
-                            ChannelR_array[k,3,nR3Index] = input_array[l]
-                            nR3Index += 1
-                        elif (l+nWOffset)%4==2: #Gr3
-                            ChannelGr_array[k,2,nGr2Index] = input_array[l]
-                            nGr2Index += 1
-                        elif (l+nWOffset)%4==3: #Gr4
-                            ChannelGr_array[k,3,nGr3Index] = input_array[l]
-                            nGr3Index += 1
-                elif i%4==2:  #Gb1~2+B1~2
-                    for l in range(0, nROI_W):
-                        if (l+nWOffset)%4==0: #Gb1
-                            ChannelGb_array[k,0,nGb0Index] = input_array[l]
-                            nGb0Index += 1
-                        elif (l+nWOffset)%4==1: #Gb2
-                            ChannelGb_array[k,1,nGb1Index] = input_array[l]
-                            nGb1Index += 1
-                        elif (l+nWOffset)%4==2: #B1
-                            ChannelB_array[k,0,nB0Index] = input_array[l]
-                            nB0Index += 1
-                        elif (l+nWOffset)%4==3: #B2
-                            ChannelB_array[k,1,nB1Index] = input_array[l]
-                            nB1Index += 1
-                elif i%4==3:  #Gb3~4+B3~4
-                    for l in range(0, nROI_W):
-                        if (l+nWOffset)%4==0: #Gb3
-                            ChannelGb_array[k,2,nGb2Index] = input_array[l]
-                            nGb2Index += 1
-                        elif (l+nWOffset)%4==1: #Gb4
-                            ChannelGb_array[k,3,nGb3Index] = input_array[l]
-                            nGb3Index += 1
-                        elif (l+nWOffset)%4==2: #B3
-                            ChannelB_array[k,2,nB2Index] = input_array[l]
-                            nB2Index += 1
-                        elif (l+nWOffset)%4==3: #B4
-                            ChannelB_array[k,3,nB3Index] = input_array[l]
-                            nB3Index += 1
+                sFileTemp = root + '/' + sFileTemp
+                print('sFileTemp: ', sFileTemp)
+                #Every row
+                for i in range(nROI_Y, nROI_Y+nROI_H):
+                    bNeedCal = False
+
+                    nPixelOffset = nWidth * i * 2 + nROI_X * 2
+                    #print('nPixelOffset: ', nPixelOffset)
+                    input_file = open(sFileTemp, 'rb')
+                    #Get all pixel of one range row
+                    input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W, sep="", offset=nPixelOffset)
+                    input_file.close()
+                    #print('input_array: ', input_array)
+                    
+                    if i%4==0:  #R1~2+Gr1~2
+                        for l in range(0, nROI_W):
+                            if (l+nWOffset)%4==0: #R1
+                                #print('h:{}, i:{}, k:{}, Index:{}, l:{}'.format(h, i, k, nR0Index, l))
+                                ChannelR_array[k,0,nR0Index] = input_array[l]
+                                nR0Index += 1
+                            elif (l+nWOffset)%4==1: #R2
+                                ChannelR_array[k,1,nR1Index] = input_array[l]
+                                nR1Index += 1
+                            elif (l+nWOffset)%4==2: #Gr1
+                                #if nGr0Index == 0:
+                                #    print('{}: {}'.format(k, input_array[l]))
+                                ChannelGr_array[k,0,nGr0Index] = input_array[l]
+                                nGr0Index += 1
+                            elif (l+nWOffset)%4==3: #Gr2
+                                ChannelGr_array[k,1,nGr1Index] = input_array[l]
+                                nGr1Index += 1
+                    elif i%4==1:  #R3~4+Gr3~4
+                        for l in range(0, nROI_W):
+                            if (l+nWOffset)%4==0: #R3
+                                ChannelR_array[k,2,nR2Index] = input_array[l]
+                                nR2Index += 1
+                            elif (l+nWOffset)%4==1: #R4
+                                ChannelR_array[k,3,nR3Index] = input_array[l]
+                                nR3Index += 1
+                            elif (l+nWOffset)%4==2: #Gr3
+                                ChannelGr_array[k,2,nGr2Index] = input_array[l]
+                                nGr2Index += 1
+                            elif (l+nWOffset)%4==3: #Gr4
+                                ChannelGr_array[k,3,nGr3Index] = input_array[l]
+                                nGr3Index += 1
+                    elif i%4==2:  #Gb1~2+B1~2
+                        for l in range(0, nROI_W):
+                            if (l+nWOffset)%4==0: #Gb1
+                                ChannelGb_array[k,0,nGb0Index] = input_array[l]
+                                nGb0Index += 1
+                            elif (l+nWOffset)%4==1: #Gb2
+                                ChannelGb_array[k,1,nGb1Index] = input_array[l]
+                                nGb1Index += 1
+                            elif (l+nWOffset)%4==2: #B1
+                                ChannelB_array[k,0,nB0Index] = input_array[l]
+                                nB0Index += 1
+                            elif (l+nWOffset)%4==3: #B2
+                                ChannelB_array[k,1,nB1Index] = input_array[l]
+                                nB1Index += 1
+                    elif i%4==3:  #Gb3~4+B3~4
+                        for l in range(0, nROI_W):
+                            if (l+nWOffset)%4==0: #Gb3
+                                ChannelGb_array[k,2,nGb2Index] = input_array[l]
+                                nGb2Index += 1
+                            elif (l+nWOffset)%4==1: #Gb4
+                                ChannelGb_array[k,3,nGb3Index] = input_array[l]
+                                nGb3Index += 1
+                            elif (l+nWOffset)%4==2: #B3
+                                ChannelB_array[k,2,nB2Index] = input_array[l]
+                                nB2Index += 1
+                            elif (l+nWOffset)%4==3: #B4
+                                ChannelB_array[k,3,nB3Index] = input_array[l]
+                                nB3Index += 1
+                k = k + 1
 
         #Save the R information
         #print(h)
@@ -423,9 +426,9 @@ def ParsingPixel():
         #Save_CSV(sSaveBAvgFile, lCsvAvgRow)
         Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, nExposureIntervalIndex, sSaveOrgBFile)
 
+        h = h + 1
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
-  
 
 if __name__ == "__main__":
     ParsingPixel()
