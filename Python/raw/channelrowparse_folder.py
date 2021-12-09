@@ -6,7 +6,7 @@ import numpy as np
 import time
 import csv
 import datetime
-import enum
+#import enum
 import os
 import re
 
