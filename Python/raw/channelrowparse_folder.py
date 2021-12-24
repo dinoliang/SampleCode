@@ -17,15 +17,19 @@ StartTime = time.time()
 nWidth = 8000
 nHeight = 6000
 
-nFileCount = 10
+nFileCount = 5
 #sFilePath = '/home/dino/RawShared/2021111810/{}/'
 #sFilePath = '/home/dino/RawShared/2021112914/600/{}/'
-sFilePath = '/home/dino/RawShared/2021113014/AngularSample/{}/'
+sFilePath = '/home/dino/RawShared/Temp/Temp2/{}/'
 
 #LightIntensity
 #g_sFilePathFolder = [
 #                    '20211118093237', '20211118094433', '20211118094925', '20211118095420', '20211118095940' \
 #                    ]
+
+g_sFilePathFolder = [
+                    'RAW_TEMP' \
+                    ]
 
 #ExposureTime
 #g_sFilePathFolder = [
@@ -34,17 +38,17 @@ sFilePath = '/home/dino/RawShared/2021113014/AngularSample/{}/'
 #                    ]
                     
 #AngulerResponse
-g_sFilePathFolder = [
-                    '-35', '-34', '-33', '-32', '-31', '-30', \
-                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-                    '0', \
-                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-                    '+31', '+32', '+33', '+34', '+35' \
-                    ]
+#g_sFilePathFolder = [
+#                    '-35', '-34', '-33', '-32', '-31', '-30', \
+#                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+#                    '0', \
+#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+#                    '+31', '+32', '+33', '+34', '+35' \
+#                    ]
 
 
 bExposureRaw = False # True/False
@@ -54,17 +58,17 @@ nFileExposureInterval = 1
 
 nROI_X = 3950
 nROI_Y = 2950
-nROI_W = 100    #multiple of 4
-nROI_H = 100    #multiple of 4
+nROI_W = 200    #multiple of 4
+nROI_H = 200    #multiple of 4
 
 g_re_FilePattern = "[a-zA-Z0-9_]+(.raw)"
 
 bSaveCSV = True
-sFileTempTime = '2021112914'
+sFileTempTime = '20211130153318'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021113014/AngularSample/{}/'
-sSavePath = '/home/dino/RawShared/Output/2021113014_ROI100/AngularSample/{}/'
+sSavePath = '/home/dino/RawShared/Temp/Temp2/{}/'
 
 bShowDebugOutput = False
 
@@ -72,8 +76,8 @@ bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
 
-bCalROIChannel = True
-bSaveCSV_ROI = True
+bCalROIChannel = False
+bSaveCSV_ROI = False
 ### Change the parameters to match the settings
 #######################################################
 

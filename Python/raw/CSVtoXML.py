@@ -11,15 +11,15 @@ StartTime = time.time()
 
 g_sFilePath = '/home/dino/RawShared/Temp/'
 g_sInFile = 'ZettTool_StringTable.csv'
-g_sOutFile = 'ZettTool_StringTable.xml'
-g_sLanguage = 'en-US'
-#g_sXMLStringFormat = '<String no=\"{}\" text=\"{}\"/>'
+g_sOutFile = 'Language_{}.xml'
+g_sLanguage = 'zh-CN' #'en-US' / 'ja-JP' / 'zh-TW' / 'zh-CN'
+g_sXMLStringFormat = '<String no=\"{}\" text=\"{}\"/>'
 
 g_bFirstOpen = False
 
-def prettyXml(element, indent, newline, level = 0): # elemnt为传进来的Elment类，参数indent用于缩进，newline用于换行 
-    if element: # 判断element是否有子元素 
-        if element.text == None or element.text.isspace(): # 如果element的text没有内容 
+def prettyXml(element, indent, newline, level = 0): # Elment class by elemnt，indent for indentation，newline for wrap
+    if element: # have child item of element
+        if element.text == None or element.text.isspace(): # no content of element text
             element.text = newline + indent * (level + 1)  
         else: 
             element.text = newline + indent * (level + 1) + element.text.strip() + newline + indent * (level + 1) 
@@ -34,7 +34,10 @@ def prettyXml(element, indent, newline, level = 0): # elemnt为传进来的Elmen
         prettyXml(subelement, indent, newline, level = level + 1) # 对子元素进行递归操作 
 
 def WriteXML(rows):
-    sOutFile = g_sFilePath + g_sOutFile
+    sOutFileTemp = g_sOutFile.format(g_sLanguage);
+    sOutFile = g_sFilePath + sOutFileTemp
+    if os.path.exists(sOutFile):
+        os.remove(sOutFile)
 
     #NodeRoot = ET.Element('?xml version=\"1.0\" encoding=\"utf-8\"')
 
@@ -54,15 +57,17 @@ def WriteXML(rows):
     prettyXml(Node1, '\t', '\n')
     #Tree = ET.ElementTree(NodeRoot)
     Tree = ET.ElementTree(Node1)
-    Tree.write(sOutFile, encoding='utf-8', xml_declaration=True)
+    Tree.write(sOutFile, encoding='utf-16', xml_declaration=True)
 
     return
 
 def CSVtoXML():
 
     sInFile = g_sFilePath + g_sInFile
-    with open(sInFile,newline="",encoding="utf-8")as file:
-        rows = csv.reader(file)   
+    with open(sInFile, newline="", encoding="utf-16")as file:
+        rows = csv.reader(file)
+        #dataList = list(rows)
+        #print(dataList)
         WriteXML(rows)
 
     return
