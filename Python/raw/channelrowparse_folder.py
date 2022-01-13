@@ -19,22 +19,22 @@ nHeight = 6000
 
 nFileCount = 5
 #sFilePath = '/home/dino/RawShared/2021111810/{}/'
-#sFilePath = '/home/dino/RawShared/2021112914/600/{}/'
-sFilePath = '/home/dino/RawShared/Temp/Temp2/{}/'
+#sFilePath = '/home/dino/RawShared/2022010413/800/{}/'
+sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
+
+#Normal
+#g_sFilePathFolder = [
+#                    '450'
+#                    ]
 
 #LightIntensity
 #g_sFilePathFolder = [
 #                    '20211118093237', '20211118094433', '20211118094925', '20211118095420', '20211118095940' \
 #                    ]
 
-g_sFilePathFolder = [
-                    'RAW_TEMP' \
-                    ]
-
 #ExposureTime
 #g_sFilePathFolder = [
-#                    '25', '26', '27', '28', '29', '30', \
-#                    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40'
+#                    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
 #                    ]
                     
 #AngulerResponse
@@ -50,25 +50,33 @@ g_sFilePathFolder = [
 #                    '+31', '+32', '+33', '+34', '+35' \
 #                    ]
 
+#QuantumEfficiency
+g_sFilePathFolder = [
+                    '400', \
+                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
+                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
+                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+                    '710', '720', '730', '740', '750',  '760', '770', '780' \
+                   ]
 
 bExposureRaw = False # True/False
-nFileExposureIM = 25
-nFileExposureID = 600
+nFileExposureIM = 2
+nFileExposureID = 1200
 nFileExposureInterval = 1
 
-nROI_X = 3950
-nROI_Y = 2950
-nROI_W = 200    #multiple of 4
-nROI_H = 200    #multiple of 4
+nROI_X = 4000
+nROI_Y = 3000
+nROI_W = 4    #multiple of 4
+nROI_H = 4    #multiple of 4
 
 g_re_FilePattern = "[a-zA-Z0-9_]+(.raw)"
 
 bSaveCSV = True
-sFileTempTime = '20211130153318'
+sFileTempTime = '2022010614'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021113014/AngularSample/{}/'
-sSavePath = '/home/dino/RawShared/Temp/Temp2/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
 
 bShowDebugOutput = False
 
@@ -301,7 +309,8 @@ def ParsingPixel():
         if os.path.exists(sSaveBFile):
             os.remove(sSaveBFile)
 
-        
+        if bShowDebugOutput:
+            print('TempFilePath: ', sTempFilePath)
         k = 0
         for root, dirs, files in os.walk(sTempFilePath):
             for sFile in files:
