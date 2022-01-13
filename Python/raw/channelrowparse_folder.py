@@ -19,13 +19,13 @@ nHeight = 6000
 
 nFileCount = 5
 #sFilePath = '/home/dino/RawShared/2021111810/{}/'
-#sFilePath = '/home/dino/RawShared/2022010413/800/{}/'
-sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
+sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
+#sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
 
 #Normal
-#g_sFilePathFolder = [
-#                    '450'
-#                    ]
+g_sFilePathFolder = [
+                    '500'
+                    ]
 
 #LightIntensity
 #g_sFilePathFolder = [
@@ -51,13 +51,13 @@ sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
 #                    ]
 
 #QuantumEfficiency
-g_sFilePathFolder = [
-                    '400', \
-                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
-                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-                    '710', '720', '730', '740', '750',  '760', '770', '780' \
-                   ]
+#g_sFilePathFolder = [
+#                    '400', \
+#                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
+#                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
+#                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+#                    '710', '720', '730', '740', '750',  '760', '770', '780' \
+#                   ]
 
 bExposureRaw = False # True/False
 nFileExposureIM = 2
@@ -69,14 +69,15 @@ nROI_Y = 3000
 nROI_W = 4    #multiple of 4
 nROI_H = 4    #multiple of 4
 
-g_re_FilePattern = "[a-zA-Z0-9_]+(.raw)"
+g_bAYAFile = True
+g_re_FilePattern = ""
 
 bSaveCSV = True
-sFileTempTime = '2022010614'
+sFileTempTime = '2022010610'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
-#sSavePath = '/home/dino/RawShared/Output/Temp/2021113014/AngularSample/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
+sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
+#sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
 
 bShowDebugOutput = False
 
@@ -89,6 +90,11 @@ bSaveCSV_ROI = False
 ### Change the parameters to match the settings
 #######################################################
 
+g_re_FilePattern_raw = "[a-zA-Z0-9_]+(.raw)"
+g_re_FilePattern_bin = "[a-zA-Z0-9_]+(.bin)"
+
+g_nRawBeginIndex = 0
+
 if not bExposureRaw:
     # Normal
     sSaveTempFile = '{}_Single_{}.csv'
@@ -97,6 +103,13 @@ else:
     # Exposure
     sSaveTempFile = '{}_{}_{}.csv'
     sSaveOrganizeTempFile = '{}_{}_{}.csv'
+
+if not g_bAYAFile:
+    g_re_FilePattern = g_re_FilePattern_raw
+    g_nRawBeginIndex = 0
+else:
+    g_re_FilePattern = g_re_FilePattern_bin
+    g_nRawBeginIndex = 4    # header (width + height)
 
 #PixelRow_array = np.zeros((nFileCount, nROI_W))
 lCsvStdRow = []
@@ -240,6 +253,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, sSav
 
 def ParsingPixel():
     nCount = nFileCount
+    nRawBeginIndex = g_nRawBeginIndex
 
     #Get the numbers of every channel
     nR_Gb_Len = nROI_W//4 * nROI_H//4
@@ -333,7 +347,7 @@ def ParsingPixel():
                 for i in range(nROI_Y, nROI_Y+nROI_H):
                     bNeedCal = False
 
-                    nPixelOffset = nWidth * i * 2 + nROI_X * 2
+                    nPixelOffset = nWidth * i * 2 + nROI_X * 2 + nRawBeginIndex
                     #print('nPixelOffset: ', nPixelOffset)
                     input_file = open(sFileTemp, 'rb')
                     #Get all pixel of one range row
