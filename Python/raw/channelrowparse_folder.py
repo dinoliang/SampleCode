@@ -1,6 +1,9 @@
 #######################################################
 ### Get one row data to calculate.
 ### Calculate block(R1~4/Gr1~4/Gb1~4/B1~4) std and avg.
+### If R1/Gr1/Gb1/B1 only has only 1 pixel, the result is like to calculate one pixel. (nROI_W <= 4 && nROI_H <= 4)
+### If R1/Gr1/Gb1/B1 only has more 1 pixel, the result is to calculate all pixels of R1/Gr1/Gb1/B1 channel.
+### If bCalROIChannel is True, the result is to calculate all pixels of R(1+2+3+4)/Gr(1+2+3+4)/Gb(1+2+3+4)/B(1+2+3+4) channel.
 
 import numpy as np
 import time
@@ -19,8 +22,8 @@ nHeight = 6000
 
 nFileCount = 5
 #sFilePath = '/home/dino/RawShared/2021111810/{}/'
-#sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
-sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
+sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
+#sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
 
 #Normal
 g_sFilePathFolder = [
@@ -79,14 +82,17 @@ sFileTempTime = '2022010610'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
 sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
 
+# ROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
+bCalROIChannel = False
+bSaveCSV_ROI = False
+
+# Debug
 bShowDebugOutput = False
 
 bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
 
-bCalROIChannel = False
-bSaveCSV_ROI = False
 ### Change the parameters to match the settings
 #######################################################
 
