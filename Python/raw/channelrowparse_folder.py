@@ -19,8 +19,8 @@ nHeight = 6000
 
 nFileCount = 5
 #sFilePath = '/home/dino/RawShared/2021111810/{}/'
-sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
-#sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
+#sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
+sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
 
 #Normal
 g_sFilePathFolder = [
@@ -76,8 +76,8 @@ bSaveCSV = True
 sFileTempTime = '2022010610'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
-sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-#sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
+#sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
 
 bShowDebugOutput = False
 

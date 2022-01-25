@@ -32,13 +32,15 @@ class RawBayer(enum.IntEnum):
 
 #######################################################
 # Var
-g_nWidth = 8000
-g_nHeight = 6000
+g_bResolution = True
+g_nWidth = 9728
+g_nHeight = 8192
 
-g_InputPath = '//home/dino/RawShared/2021111908/60/'
-g_InputFile = 'FrameID0_W8000_H6000_20211119082056_P10_1805_10_60.raw'
+g_InputPath = '//home/dino/RawShared/TEG_Output/20220122/'
+g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835.bin'
 
-g_rawBayer = RawBayer.Q_RGGB
+g_rawBayer = RawBayer.Q_GRBG
+g_bDeMosaic = True
 
 #ISP 
 g_bISP_DeNoise = False
@@ -67,8 +69,9 @@ g_bISP_Sharp = False
 #enhance color、contrast
 #output YUV or RGB
 
-g_bSave = False
-g_SavingFileName = 'FrameID0_W8000_H6000_20211119082056_P10_1805_10_60.bmp'
+g_bSaveReMosaicRaw = False
+g_bSaveTiff = False
+g_SavingFileName = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835_test.jpg'
 
 g_bDisplay = True
 
@@ -80,6 +83,12 @@ TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.m
 def SaveTiff(RawImage):
     cv2.imwrite(g_InputPath + g_SavingFileName, RawImage)
 
+def SaveRaw(RawImage):
+    output_array_header = np.array([g_nWidth, g_nHeight])
+    output_array_data = RawImage.reshape((g_nHeight * g_nWidth))
+    output_array = np.append(output_array_header, output_array_data)
+    output_array.astype('int16').tofile(g_InputPath + g_SavingFileName)
+    pass
 
 def ReMosaic(RawArray):
     #print(np.size(RawArray, 0))
@@ -88,6 +97,8 @@ def ReMosaic(RawArray):
         RawArray[[i+1,i+2],:] = RawArray[[i+2,i+1],:]
     for i in range(0, g_nWidth, 4):
         RawArray[:,[i+1,i+2]] = RawArray[:,[i+2,i+1]]
+    if (g_bSaveReMosaicRaw):
+        SaveRaw(RawArray);
     return RawArray
 
 
@@ -109,6 +120,7 @@ def DeMosaic(RawArray, bayerFormat):
 
     return DeMosaicImg
 
+
 def DeNoise(RawImg):
     '''
     cv2.fastNlMeansDenoising() - works with a single grayscale images
@@ -119,6 +131,7 @@ def DeNoise(RawImg):
     DeDeNoiseImg = cv2.fastNlMeansDenoisingColored(RawImg, None, 10, 10, 7, 21)
 
     return DeDeNoiseImg
+
 
 def SharpImage(RawImg):
     kernel = np.array([[0, -1, 0],
@@ -146,10 +159,13 @@ def ISP(RawArray):
     StageTime = time.time()
     print("Durning ReMosaic Stage Time(sec): ", StageTime - StartTime)
 
-    DeMosaicImg = DeMosaic(ReMosaicImg, bayerFormat)
-    RGBImage = DeMosaicImg
-    StageTime = time.time()
-    print("Durning DeMosaic Stage Time(sec): ", StageTime - StartTime)
+    if g_bDeMosaic:
+        DeMosaicImg = DeMosaic(ReMosaicImg, bayerFormat)
+        RGBImage = DeMosaicImg
+        StageTime = time.time()
+        print("Durning DeMosaic Stage Time(sec): ", StageTime - StartTime)
+    else:
+        RGBImage = ReMosaicImg
 
     if g_bISP_DeNoise:
         DeNoiseImg = DeNoise(RGBImage)
@@ -178,20 +194,28 @@ def ReadRaw(rawFormat):
         pass
     elif rawFormat == RawFormat.Raw10:
         input_file = open(g_InputPath+g_InputFile, 'rb')
-        input_array = np.fromfile(input_file, dtype=np.uint16, count=-1, sep="", offset=0)
+        #if g_bResolution:
+        #    input_array_r = np.fromfile(input_file, dtype=np.uint16, count=2, sep="", offset=0)
+        #    g_nWidth = input_array_r[0]
+        #    g_nHeight = input_array_r[1]
+        #input_array = np.fromfile(input_file, dtype=np.uint16, count=-1, sep="", offset=0)
+        input_array = np.fromfile(input_file, dtype=np.uint16, count=-1, sep="", offset=4)
         input_file.close()
+        print("Raw resolution W:{0}, H:{1}".format(g_nWidth, g_nHeight))
+        print("Max LSB:{0}, Min LSB:{1}".format(np.max(input_array), np.min(input_array)))
         input_array = input_array.reshape((g_nHeight, g_nWidth))
     elif rawFormat == RawFormat.Raw16:
         pass
     return input_array
+
 
 if __name__ == "__main__":    
     input_array = ReadRaw(RawFormat.Raw10)
     OutputImage = ISP(input_array)
     ISPTime = time.time()
     print("Durning ISP Time(sec): ", ISPTime - StartTime)
-    
-    if g_bSave:
+
+    if g_bSaveTiff:
         SaveTiff(OutputImage)
 
     #Displayed the image
