@@ -21,14 +21,16 @@ nWidth = 8000
 nHeight = 6000
 
 nFileCount = 5
-#sFilePath = '/home/dino/RawShared/2021111810/{}/'
-sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
-#sFilePath = '/home/dino/IMX586_Raw2/2022010614/{}/'
+#sFilePath = '/home/dino/RawShared/2022012516/{}/'
+#sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
+#sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022012517/{}/'
+
 
 #Normal
-g_sFilePathFolder = [
-                    '500'
-                    ]
+#g_sFilePathFolder = [
+#                    '55_1', '55_10'
+#                    ]
 
 #LightIntensity
 #g_sFilePathFolder = [
@@ -62,32 +64,44 @@ g_sFilePathFolder = [
 #                    '710', '720', '730', '740', '750',  '760', '770', '780' \
 #                   ]
 
+#DarkCurrent
+g_sFilePathFolder = [
+                    '80_1_10', '80_2_10', '80_3_10', '80_4_10', '80_5_10', '80_6_10', '80_7_10', '80_8_10', '80_9_10', '80_10_10', \
+                    '75_1_10', '75_2_10', '75_3_10', '75_4_10', '75_5_10', '75_6_10', '75_7_10', '75_8_10', '75_9_10', '75_10_10', \
+                    '70_1_10', '70_2_10', '70_3_10', '70_4_10', '70_5_10', '70_6_10', '70_7_10', '70_8_10', '70_9_10', '70_10_10', \
+                    '65_1_10', '65_2_10', '65_3_10', '65_4_10', '65_5_10', '65_6_10', '65_7_10', '65_8_10', '65_9_10', '65_10_10', \
+                    '60_1_10', '60_2_10', '60_3_10', '60_4_10', '60_5_10', '60_6_10', '60_7_10', '60_8_10', '60_9_10', '60_10_10', \
+                    '55_1_10', '55_2_10', '55_3_10', '55_4_10', '55_5_10', '55_6_10', '55_7_10', '55_8_10', '55_9_10', '55_10_10', \
+                    '50_1_10', '50_2_10', '50_3_10', '50_4_10', '50_5_10', '50_6_10', '50_7_10', '50_8_10', '50_9_10', '50_10_10', \
+                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
+                   ]
+
 bExposureRaw = False # True/False
 nFileExposureIM = 2
 nFileExposureID = 1200
 nFileExposureInterval = 1
 
-nROI_X = 4000
-nROI_Y = 3000
-nROI_W = 4    #multiple of 4
-nROI_H = 4    #multiple of 4
+nROI_X = 3900
+nROI_Y = 2900
+nROI_W = 200    #multiple of 4
+nROI_H = 200    #multiple of 4
 
 g_bAYAFile = True
 g_re_FilePattern = ""
 
 bSaveCSV = True
-sFileTempTime = '2022010610'
+sFileTempTime = '2022012517'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022010614/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022012517/{}/'
 
 # ROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalROIChannel = False
 bSaveCSV_ROI = False
 
 # Debug
-bShowDebugOutput = False
+bShowDebugOutput = True
 
 bDeleteMaxMin = False
 nDeleteMaxCount = 3
