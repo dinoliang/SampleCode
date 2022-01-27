@@ -17,20 +17,24 @@ StartTime = time.time()
 
 #######################################################
 ### Change the parameters to match the settings
-nWidth = 8000
-nHeight = 6000
+#nWidth = 8000
+#nHeight = 6000
 
-nFileCount = 5
-#sFilePath = '/home/dino/RawShared/2022012516/{}/'
+#Color TEG
+nWidth = 9728
+nHeight = 8192
+
+nFileCount = 1
+sFilePath = '/home/dino/RawShared/2022012714/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp3/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022012517/{}/'
+#sFilePath = '/home/dino/IMX586_Bin/2022012618/{}/'
 
 
 #Normal
-#g_sFilePathFolder = [
-#                    '55_1', '55_10'
-#                    ]
+g_sFilePathFolder = [
+                    'color'
+                    ]
 
 #LightIntensity
 #g_sFilePathFolder = [
@@ -65,36 +69,60 @@ sFilePath = '/home/dino/IMX586_Bin/2022012517/{}/'
 #                   ]
 
 #DarkCurrent
-g_sFilePathFolder = [
-                    '80_1_10', '80_2_10', '80_3_10', '80_4_10', '80_5_10', '80_6_10', '80_7_10', '80_8_10', '80_9_10', '80_10_10', \
-                    '75_1_10', '75_2_10', '75_3_10', '75_4_10', '75_5_10', '75_6_10', '75_7_10', '75_8_10', '75_9_10', '75_10_10', \
-                    '70_1_10', '70_2_10', '70_3_10', '70_4_10', '70_5_10', '70_6_10', '70_7_10', '70_8_10', '70_9_10', '70_10_10', \
-                    '65_1_10', '65_2_10', '65_3_10', '65_4_10', '65_5_10', '65_6_10', '65_7_10', '65_8_10', '65_9_10', '65_10_10', \
-                    '60_1_10', '60_2_10', '60_3_10', '60_4_10', '60_5_10', '60_6_10', '60_7_10', '60_8_10', '60_9_10', '60_10_10', \
-                    '55_1_10', '55_2_10', '55_3_10', '55_4_10', '55_5_10', '55_6_10', '55_7_10', '55_8_10', '55_9_10', '55_10_10', \
-                    '50_1_10', '50_2_10', '50_3_10', '50_4_10', '50_5_10', '50_6_10', '50_7_10', '50_8_10', '50_9_10', '50_10_10', \
-                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
-                   ]
+#g_sFilePathFolder = [
+#                    '80_1_10', '80_2_10', '80_3_10', '80_4_10', '80_5_10', '80_6_10', '80_7_10', '80_8_10', '80_9_10', '80_10_10', \
+#                    '75_1_10', '75_2_10', '75_3_10', '75_4_10', '75_5_10', '75_6_10', '75_7_10', '75_8_10', '75_9_10', '75_10_10', \
+#                    '70_1_10', '70_2_10', '70_3_10', '70_4_10', '70_5_10', '70_6_10', '70_7_10', '70_8_10', '70_9_10', '70_10_10', \
+#                    '65_1_10', '65_2_10', '65_3_10', '65_4_10', '65_5_10', '65_6_10', '65_7_10', '65_8_10', '65_9_10', '65_10_10', \
+#                    '60_1_10', '60_2_10', '60_3_10', '60_4_10', '60_5_10', '60_6_10', '60_7_10', '60_8_10', '60_9_10', '60_10_10', \
+#                    '55_1_10', '55_2_10', '55_3_10', '55_4_10', '55_5_10', '55_6_10', '55_7_10', '55_8_10', '55_9_10', '55_10_10', \
+#                    '50_1_10', '50_2_10', '50_3_10', '50_4_10', '50_5_10', '50_6_10', '50_7_10', '50_8_10', '50_9_10', '50_10_10', \
+#                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
+#                   ]
 
 bExposureRaw = False # True/False
 nFileExposureIM = 2
 nFileExposureID = 1200
 nFileExposureInterval = 1
 
-nROI_X = 3900
-nROI_Y = 2900
+#Center R1: 4000,3000
+#nROI_X = 3900
+#nROI_Y = 2900
+
+#Color TEG
+#Center R1: 4864,4094
+nROI_X = 4864
+nROI_Y = 4098
+#PDAF: B3+Gb4
+#Center
+#Center
+#nROI_X = 4764
+#nROI_Y = 3998
+#Top-Left
+#nROI_X = 272
+#nROI_Y = 32
+#Top-Right
+#nROI_X = 9260
+#nROI_Y = 32
+#Bottom-Right
+#nROI_X = 9196
+#nROI_Y = 6796
+#Bottom-Left
+#nROI_X = 272
+#nROI_Y = 6796
+
 nROI_W = 200    #multiple of 4
 nROI_H = 200    #multiple of 4
 
 g_bAYAFile = True
 g_re_FilePattern = ""
 
-bSaveCSV = True
-sFileTempTime = '2022012517'
+bSaveCSV = False
+sFileTempTime = '2022012714'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022012517/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022012714/{}/'
 
 # ROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalROIChannel = False
@@ -107,11 +135,16 @@ bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
 
+#(Test TEG)
+#TEG Bad Pixel
+g_nBadPixelLevel = -1
+g_bBadPixelSite = False
+
 ### Change the parameters to match the settings
 #######################################################
 
-g_re_FilePattern_raw = "[a-zA-Z0-9_]+(.raw)"
-g_re_FilePattern_bin = "[a-zA-Z0-9_]+(.bin)"
+g_re_FilePattern_raw = "[a-zA-Z0-9-_]+(.raw)"
+g_re_FilePattern_bin = "[a-zA-Z0-9-_]+(.bin)"
 
 g_nRawBeginIndex = 0
 
@@ -142,10 +175,12 @@ TimeInfo = sFileTempTime
 
 def Check_File(sFileName, rePattern):
     if re.fullmatch(rePattern, sFileName):
-        #print("Is right file..")
+        #if bShowDebugOutput:
+        #    print("{0} Is right file..".format(sFileName))
         return True
-    #else:
-    #    print("Not right file..")
+    else:
+        if bShowDebugOutput:
+            print("{0} Not right file..".format(sFileName))
     return False
 
 def Save_CSV(FileName, RowInfo):
@@ -368,15 +403,23 @@ def ParsingPixel():
                     bNeedCal = False
 
                     nPixelOffset = nWidth * i * 2 + nROI_X * 2 + nRawBeginIndex
-                    #print('nPixelOffset: ', nPixelOffset)
+                    #if i == nROI_Y:
+                    #    print('nPixelOffset: ', nPixelOffset)
                     input_file = open(sFileTemp, 'rb')
                     #Get all pixel of one range row
                     input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W, sep="", offset=nPixelOffset)
                     input_file.close()
-                    #print('input_array: ', input_array)
+                    #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
                     
                     if i%4==0:  #R1~2+Gr1~2
                         for l in range(0, nROI_W):
+                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                            #continue
+
+                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                                continue
+
                             if (l+nWOffset)%4==0: #R1
                                 #print('h:{}, i:{}, k:{}, Index:{}, l:{}'.format(h, i, k, nR0Index, l))
                                 ChannelR_array[k,0,nR0Index] = input_array[l]
@@ -394,6 +437,13 @@ def ParsingPixel():
                                 nGr1Index += 1
                     elif i%4==1:  #R3~4+Gr3~4
                         for l in range(0, nROI_W):
+                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                            #continue
+
+                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                                continue
+
                             if (l+nWOffset)%4==0: #R3
                                 ChannelR_array[k,2,nR2Index] = input_array[l]
                                 nR2Index += 1
@@ -408,6 +458,13 @@ def ParsingPixel():
                                 nGr3Index += 1
                     elif i%4==2:  #Gb1~2+B1~2
                         for l in range(0, nROI_W):
+                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                            #continue
+
+                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                                continue
+
                             if (l+nWOffset)%4==0: #Gb1
                                 ChannelGb_array[k,0,nGb0Index] = input_array[l]
                                 nGb0Index += 1
@@ -422,6 +479,13 @@ def ParsingPixel():
                                 nB1Index += 1
                     elif i%4==3:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
+                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                            #continue
+
+                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                                continue
+
                             if (l+nWOffset)%4==0: #Gb3
                                 ChannelGb_array[k,2,nGb2Index] = input_array[l]
                                 nGb2Index += 1
