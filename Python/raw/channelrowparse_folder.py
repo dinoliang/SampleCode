@@ -30,7 +30,7 @@ sFilePath = '/home/dino/RawShared/2022012714/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
 #sFilePath = '/home/dino/IMX586_Bin/2022012618/{}/'
 
-
+#Subfolder
 #Normal
 g_sFilePathFolder = [
                     'color'
@@ -80,10 +80,11 @@ g_sFilePathFolder = [
 #                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
 #                   ]
 
-bExposureRaw = False # True/False
-nFileExposureIM = 2
-nFileExposureID = 1200
-nFileExposureInterval = 1
+##Exposure time setting #reference by subfolder
+#bExposureRaw = False # True/False
+#nFileExposureIM = 2
+#nFileExposureID = 1200
+#nFileExposureInterval = 1
 
 #Center R1: 4000,3000
 #nROI_X = 3900
@@ -114,10 +115,16 @@ nROI_Y = 4098
 nROI_W = 200    #multiple of 4
 nROI_H = 200    #multiple of 4
 
+#There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
+
+#Regular Expression for parsing file
 g_re_FilePattern = ""
 
-bSaveCSV = False
+#Saving output file or not
+bSaveCSV = True
+
+#The path of saving file
 sFileTempTime = '2022012714'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
@@ -128,34 +135,40 @@ sSavePath = '/home/dino/RawShared/Output/2022012714/{}/'
 bCalROIChannel = False
 bSaveCSV_ROI = False
 
-# Debug
+#Debug or not
 bShowDebugOutput = True
 
+#Delete the over Max/Min number or not
 bDeleteMaxMin = False
 nDeleteMaxCount = 3
 nDeleteMinCount = 3
 
 #(Test TEG)
 #TEG Bad Pixel
-g_nBadPixelLevel = -1
-g_bBadPixelSite = False
+g_bDeleteBadPixel = False
+g_nBadPixelLevel = 64
+
 
 ### Change the parameters to match the settings
 #######################################################
 
+#Regular Expression of raw file
 g_re_FilePattern_raw = "[a-zA-Z0-9-_]+(.raw)"
+#Regular Expression of AYA(bin) file
 g_re_FilePattern_bin = "[a-zA-Z0-9-_]+(.bin)"
 
 g_nRawBeginIndex = 0
 
-if not bExposureRaw:
-    # Normal
-    sSaveTempFile = '{}_Single_{}.csv'
-    sSaveOrganizeTempFile = '{}_{}.csv'
-else:
-    # Exposure
-    sSaveTempFile = '{}_{}_{}.csv'
-    sSaveOrganizeTempFile = '{}_{}_{}.csv'
+sSaveTempFile = '{}_Single_{}.csv'
+sSaveOrganizeTempFile = '{}_{}.csv'
+#if not bExposureRaw:
+#    # Normal
+#    sSaveTempFile = '{}_Single_{}.csv'
+#    sSaveOrganizeTempFile = '{}_{}.csv'
+#else:
+#    # Exposure
+#    sSaveTempFile = '{}_{}_{}.csv'
+#    sSaveOrganizeTempFile = '{}_{}_{}.csv'
 
 if not g_bAYAFile:
     g_re_FilePattern = g_re_FilePattern_raw
@@ -173,6 +186,7 @@ NowDate = datetime.datetime.now()
 TimeInfo = sFileTempTime
 #print(TimeInfo)
 
+#Check the file is raw/bin file
 def Check_File(sFileName, rePattern):
     if re.fullmatch(rePattern, sFileName):
         #if bShowDebugOutput:
@@ -183,6 +197,7 @@ def Check_File(sFileName, rePattern):
             print("{0} Not right file..".format(sFileName))
     return False
 
+#Save output file
 def Save_CSV(FileName, RowInfo):
     if not bSaveCSV:
         return
@@ -193,6 +208,7 @@ def Save_CSV(FileName, RowInfo):
         #print(RowInfo)
         csv_writer.writerow(RowInfo)
 
+#Calculate AVG/STD 
 def Cal_Information(y, nCount, ChannelArray, sColor):
     for i in range(0, nCount+1):
         if i < nCount:
@@ -413,11 +429,8 @@ def ParsingPixel():
                     
                     if i%4==0:  #R1~2+Gr1~2
                         for l in range(0, nROI_W):
-                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
-                            #continue
-
-                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
                                 continue
 
                             if (l+nWOffset)%4==0: #R1
@@ -437,11 +450,8 @@ def ParsingPixel():
                                 nGr1Index += 1
                     elif i%4==1:  #R3~4+Gr3~4
                         for l in range(0, nROI_W):
-                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
-                            #continue
-
-                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
                                 continue
 
                             if (l+nWOffset)%4==0: #R3
@@ -458,11 +468,8 @@ def ParsingPixel():
                                 nGr3Index += 1
                     elif i%4==2:  #Gb1~2+B1~2
                         for l in range(0, nROI_W):
-                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
-                            #continue
-
-                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
                                 continue
 
                             if (l+nWOffset)%4==0: #Gb1
@@ -479,11 +486,8 @@ def ParsingPixel():
                                 nB1Index += 1
                     elif i%4==3:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
-                            #if g_bBadPixelSite and g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
-                            #continue
-
-                            if g_nBadPixelLevel > 0 and input_array[l] < g_nBadPixelLevel:
                                 continue
 
                             if (l+nWOffset)%4==0: #Gb3
