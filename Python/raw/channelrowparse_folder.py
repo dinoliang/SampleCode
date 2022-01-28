@@ -3,7 +3,7 @@
 ### Calculate block(R1~4/Gr1~4/Gb1~4/B1~4) std and avg.
 ### If R1/Gr1/Gb1/B1 only has only 1 pixel, the result is like to calculate one pixel. (nROI_W <= 4 && nROI_H <= 4)
 ### If R1/Gr1/Gb1/B1 only has more 1 pixel, the result is to calculate all pixels of every R1~4/Gr1~4/Gb1~4/B1~4 channel.
-### If bCalROIChannel is True, the result is to calculate all pixels of R(1+2+3+4)/Gr(1+2+3+4)/Gb(1+2+3+4)/B(1+2+3+4) channel.
+### If bCalMergeROIChannel is True, the result is to calculate all pixels of R(1+2+3+4)/Gr(1+2+3+4)/Gb(1+2+3+4)/B(1+2+3+4) channel.
 
 import numpy as np
 import time
@@ -131,8 +131,8 @@ sFileTempTime = '2022012714'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
 sSavePath = '/home/dino/RawShared/Output/2022012714/{}/'
 
-# ROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
-bCalROIChannel = False
+#CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
+bCalMergeROIChannel = False
 bSaveCSV_ROI = False
 
 #Debug or not
@@ -303,7 +303,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, sSav
             if not bSaveCSV_ROI:
                 Save_CSV(sSaveOrgFile, lRawOrglInfo)
 
-            if bCalROIChannel:
+            if bCalMergeROIChannel:
                 lRawROIInfo = []
                 lRawROIInfo.clear()
                 lRawROIInfo.append('{}'.format(g_sFilePathFolder[y]))
@@ -337,16 +337,20 @@ def ParsingPixel():
 
     #Set the save orgnize file (Orgnize result)
     sTempSavePath = sSavePath.format('Total')
-    if not bExposureRaw:
-        sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
-        sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
-        sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
-        sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
-    else:
-        sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
-        sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
-        sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
-        sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
+    sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
+    sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
+    sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
+    sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
+    #if not bExposureRaw:
+    #    sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
+    #    sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
+    #    sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
+    #    sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
+    #else:
+    #    sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
+    #    sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
+    #    sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
+    #    sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
     if os.path.exists(sSaveOrgRFile):
         os.remove(sSaveOrgRFile)
     if os.path.exists(sSaveOrgGrFile):
@@ -375,16 +379,20 @@ def ParsingPixel():
             
         #Set the every channel saving file (R/Gr/Gb/B) (Total)
         sTempSavePath = sSavePath.format(x)
-        if not bExposureRaw:
-            sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'R')
-            sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
-            sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
-            sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
-        else:
-            sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'R')
-            sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gr')
-            sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gb')
-            sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'B')
+        sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'R')
+        sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
+        sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
+        sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
+        #if not bExposureRaw:
+        #    sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'R')
+        #    sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
+        #    sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
+        #    sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
+        #else:
+        #    sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'R')
+        #    sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gr')
+        #    sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gb')
+        #    sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'B')
         if os.path.exists(sSaveRFile):
             os.remove(sSaveRFile)
         if os.path.exists(sSaveGrFile):
