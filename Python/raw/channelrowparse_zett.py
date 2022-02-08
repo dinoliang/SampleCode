@@ -80,12 +80,6 @@ g_sFilePathFolder = [
 #                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
 #                   ]
 
-##Exposure time setting #reference by subfolder
-#bExposureRaw = False # True/False
-#nFileExposureIM = 2
-#nFileExposureID = 1200
-#nFileExposureInterval = 1
-
 #Center R1: 4000,3000
 #nROI_X = 3900
 #nROI_Y = 2900
@@ -160,19 +154,12 @@ g_re_FilePattern_bin = "[a-zA-Z0-9-_]+(.bin)"
 
 g_FilePattern_HS0 = "(HS0)"
 g_FilePattern_HSN1 = "(HS-1)"
+g_FilePattern_HSP1 = "(HS1)"
 
 g_nRawBeginIndex = 0
 
 sSaveTempFile = '{}_Single_{}.csv'
 sSaveOrganizeTempFile = '{}_{}.csv'
-#if not bExposureRaw:
-#    # Normal
-#    sSaveTempFile = '{}_Single_{}.csv'
-#    sSaveOrganizeTempFile = '{}_{}.csv'
-#else:
-#    # Exposure
-#    sSaveTempFile = '{}_{}_{}.csv'
-#    sSaveOrganizeTempFile = '{}_{}_{}.csv'
 
 if not g_bAYAFile:
     g_re_FilePattern = g_re_FilePattern_raw
@@ -366,16 +353,7 @@ def ParsingPixel():
     sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
     sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
     sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
-    #if not bExposureRaw:
-    #    sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'R')
-    #    sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gr')
-    #    sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'Gb')
-    #    sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, 'B')
-    #else:
-    #    sSaveOrgRFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'R')
-    #    sSaveOrgGrFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gr')
-    #    sSaveOrgGbFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'Gb')
-    #    sSaveOrgBFile = sTempSavePath+sSaveOrganizeTempFile.format(TimeInfo, nFileExposureID, 'B')
+
     if os.path.exists(sSaveOrgRFile):
         os.remove(sSaveOrgRFile)
     if os.path.exists(sSaveOrgGrFile):
@@ -408,16 +386,7 @@ def ParsingPixel():
         sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
         sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
         sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
-        #if not bExposureRaw:
-        #    sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'R')
-        #    sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gr')
-        #    sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'Gb')
-        #    sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, 'B')
-        #else:
-        #    sSaveRFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'R')
-        #    sSaveGrFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gr')
-        #    sSaveGbFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'Gb')
-        #    sSaveBFile = sTempSavePath+sSaveTempFile.format(TimeInfo, nFileExposureID, 'B')
+
         if os.path.exists(sSaveRFile):
             os.remove(sSaveRFile)
         if os.path.exists(sSaveGrFile):
@@ -452,6 +421,9 @@ def ParsingPixel():
                                 continue
                         elif g_nSelect_HSValue == -1:
                             if not Check_FileHS(sFileTemp, g_FilePattern_HSN1):
+                                continue
+                        elif g_nSelect_HSValue == 1:
+                            if not Check_FileHS(sFileTemp, g_FilePattern_HSP1):
                                 continue
                         else:
                             continue
@@ -548,30 +520,12 @@ def ParsingPixel():
                                 nB3Index += 1
                 k = k + 1
 
-        #Save the R information
-        #print(h)
-        #lCsvStdRow.clear()
-        #lCsvAvgRow.clear()
-        #Save_CSV(sSaveRStdFile, lCsvStdRow)
-        #Save_CSV(sSaveRAvgFile, lCsvAvgRow)
         Cal_Save_AllInformation(h, nCount, ChannelR_array, 'R', sSaveRFile, sSaveOrgRFile)
-        #Save the G information
-        #lCsvStdRow.clear()
-        #lCsvAvgRow.clear()
-        #Save_CSV(sSaveGrStdFile, lCsvStdRow)
-        #Save_CSV(sSaveGrAvgFile, lCsvAvgRow)
+
         Cal_Save_AllInformation(h, nCount, ChannelGr_array, 'Gr', sSaveGrFile, sSaveOrgGrFile)
-        #Save the Gb information
-        #lCsvStdRow.clear()
-        #lCsvAvgRow.clear()
-        #Save_CSV(sSaveGbStdFile, lCsvStdRow)
-        #Save_CSV(sSaveGbAvgFile, lCsvAvgRow)
+
         Cal_Save_AllInformation(h, nCount, ChannelGb_array, 'Gb', sSaveGbFile, sSaveOrgGbFile)
-        #Save the B information
-        #lCsvStdRow.clear()
-        #lCsvAvgRow.clear()
-        #Save_CSV(sSaveBStdFile, lCsvStdRow)
-        #Save_CSV(sSaveBAvgFile, lCsvAvgRow)
+
         Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, sSaveOrgBFile)
 
         h = h + 1
