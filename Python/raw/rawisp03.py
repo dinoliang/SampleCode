@@ -67,6 +67,7 @@ g_bISP_Sharp = False
 #DeNoise
 #edge enhance
 #enhance color、contrast
+#Flip、Mirror、Rotation
 #output YUV or RGB
 
 g_bSaveReMosaicRaw = False

@@ -87,13 +87,13 @@ g_sFilePathFolder = [
 
 #Color TEG
 #Center R1: 4864,4094
-nROI_X = 4864
-nROI_Y = 4098
+#nROI_X = 4864
+#nROI_Y = 4098
 #PDAF: B3+Gb4
 #Center
 #Center
-#nROI_X = 4764
-#nROI_Y = 3998
+nROI_X = 4764
+nROI_Y = 3998
 #Top-Left
 #nROI_X = 272
 #nROI_Y = 32
@@ -111,8 +111,10 @@ nROI_Y = 4098
 #nROI_X = 535
 #nROI_Y = 983
 
-nROI_W = 200    #multiple of 4
-nROI_H = 200    #multiple of 4
+#nROI_W = 200    #multiple of 4
+#nROI_H = 200    #multiple of 4
+nROI_W = 256    #multiple of 16
+nROI_H = 256    #multiple of 16
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -129,7 +131,7 @@ sFileTempTime = '2022021515'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022021515_AngulerResponse/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022021515_AngulerResponse_PDAF/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -147,7 +149,6 @@ nDeleteMinCount = 3
 #TEG Bad Pixel
 g_bDeleteBadPixel = False
 g_nBadPixelLevel = 64
-
 
 ### Change the parameters to match the settings
 #######################################################
@@ -435,8 +436,12 @@ def ParsingPixel():
 
                 sFileTemp = root + '/' + sFileTemp
                 print('sFileTemp: ', sFileTemp)
+
                 #Every row
                 for i in range(nROI_Y, nROI_Y+nROI_H):
+                    #if bShowDebugOutput:
+                    #    print('ROW i: ', i)
+
                     bNeedCal = False
 
                     nPixelOffset = nWidth * i * 2 + nROI_X * 2 + nRawBeginIndex
@@ -448,7 +453,29 @@ def ParsingPixel():
                     input_file.close()
                     #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
                     
+                    #if i%16==11:  #Gb3~4+B3~4
+                    if i%16==11:  #Gb3~4+B3~4
+                        for l in range(0, nROI_W):
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                                continue
+
+                            if (l+nWOffset)%16==10: #Gb3
+                                #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
+                                ChannelGb_array[k,2,nGb2Index] = input_array[l]
+                                nGb2Index += 1
+                            elif (l+nWOffset)%16==11: #Gb4
+                                ChannelGb_array[k,3,nGb3Index] = input_array[l]
+                                nGb3Index += 1
+                            elif (l+nWOffset)%16==12: #B3
+                                ChannelB_array[k,2,nB2Index] = input_array[l]
+                                nB2Index += 1
+                            elif (l+nWOffset)%16==13: #B4
+                                ChannelB_array[k,3,nB3Index] = input_array[l]
+                                nB3Index += 1
+
                     if i%4==0:  #R1~2+Gr1~2
+                        continue
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
@@ -470,6 +497,7 @@ def ParsingPixel():
                                 ChannelGr_array[k,1,nGr1Index] = input_array[l]
                                 nGr1Index += 1
                     elif i%4==1:  #R3~4+Gr3~4
+                        continue
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
@@ -488,41 +516,73 @@ def ParsingPixel():
                                 ChannelGr_array[k,3,nGr3Index] = input_array[l]
                                 nGr3Index += 1
                     elif i%4==2:  #Gb1~2+B1~2
+                        continue
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
-                            if (l+nWOffset)%4==0: #Gb1
+                            #if (l+nWOffset)%4==0: #Gb1
+                            #    ChannelGb_array[k,0,nGb0Index] = input_array[l]
+                            #    nGb0Index += 1
+                            #elif (l+nWOffset)%4==1: #Gb2
+                            #    ChannelGb_array[k,1,nGb1Index] = input_array[l]
+                            #    nGb1Index += 1
+                            #elif (l+nWOffset)%4==2: #B1
+                            #    ChannelB_array[k,0,nB0Index] = input_array[l]
+                            #    nB0Index += 1
+                            #elif (l+nWOffset)%4==3: #B2
+                            #    ChannelB_array[k,1,nB1Index] = input_array[l]
+                            #    nB1Index += 1
+
+                            if (l+nWOffset)%16==12: #Gb1
                                 ChannelGb_array[k,0,nGb0Index] = input_array[l]
                                 nGb0Index += 1
-                            elif (l+nWOffset)%4==1: #Gb2
+                            elif (l+nWOffset)%16==13: #Gb2
                                 ChannelGb_array[k,1,nGb1Index] = input_array[l]
                                 nGb1Index += 1
-                            elif (l+nWOffset)%4==2: #B1
+                            elif (l+nWOffset)%16==14: #B1
                                 ChannelB_array[k,0,nB0Index] = input_array[l]
                                 nB0Index += 1
-                            elif (l+nWOffset)%4==3: #B2
+                            elif (l+nWOffset)%16==15: #B2
                                 ChannelB_array[k,1,nB1Index] = input_array[l]
                                 nB1Index += 1
+
                     elif i%4==3:  #Gb3~4+B3~4
+                        continue
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
-                            if (l+nWOffset)%4==0: #Gb3
+                            #if (l+nWOffset)%4==0: #Gb3
+                            #    ChannelGb_array[k,2,nGb2Index] = input_array[l]
+                            #    nGb2Index += 1
+                            #elif (l+nWOffset)%4==1: #Gb4
+                            #    ChannelGb_array[k,3,nGb3Index] = input_array[l]
+                            #    nGb3Index += 1
+                            #elif (l+nWOffset)%4==2: #B3
+                            #    ChannelB_array[k,2,nB2Index] = input_array[l]
+                            #    nB2Index += 1
+                            #elif (l+nWOffset)%4==3: #B4
+                            #    ChannelB_array[k,3,nB3Index] = input_array[l]
+                            #    nB3Index += 1
+
+                            if (l+nWOffset)%16==12: #Gb3
+                                #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
                                 ChannelGb_array[k,2,nGb2Index] = input_array[l]
                                 nGb2Index += 1
-                            elif (l+nWOffset)%4==1: #Gb4
+                            elif (l+nWOffset)%16==13: #Gb4
                                 ChannelGb_array[k,3,nGb3Index] = input_array[l]
                                 nGb3Index += 1
-                            elif (l+nWOffset)%4==2: #B3
+                            elif (l+nWOffset)%16==14: #B3
                                 ChannelB_array[k,2,nB2Index] = input_array[l]
                                 nB2Index += 1
-                            elif (l+nWOffset)%4==3: #B4
+                            elif (l+nWOffset)%16==15: #B4
                                 ChannelB_array[k,3,nB3Index] = input_array[l]
                                 nB3Index += 1
+
+                            
                 k = k + 1
 
         Cal_Save_AllInformation(h, nCount, ChannelR_array, 'R', sSaveRFile, sSaveOrgRFile)
