@@ -24,11 +24,14 @@ StartTime = time.time()
 nWidth = 9728
 nHeight = 8192
 
-nFileCount = 1
+nFileCount = 9
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022021515_AngulerResponse/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022022215_75C_DarkLag/{}/'
+
+#There is header data, and the extenstion file name is *.bin in AYA file
+g_bAYAFile = True
 
 #Subfolder
 #Normal
@@ -47,18 +50,18 @@ sFilePath = '/home/dino/IMX586_Bin/2022021515_AngulerResponse/{}/'
 #                    ]
                     
 #AngulerResponse
-g_sFilePathFolder = [
-                    '-40', \
-                    '-39', '-38', '-37', '-36','-35', '-34', '-33', '-32', '-31', '-30', \
-                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-                    '0', \
-                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-                   '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-                    '+31', '+32', '+33', '+34', '+35', '+36', '+37', '+38', '+39', '+40' \
-                    ]
+#g_sFilePathFolder = [
+#                    '-40', \
+#                    '-39', '-38', '-37', '-36','-35', '-34', '-33', '-32', '-31', '-30', \
+#                   '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+#                    '0', \
+#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                   '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+#                    '+31', '+32', '+33', '+34', '+35', '+36', '+37', '+38', '+39', '+40' \
+#                    ]
 
 #QuantumEfficiency
 #g_sFilePathFolder = [
@@ -70,7 +73,7 @@ g_sFilePathFolder = [
 #                  ]
 
 #DarkCurrent
-#g_sFilePathFolder = [
+g_sFilePathFolder = [
 #                    '80_1_10', '80_2_10', '80_3_10', '80_4_10', '80_5_10', '80_6_10', '80_7_10', '80_8_10', '80_9_10', '80_10_10', \
 #                    '75_1_10', '75_2_10', '75_3_10', '75_4_10', '75_5_10', '75_6_10', '75_7_10', '75_8_10', '75_9_10', '75_10_10', \
 #                    '70_1_10', '70_2_10', '70_3_10', '70_4_10', '70_5_10', '70_6_10', '70_7_10', '70_8_10', '70_9_10', '70_10_10', \
@@ -79,7 +82,9 @@ g_sFilePathFolder = [
 #                    '55_1_10', '55_2_10', '55_3_10', '55_4_10', '55_5_10', '55_6_10', '55_7_10', '55_8_10', '55_9_10', '55_10_10', \
 #                    '50_1_10', '50_2_10', '50_3_10', '50_4_10', '50_5_10', '50_6_10', '50_7_10', '50_8_10', '50_9_10', '50_10_10', \
 #                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
-#                   ]
+#                     '25', '50', '75', '100', '125', '150',
+                     '5', '10', '15', '20', '25',
+                   ]
 
 #Center R1: 4000,3000
 #nROI_X = 3900
@@ -114,9 +119,6 @@ nROI_Y = 4098
 nROI_W = 200    #multiple of 4
 nROI_H = 200    #multiple of 4
 
-#There is header data, and the extenstion file name is *.bin in AYA file
-g_bAYAFile = True
-
 #Regular Expression for parsing file
 g_re_FilePattern = ""
 g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
@@ -125,11 +127,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022021515'
+sFileTempTime = '2022022215'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022021515_AngulerResponse/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022022215_75C_DarkLag/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -289,7 +291,7 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, sSav
                 ChannelAllPixel = ChannelArray[:,j,:].flatten()
                 ChannelAllPixel = np.delete(ChannelAllPixel, np.where(ChannelAllPixel == g_nArrayDefaultValue))
                 if bShowDebugOutput:
-                    print('OnePixel_{}{}: {}'.format(sColor, j+1, ChannelAllPixel))
+                    print('OnePixel_{}{}: Count={} {}'.format(sColor, j+1, np.size(ChannelAllPixel), ChannelAllPixel))
                 #print(ChannelAllPixel)
                 
                 #mask = np.logical_or(ChannelAllPixel == ChannelAllPixel.max(keepdims = 1), ChannelAllPixel == ChannelAllPixel.min(keepdims = 1))
@@ -450,7 +452,7 @@ def ParsingPixel():
                     
                     if i%4==0:  #R1~2+Gr1~2
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
@@ -471,7 +473,7 @@ def ParsingPixel():
                                 nGr1Index += 1
                     elif i%4==1:  #R3~4+Gr3~4
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
@@ -489,7 +491,7 @@ def ParsingPixel():
                                 nGr3Index += 1
                     elif i%4==2:  #Gb1~2+B1~2
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
@@ -507,7 +509,7 @@ def ParsingPixel():
                                 nB1Index += 1
                     elif i%4==3:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
