@@ -24,11 +24,11 @@ StartTime = time.time()
 nWidth = 9728
 nHeight = 8192
 
-nFileCount = 9
+nFileCount = 1
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022022215_75C_DarkLag/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022030116_color_EQE_NoCG_1713/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -64,16 +64,16 @@ g_bAYAFile = True
 #                    ]
 
 #QuantumEfficiency
-#g_sFilePathFolder = [
-#                    '400', \
-#                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
-#                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-#                   '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-#                   '710', '720', '730', '740', '750',  '760', '770', '780' \
-#                  ]
+g_sFilePathFolder = [
+                    '400', \
+                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
+                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
+                   '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+                   '710', '720', '730', '740', '750',  '760', '770', '780' \
+                  ]
 
 #DarkCurrent
-g_sFilePathFolder = [
+#g_sFilePathFolder = [
 #                    '80_1_10', '80_2_10', '80_3_10', '80_4_10', '80_5_10', '80_6_10', '80_7_10', '80_8_10', '80_9_10', '80_10_10', \
 #                    '75_1_10', '75_2_10', '75_3_10', '75_4_10', '75_5_10', '75_6_10', '75_7_10', '75_8_10', '75_9_10', '75_10_10', \
 #                    '70_1_10', '70_2_10', '70_3_10', '70_4_10', '70_5_10', '70_6_10', '70_7_10', '70_8_10', '70_9_10', '70_10_10', \
@@ -83,8 +83,7 @@ g_sFilePathFolder = [
 #                    '50_1_10', '50_2_10', '50_3_10', '50_4_10', '50_5_10', '50_6_10', '50_7_10', '50_8_10', '50_9_10', '50_10_10', \
 #                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
 #                     '25', '50', '75', '100', '125', '150',
-                     '5', '10', '15', '20', '25',
-                   ]
+#                   ]
 
 #Center R1: 4000,3000
 #nROI_X = 3900
@@ -127,11 +126,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022022215'
+sFileTempTime = '2022030116'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022022215_75C_DarkLag/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022030116_color_EQE_NoCG_1713/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -147,7 +146,7 @@ nDeleteMinCount = 3
 
 #(Test TEG)
 #TEG Bad Pixel
-g_bDeleteBadPixel = False
+g_bDeleteBadPixel = True
 g_nBadPixelLevel = 64
 
 
@@ -452,7 +451,7 @@ def ParsingPixel():
                     
                     if i%4==0:  #R1~2+Gr1~2
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
@@ -473,7 +472,7 @@ def ParsingPixel():
                                 nGr1Index += 1
                     elif i%4==1:  #R3~4+Gr3~4
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
@@ -491,7 +490,7 @@ def ParsingPixel():
                                 nGr3Index += 1
                     elif i%4==2:  #Gb1~2+B1~2
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
@@ -509,7 +508,7 @@ def ParsingPixel():
                                 nB1Index += 1
                     elif i%4==3:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] == g_nBadPixelLevel:
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
