@@ -544,3 +544,14 @@ if __name__ == "__main__":
 
 EndTime = time.time()
 print("Durning Program Time(sec): ", EndTime - StartTime)
+
+
+###########################################
+#def get_channels(bayer_image):
+#    red = bayer_image[0::2,0::2]
+#    blue = bayer_image[1::2,1::2]
+#   green1 = bayer_image[0::2,1::2]
+#   green2 = bayer_image[1::2,0::2]
+#   green = (green1 + green2)/2
+#   return red, green, blue
+##########################################

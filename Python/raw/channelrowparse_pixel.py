@@ -6,6 +6,7 @@
 ### If bCalMergeROIChannel is True, the result is to calculate all pixels of R(1+2+3+4)/Gr(1+2+3+4)/Gb(1+2+3+4)/B(1+2+3+4) channel.
 
 import numpy as np
+from matplotlib import pyplot as plt
 import time
 import csv
 import datetime
@@ -26,9 +27,9 @@ nHeight = 6000
 
 nFileCount = 25
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
-sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
+#sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-#sFilePath = '/home/dino/IMX586_Bin/2022030116_color_EQE_NoCG_1713/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022030416_DS/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -36,7 +37,7 @@ g_bAYAFile = True
 #Subfolder
 #Normal
 g_sFilePathFolder = [
-                    '250_Bin'
+                    '500'
                     ]
 
 #LightIntensity
@@ -88,17 +89,17 @@ g_sFilePathFolder = [
 nROI_W = nWidth
 nROI_H = nHeight
 
-g_nCalRows = 200
+g_nCalRows = 1000
 
 #Saving output file or not
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '20220303'
+sFileTempTime = '2022030416'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
-sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-#sSavePath = '/home/dino/RawShared/Output/2022030116_color_EQE_NoCG_1713/{}/'
+#sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022030416_DS/{}/'
 
 #Debug or not
 bShowDebugOutput = True
@@ -151,6 +152,31 @@ def Cal_Pixel_Std(ChannelArray, x, y):
     Pixel_STD = np.std(PixelArray)
     return Pixel_STD
 
+def SaveAvgToCSV(Avg_Array):
+    sAvgFile = sSavePath.format('500') + sFileTempTime + '_Avg.csv'
+    np.savetxt(sAvgFile, Avg_Array, fmt = '%.2f', delimiter=',')
+
+def SaveStdToCSV(Std_Array):
+    sStdFile = sSavePath.format('500') +  sFileTempTime + '_Std.csv'
+    np.savetxt(sStdFile, Std_Array, fmt = '%.8f', delimiter=',')
+
+def LoadAvgFromCSV():
+    sAvgFile = sSavePath.format('Total') + sFileTempTime + '_Avg.csv'
+    sLoadAvgArray = np.loadtxt(sAvgFile, delimiter=',')
+    print('Load AVG:{}, Shape:{}'.format(sLoadAvgArray, sLoadAvgArray.shape))
+    return sLoadAvgArray
+        
+def LoadStdFromCSV():
+    sStdFile = sSavePath.format('Total') +  sFileTempTime + '_Std.csv'
+    sLoadStdArray = np.loadtxt(sStdFile, delimiter=',')
+    print('Load STD:{}, Shape:{}'.format(sLoadStdArray, sLoadStdArray.shape))
+    return sLoadStdArray
+
+def ShowHistogram(ShowArray):
+    plt.hist(ShowArray) 
+    plt.title("histogram") 
+    plt.show()
+
 
 def ParsingPixel():
     nCount = nFileCount
@@ -198,15 +224,18 @@ def ParsingPixel():
                     input_file.close()
                     #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
 
-                    for m in range(0, nCalRows):
-                        for n in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[m*nCalRows + n] < g_nBadPixelLevel:
-                            #    print('Bad Pixel {0}, {1}'.format(m*nCalRows + n, input_array[m*nCalRows + n]))
-                                continue
+                    #for m in range(0, nCalRows):
+                    #    for n in range(0, nROI_W):
+                    #        if g_bDeleteBadPixel and input_array[m*nCalRows + n] < g_nBadPixelLevel:
+                    #        #    print('Bad Pixel {0}, {1}'.format(m*nCalRows + n, input_array[m*nCalRows + n]))
+                    #            continue
+                    #
+                    #        #if bShowDebugOutput:
+                    #        #    print('Pixel_array[{},{},{}]: Value:{}'.format(k,m,n,input_array[m*nCalRows + n]))
+                    #        Pixel_array[k,m,n] = input_array[m*nCalRows + n]
 
-                            #if bShowDebugOutput:
-                            #    print('Pixel_array[{},{},{}]: Value:{}'.format(k,m,n,input_array[m*nCalRows + n]))
-                            Pixel_array[k,m,n] = input_array[m*nCalRows + n]
+                    Pixel_array[k,:,:] = np.reshape(input_array, (nCalRows, nROI_W))
+                    #print('Pixel_array: {0}, Len:{1}, shape:{2}'.format(Pixel_array[k,:,:], np.size(Pixel_array[k,:,:]), Pixel_array[k,:,:].shape))
 
                     k = k + 1
 
@@ -238,23 +267,27 @@ def ParsingPixel():
         #Normalize Array
         #Keep float number to txt file, do not normalize array
 
-        ##Save image
-        sAvgFile = sSavePath.format('Total') + sFileTempTime + '_Avg.txt'
-        np.savetxt(sAvgFile, AvgArray, fmt = '%.2f')
-        sStdFile = sSavePath.format('Total') +  sFileTempTime + '_Std.txt'
-        np.savetxt(sStdFile, StdArray, fmt = '%.8f')
-
-        ##Test
-        #sLoadAvgArray = np.loadtxt(sAvgFile)
-        #print('Load AVG:{}, Shape:{}'.format(sLoadAvgArray, sLoadAvgArray.shape))
-        #sLoadStdArray = np.loadtxt(sStdFile)
-        #print('Load STD:{}, Shape:{}'.format(sLoadStdArray, sLoadStdArray.shape))
+        #Save image
+        #sAvgFile = sSavePath.format('Total') + sFileTempTime + '_Avg.csv'
+        #np.savetxt(sAvgFile, AvgArray, fmt = '%.2f', delimiter=',')
+        #sStdFile = sSavePath.format('Total') +  sFileTempTime + '_Std.csv'
+        #np.savetxt(sStdFile, StdArray, fmt = '%.8f', delimiter=',')
+        SaveAvgToCSV(AvgArray)
+        SaveStdToCSV(StdArray)
 
         nEachIntervalTime = time.time()
         print("Durning Interval[{}] Time(sec): {}".format(x, nEachIntervalTime - StartTime))
 
 if __name__ == "__main__":
     ParsingPixel()
+
+    ##Test
+    #LoadAvgFromCSV()
+    #LoadStdFromCSV()
+    #LoadArray = LoadStdFromCSV()
+    #ShowHistogram(LoadArray)
+
+    pass
 
 
 EndTime = time.time()

@@ -28,7 +28,7 @@ nFileCount = 1
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2021113014/AngularSample/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022022514_AngularResponse_20percent_002F_147LSB/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022030410_angular_response_20percent_002F_145LSB_4x/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -54,13 +54,13 @@ g_sFilePathFolder = [
 #                    '-40', '-39', '-38', '-37', '-36',\
 #                    '-35', '-34', '-33', '-32', '-31', '-30', \
 #                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-25', '-24', '-23', '-22', '-21', '-20', \
+                    '-26', '-25', '-24', '-23', '-22', '-21', '-20', \
                     '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
                     '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
                     '0', \
                     '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
                     '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-                    '+21', '+22', '+23', '+24', '+25', \
+                    '+21', '+22', '+23', '+24', \
 #                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
 #                    '+31', '+32', '+33', '+34', '+35', \
 #                    '+36', '+37', '+38', '+39', '+40' \
@@ -141,11 +141,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022022514'
+sFileTempTime = '2022030410'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022022514_AngularResponse_20percent/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022030410_angular_response_20percent_002F_145LSB_4x/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
