@@ -72,6 +72,17 @@ def ShowHistogram(ShowArray):
     plt.title("histogram") 
     plt.show()
 
+def Save2DArrayToBin(Save_Array, strFileName):
+    rows, cols = Save_Array.shape
+    SaveArray = np.zeros((1, rows * cols + 2))
+    SaveArray[0, 0] = cols
+    SaveArray[0, 1] = rows
+    SArray = Save_Array[:,:].flatten()
+    SaveArray[0, 2:cols * rows + 2] = SArray
+    print('SaveArray:{}, Shape:{}'.format(SaveArray, SaveArray.shape))
+    SaveArray.astype(np.uint16).tofile(strFileName)
+
+
 def ShowStdHistogram():
     LoadArray = LoadFileFromCSV(g_sFileName1)
     ShowHistogram(LoadArray)
@@ -93,11 +104,15 @@ def CaluTwoDiff():
 
     DiffArray = np.diff(BaseArray, axis=0)
     DiffArray = np.reshape(DiffArray, (nROI_H, nROI_W))
-
     if bShowDebugOutput:
         print('Array: {0}, Len:{1}, shape:{2}'.format(DiffArray, np.size(DiffArray), DiffArray.shape))
+
+    #DiffArray = DiffArray/float(8405.0)
+    #if bShowDebugOutput:
+    #    print('Array: {0}, Len:{1}, shape:{2}'.format(DiffArray, np.size(DiffArray), DiffArray.shape))
+    
     #Save
-    SaveArrayToCSV(DiffArray, g_sOutputFileName, '%.2f', ',')
+    SaveArrayToCSV(DiffArray, g_sOutputFileName, '%.6f', ',')
     pass
 
 def CaluStdOneFile(LoadArray):
@@ -112,48 +127,38 @@ def CaluColumnStd(LoadArray):
     num_rows, num_cols = LoadArray.shape
     ColumnArray = np.zeros((1, num_cols))
     for i in range(0, num_cols):
-        ColumnPixel_Std = np.std(LoadArray[:, i])
-        ColumnArray[0, i] = ColumnPixel_Std
-
+        ColumnPixel_Avg = np.average(LoadArray[:, i])
+        ColumnArray[0, i] = ColumnPixel_Avg
+    AllColumnPixel_Std = np.std(ColumnArray)
     if bShowDebugOutput:
-        print('Array: {0}, Len:{1}, shape:{2}'.format(ColumnArray, np.size(ColumnArray), ColumnArray.shape))
-    return ColumnArray
+        print('Array: {0}, Len:{1}, shape:{2}, STD:{3}'.format(ColumnArray, np.size(ColumnArray), ColumnArray.shape, AllColumnPixel_Std))
+    return AllColumnPixel_Std
 
 def CaluRowStd(LoadArray):
     #LoadArray = LoadFileFromCSV(g_sFileName1)
     num_rows, num_cols = LoadArray.shape
     RowArray = np.zeros((num_rows, 1))
     for i in range(0, num_rows):
-        Row_Std = np.std(LoadArray[i, :])
-        RowArray[i, 0] = Row_Std
-
+        RowPixel_Std = np.average(LoadArray[i, :])
+        RowArray[i, 0] = RowPixel_Std
+    AllRowPixel_Std = np.std(RowArray)
     if bShowDebugOutput:
-        print('Array: {0}, Len:{1}, shape:{2}'.format(RowArray, np.size(RowArray), RowArray.shape))
-    return RowArray
+        print('Array: {0}, Len:{1}, shape:{2}, STD:{3}'.format(RowArray, np.size(RowArray), RowArray.shape, AllRowPixel_Std))
+    return AllRowPixel_Std
 
 def CaluFPN(LoadArray):
     AllPixel_STD = CaluStdOneFile(LoadArray)
-    ColumnArray = CaluColumnStd(LoadArray)
-    column_rows, column_cols = ColumnArray.shape
-    RowArray = CaluRowStd(LoadArray)
-    row_rows, row_cols = RowArray.shape
-
-    FPNArray = np.zeros((row_rows, column_cols))
-    for i in range(0, row_rows):
-        for j in range(0, column_cols):
-            #print('AllPixel_STD:{0}, ColumnArray[0, {1}]:{2}, RowArray[{3}, 0]:{4}'.format(AllPixel_STD, j, ColumnArray[0, j], i, RowArray[i, 0]))
-            #FPN = ((AllPixel_STD)**2 - (ColumnArray[0, j])**2 - (RowArray[i, 0])**2) ** 0.5
-            #print('FPN: {0}'.format(FPN))
-
-            FPN = ((AllPixel_STD)**2 - (ColumnArray[0, j])**2 - (RowArray[i, 0])**2)
-            #print('FPN: {0}'.format(FPN))
-            FPNArray[i,j] = FPN
-
+    ColumnStd = CaluColumnStd(LoadArray)
+    RowStd = CaluRowStd(LoadArray)
+    FPN = ((AllPixel_STD)**2 - (ColumnStd)**2 - (RowStd**2))
     if bShowDebugOutput:
-        print('Array: {0}, Len:{1}, shape:{2}'.format(FPNArray, np.size(FPNArray), FPNArray.shape))
-    #Save
-    SaveArrayToCSV(FPNArray, g_sOutputFileName, '%.8f', ',')
-    pass
+        print('AllPixelStd: {0}, ColumnStd: {1}, RowStd: {2}, FPN: {3}'.format(AllPixel_STD, ColumnStd, RowStd, FPN))
+
+    FPN = (FPN)**0.5
+    if bShowDebugOutput:
+        print('FPN^0.5: {0}'.format(FPN))
+
+    return FPN
 
 
 if __name__ == "__main__":

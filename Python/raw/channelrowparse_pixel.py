@@ -37,54 +37,8 @@ g_bAYAFile = True
 #Subfolder
 #Normal
 g_sFilePathFolder = [
-                    '500'
+                    '1', '500', \
                     ]
-
-#LightIntensity
-#g_sFilePathFolder = [
-#                    '20211118093237', '20211118094433', '20211118094925', '20211118095420', '20211118095940' \
-#                    ]
-
-#ExposureTime
-#g_sFilePathFolder = [
-#                    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-#                    ]
-                    
-#AngulerResponse
-#g_sFilePathFolder = [
-#                    '-40', \
-#                    '-39', '-38', '-37', '-36','-35', '-34', '-33', '-32', '-31', '-30', \
-#                   '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-#                    '0', \
-#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-#                   '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-#                    '+31', '+32', '+33', '+34', '+35', '+36', '+37', '+38', '+39', '+40' \
-#                    ]
-
-#QuantumEfficiency
-#g_sFilePathFolder = [
-#                    '400', \
-#                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
-#                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-#                   '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-#                   '710', '720', '730', '740', '750',  '760', '770', '780' \
-#                  ]
-
-#DarkCurrent
-#g_sFilePathFolder = [
-#                    '80_1_10', '80_2_10', '80_3_10', '80_4_10', '80_5_10', '80_6_10', '80_7_10', '80_8_10', '80_9_10', '80_10_10', \
-#                    '75_1_10', '75_2_10', '75_3_10', '75_4_10', '75_5_10', '75_6_10', '75_7_10', '75_8_10', '75_9_10', '75_10_10', \
-#                    '70_1_10', '70_2_10', '70_3_10', '70_4_10', '70_5_10', '70_6_10', '70_7_10', '70_8_10', '70_9_10', '70_10_10', \
-#                    '65_1_10', '65_2_10', '65_3_10', '65_4_10', '65_5_10', '65_6_10', '65_7_10', '65_8_10', '65_9_10', '65_10_10', \
-#                    '60_1_10', '60_2_10', '60_3_10', '60_4_10', '60_5_10', '60_6_10', '60_7_10', '60_8_10', '60_9_10', '60_10_10', \
-#                    '55_1_10', '55_2_10', '55_3_10', '55_4_10', '55_5_10', '55_6_10', '55_7_10', '55_8_10', '55_9_10', '55_10_10', \
-#                    '50_1_10', '50_2_10', '50_3_10', '50_4_10', '50_5_10', '50_6_10', '50_7_10', '50_8_10', '50_9_10', '50_10_10', \
-#                    '25_1_10', '25_2_10', '25_3_10', '25_4_10', '25_5_10', '25_6_10', '25_7_10', '25_8_10', '25_9_10', '25_10_10', \
-#                     '25', '50', '75', '100', '125', '150',
-#                   ]
 
 nROI_W = nWidth
 nROI_H = nHeight
@@ -99,7 +53,7 @@ sFileTempTime = '2022030416'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022030416_DS/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022030416_DS/Output/{}/'
 
 #Debug or not
 bShowDebugOutput = True
@@ -152,22 +106,26 @@ def Cal_Pixel_Std(ChannelArray, x, y):
     Pixel_STD = np.std(PixelArray)
     return Pixel_STD
 
-def SaveAvgToCSV(Avg_Array):
-    sAvgFile = sSavePath.format('500') + sFileTempTime + '_Avg.csv'
+def SaveAvgToCSV(Avg_Array, folder):
+    #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
+    sAvgFile = '{}{}_{}_Avg.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
     np.savetxt(sAvgFile, Avg_Array, fmt = '%.2f', delimiter=',')
 
-def SaveStdToCSV(Std_Array):
-    sStdFile = sSavePath.format('500') +  sFileTempTime + '_Std.csv'
+def SaveStdToCSV(Std_Array, folder):
+    #sStdFile = sSavePath.format(folder) +  sFileTempTime + '_Std.csv'
+    sStdFile = '{}{}_{}_Std.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
     np.savetxt(sStdFile, Std_Array, fmt = '%.8f', delimiter=',')
 
-def LoadAvgFromCSV():
-    sAvgFile = sSavePath.format('Total') + sFileTempTime + '_Avg.csv'
+def LoadAvgFromCSV(folder):
+    #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
+    sAvgFile = '{}{}_{}_Avg.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
     sLoadAvgArray = np.loadtxt(sAvgFile, delimiter=',')
     print('Load AVG:{}, Shape:{}'.format(sLoadAvgArray, sLoadAvgArray.shape))
     return sLoadAvgArray
         
-def LoadStdFromCSV():
-    sStdFile = sSavePath.format('Total') +  sFileTempTime + '_Std.csv'
+def LoadStdFromCSV(folder):
+    #sStdFile = sSavePath.format(folder) +  sFileTempTime + '_Std.csv'
+    sStdFile = '{}{}_{}_Std.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
     sLoadStdArray = np.loadtxt(sStdFile, delimiter=',')
     print('Load STD:{}, Shape:{}'.format(sLoadStdArray, sLoadStdArray.shape))
     return sLoadStdArray
@@ -176,6 +134,17 @@ def ShowHistogram(ShowArray):
     plt.hist(ShowArray) 
     plt.title("histogram") 
     plt.show()
+
+def SaveAvgToBin(Avg_Array, folder):
+    #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
+    sAvgFile = '{}{}_{}_Avg.bin'.format(sSavePath.format(folder), sFileTempTime, folder)
+    SaveArray = np.zeros((1, nROI_H * nROI_W + 2))
+    SaveArray[0, 0] = nROI_W
+    SaveArray[0, 1] = nROI_H
+    AvgArray = Avg_Array[:,:].flatten()
+    SaveArray[0, 2:nROI_H * nROI_W + 2] = AvgArray
+    print('SaveArray:{}, Shape:{}'.format(SaveArray, SaveArray.shape))
+    SaveArray.astype(np.uint16).tofile(sAvgFile)
 
 
 def ParsingPixel():
@@ -272,8 +241,9 @@ def ParsingPixel():
         #np.savetxt(sAvgFile, AvgArray, fmt = '%.2f', delimiter=',')
         #sStdFile = sSavePath.format('Total') +  sFileTempTime + '_Std.csv'
         #np.savetxt(sStdFile, StdArray, fmt = '%.8f', delimiter=',')
-        SaveAvgToCSV(AvgArray)
-        SaveStdToCSV(StdArray)
+        SaveAvgToCSV(AvgArray, x)
+        SaveAvgToBin(AvgArray, x)
+        SaveStdToCSV(StdArray, x)
 
         nEachIntervalTime = time.time()
         print("Durning Interval[{}] Time(sec): {}".format(x, nEachIntervalTime - StartTime))
@@ -282,10 +252,11 @@ if __name__ == "__main__":
     ParsingPixel()
 
     ##Test
-    #LoadAvgFromCSV()
-    #LoadStdFromCSV()
-    #LoadArray = LoadStdFromCSV()
-    #ShowHistogram(LoadArray)
+    #for x in g_sFilePathFolder:
+    #    LoadAvgFromCSV(x)
+    #    LoadStdFromCSV(x)
+    #    LoadArray = LoadStdFromCSV(x)
+    #    ShowHistogram(LoadArray)
 
     pass
 
