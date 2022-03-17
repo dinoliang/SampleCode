@@ -18,18 +18,18 @@ StartTime = time.time()
 
 #######################################################
 ### Change the parameters to match the settings
-nWidth = 8000
-nHeight = 6000
+#nWidth = 8000
+#nHeight = 6000
 
 #Color TEG
-#nWidth = 9728
-#nHeight = 8192
+nWidth = 9728
+nHeight = 8192
 
 nFileCount = 25
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022030416_DS/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022031615_P8N533_DC/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -37,7 +37,8 @@ g_bAYAFile = True
 #Subfolder
 #Normal
 g_sFilePathFolder = [
-                    '1', '500', \
+                    #'50_1', '50_500', '55_1', '55_500', '60_1', '60_500', '65_1', '65_500', '70_1', '70_500', \
+                    '60_008', '60_7FD', \
                     ]
 
 nROI_W = nWidth
@@ -47,11 +48,11 @@ nROI_H = nHeight
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022030416'
+sFileTempTime = '2022031615'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022030416_DS/Output/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022031615_P8N533_DC/Output/{}/'
 
 #Debug or not
 bShowDebugOutput = True

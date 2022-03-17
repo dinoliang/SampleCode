@@ -23,29 +23,43 @@ class ActionType(Enum):
     CaluColumnStd       = 5
     CaluRowStd          = 6
     CaluFPN             = 7
+    ChangeDiffBase      = 8
+    CaluRN              = 9
     ActionNone          = 100
 
 StartTime = time.time()
 
 #######################################################
 ### Change the parameters to match the settings
-nWidth = 8000
-nHeight = 6000
+#nWidth = 8000
+#nHeight = 6000
+#g_nRowIndex = 0
+#g_nRowBound  = 8000
+#g_nColumnIndex = 0
+#g_nColumnBound = 6000
 
 #Color TEG
-#nWidth = 9728
-#nHeight = 8192
+nWidth = 9300
+nHeight = 7000
+g_nRowIndex = 0
+g_nRowBound  = 9300
+g_nColumnIndex = 0
+g_nColumnBound = 7000
 
-g_sFilePath = '/home/dino/RawShared/Output/2022030416_DS/Output/'
-g_sFileName1 = '2022030416_1_Avg.csv'
-g_sFileName2 = '2022030416_500_Avg.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022031615_P8N533_DC/Output/'
+g_sFileName1 = '60_008/2022031615_60_008_Avg.csv'
+g_sFileName2 = '60_7FD/2022031615_60_7FD_Avg.csv'
 
-g_sOutputFileName = '2022030416_500_1_Diff.csv'
+g_sOutputFileName = '202203615_60_7FD_008_Diff.csv'
 
 g_ActionType = ActionType.CaluTwoDiff
 
-nROI_W = nWidth
-nROI_H = nHeight
+#nROI_W = nWidth
+#nROI_H = nHeight
+nROI_W = g_nRowBound - g_nRowIndex
+nROI_H = g_nColumnBound - g_nColumnIndex
+
+g_fTwoDiffBenchmark = 0.5 #Sec
 
 #Debug or not
 bShowDebugOutput = True
@@ -98,18 +112,21 @@ def CaluTwoDiff():
     LoadArray2 = LoadFileFromCSV(g_sFileName2)
 
     num_rows, num_cols = LoadArray1.shape
-    BaseArray = np.zeros((2, num_rows, num_cols))
-    BaseArray[0,:,:] = LoadArray1
-    BaseArray[1,:,:] = LoadArray2
+    BaseArray = np.zeros((2, g_nColumnBound-g_nColumnIndex, g_nRowBound-g_nRowIndex))
+    BaseArray[0,:,:] = LoadArray1[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound]
+    BaseArray[1,:,:] = LoadArray2[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound]
 
     DiffArray = np.diff(BaseArray, axis=0)
     DiffArray = np.reshape(DiffArray, (nROI_H, nROI_W))
     if bShowDebugOutput:
         print('Array: {0}, Len:{1}, shape:{2}'.format(DiffArray, np.size(DiffArray), DiffArray.shape))
 
-    #DiffArray = DiffArray/float(8405.0)
-    #if bShowDebugOutput:
-    #    print('Array: {0}, Len:{1}, shape:{2}'.format(DiffArray, np.size(DiffArray), DiffArray.shape))
+    if g_fTwoDiffBenchmark != 1.0:
+        DiffArray = DiffArray/float(g_fTwoDiffBenchmark)
+    if bShowDebugOutput:
+        print('Array: {0}, Len:{1}, shape:{2}'.format(DiffArray, np.size(DiffArray), DiffArray.shape))
+
+    print("The average of Diff: {}".format(np.average(DiffArray)))
     
     #Save
     SaveArrayToCSV(DiffArray, g_sOutputFileName, '%.6f', ',')
@@ -117,17 +134,17 @@ def CaluTwoDiff():
 
 def CaluStdOneFile(LoadArray):
     #LoadArray = LoadFileFromCSV(g_sFileName1)
-    AllPixel_STD = np.std(LoadArray)
+    AllPixel_STD = np.std(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
     if bShowDebugOutput:
         print('AllPixel_STD: {0}'.format(AllPixel_STD))
     return AllPixel_STD
 
 def CaluColumnStd(LoadArray):
     #LoadArray = LoadFileFromCSV(g_sFileName1)
-    num_rows, num_cols = LoadArray.shape
+    num_rows, num_cols = LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape
     ColumnArray = np.zeros((1, num_cols))
     for i in range(0, num_cols):
-        ColumnPixel_Avg = np.average(LoadArray[:, i])
+        ColumnPixel_Avg = np.average(LoadArray[g_nColumnIndex:g_nColumnBound, i])
         ColumnArray[0, i] = ColumnPixel_Avg
     AllColumnPixel_Std = np.std(ColumnArray)
     if bShowDebugOutput:
@@ -136,10 +153,10 @@ def CaluColumnStd(LoadArray):
 
 def CaluRowStd(LoadArray):
     #LoadArray = LoadFileFromCSV(g_sFileName1)
-    num_rows, num_cols = LoadArray.shape
+    num_rows, num_cols = LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape
     RowArray = np.zeros((num_rows, 1))
     for i in range(0, num_rows):
-        RowPixel_Std = np.average(LoadArray[i, :])
+        RowPixel_Std = np.average(LoadArray[i, g_nRowIndex:g_nRowBound])
         RowArray[i, 0] = RowPixel_Std
     AllRowPixel_Std = np.std(RowArray)
     if bShowDebugOutput:
@@ -159,6 +176,21 @@ def CaluFPN(LoadArray):
         print('FPN^0.5: {0}'.format(FPN))
 
     return FPN
+
+def ChangeDiffBase(LoadArray):
+    #np.around(LoadArray, 6)
+    if g_fTwoDiffBenchmark != 1.0:
+        LoadArray = LoadArray/float(g_fTwoDiffBenchmark)
+    #np.around(LoadArray, 6)
+    print('Diff Array:{} Shape:{}'.format(LoadArray, LoadArray.shape))
+    SaveArrayToCSV(LoadArray, g_sOutputFileName, '%.6f', ',')
+    return
+
+def CaluRN(LoadArray):
+    RN = np.average(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
+    if bShowDebugOutput:
+        print('RN: {0}'.format(RN))
+    return RN
 
 
 if __name__ == "__main__":
@@ -187,6 +219,13 @@ if __name__ == "__main__":
         LoadArray = LoadFileFromCSV(g_sFileName1)
         CaluFPN(LoadArray)
         pass
+    elif g_ActionType == ActionType.ChangeDiffBase:
+        LoadArray = LoadFileFromCSV(g_sFileName1)
+        ChangeDiffBase(LoadArray)
+        pass
+    elif g_ActionType == ActionType.CaluRN:
+        LoadArray = LoadFileFromCSV(g_sFileName1)
+        CaluRN(LoadArray)
     elif g_ActionType == ActionType.ActionNone:
         pass
 

@@ -33,13 +33,21 @@ class RawBayer(enum.IntEnum):
 #######################################################
 # Var
 g_bResolution = True
+
 g_nWidth = 9728
 g_nHeight = 8192
+#g_nWidth = 8000
+#g_nHeight = 6000
 
 g_InputPath = '//home/dino/RawShared/TEG_Output/20220122/'
 g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835.bin'
+#g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835_ReMosaic.bin'
+#g_InputPath = '//home/dino/RawShared/Temp/'
+#g_InputFile = 'FrameID0_W8000_H6000_20211130153042_P10_0000.bin'
 
-g_rawBayer = RawBayer.Q_GRBG
+g_rawBayer = RawBayer.Q_GRBG#RawBayer.Q_RGGB
+
+
 g_bDeMosaic = True
 
 #ISP 
@@ -71,8 +79,8 @@ g_bISP_Sharp = False
 #output YUV or RGB
 
 g_bSaveReMosaicRaw = False
-g_bSaveTiff = False
-g_SavingFileName = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835_test.jpg'
+g_bSaveTiff = True
+g_SavingFileName = 'FrameID0_W8000_H6000_20211130153042_P10_0000.bmp'
 
 g_bDisplay = True
 
@@ -95,9 +103,13 @@ def ReMosaic(RawArray):
     #print(np.size(RawArray, 0))
     #print(np.size(RawArray, 1))
     for i in range(0, g_nHeight, 4):
+        RawTemp = RawArray[[i+1,i+2],:]
         RawArray[[i+1,i+2],:] = RawArray[[i+2,i+1],:]
+        RawArray[[i+2,i+1],:] = RawTemp
     for i in range(0, g_nWidth, 4):
+        RawTemp = RawArray[:,[i+1,i+2]]
         RawArray[:,[i+1,i+2]] = RawArray[:,[i+2,i+1]]
+        RawArray[:,[i+2,i+1]] = RawTemp
     if (g_bSaveReMosaicRaw):
         SaveRaw(RawArray);
     return RawArray

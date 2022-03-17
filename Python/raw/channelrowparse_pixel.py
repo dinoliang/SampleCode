@@ -18,18 +18,28 @@ StartTime = time.time()
 
 #######################################################
 ### Change the parameters to match the settings
-nWidth = 8000
-nHeight = 6000
+#nWidth = 8000
+#nHeight = 6000
+
+#g_nRowIndex = 240
+#g_nRowBound  = 9540
+#g_nColumnIndex = 0
+#g_nColumnBound = 7000
 
 #Color TEG
-#nWidth = 9728
-#nHeight = 8192
+nWidth = 9728
+nHeight = 8192
 
-nFileCount = 25
-#sFilePath = '/home/dino/RawShared/2022020816/{}/'
+g_nRowIndex = 240
+g_nRowBound  = 9540
+g_nColumnIndex = 0
+g_nColumnBound = 7000
+
+nFileCount = 1
+sFilePath = '/home/dino/RawShared/2022031712_030_650nm/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022030416_DS/{}/'
+#sFilePath = '/home/dino/IMX586_Bin/2022031710_0F0/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -37,7 +47,9 @@ g_bAYAFile = True
 #Subfolder
 #Normal
 g_sFilePathFolder = [
-                    '1', '500', \
+                    #'50_1', '50_500', '55_1', '55_500', '60_1', '60_500', '65_1', '65_500', '70_1', '70_500', \
+                    '1X', '2X', '4X', '8X', '16X', \
+                    #'0008', '0100', '0200', '0300', '0400', '0500', '0600', '0700', '07FD', \
                     ]
 
 nROI_W = nWidth
@@ -46,14 +58,14 @@ nROI_H = nHeight
 g_nCalRows = 1000
 
 #Saving output file or not
-bSaveCSV = True
+g_bSaveFile = False
 
 #The path of saving file
-sFileTempTime = '2022030416'
+sFileTempTime = '2022031710'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022030416_DS/Output/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022031710_0F0/Output/{}/'
 
 #Debug or not
 bShowDebugOutput = True
@@ -109,12 +121,12 @@ def Cal_Pixel_Std(ChannelArray, x, y):
 def SaveAvgToCSV(Avg_Array, folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
     sAvgFile = '{}{}_{}_Avg.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
-    np.savetxt(sAvgFile, Avg_Array, fmt = '%.2f', delimiter=',')
+    np.savetxt(sAvgFile, Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound], fmt = '%.2f', delimiter=',')
 
 def SaveStdToCSV(Std_Array, folder):
     #sStdFile = sSavePath.format(folder) +  sFileTempTime + '_Std.csv'
     sStdFile = '{}{}_{}_Std.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
-    np.savetxt(sStdFile, Std_Array, fmt = '%.8f', delimiter=',')
+    np.savetxt(sStdFile, Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound], fmt = '%.8f', delimiter=',')
 
 def LoadAvgFromCSV(folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
@@ -138,11 +150,12 @@ def ShowHistogram(ShowArray):
 def SaveAvgToBin(Avg_Array, folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
     sAvgFile = '{}{}_{}_Avg.bin'.format(sSavePath.format(folder), sFileTempTime, folder)
-    SaveArray = np.zeros((1, nROI_H * nROI_W + 2))
-    SaveArray[0, 0] = nROI_W
-    SaveArray[0, 1] = nROI_H
-    AvgArray = Avg_Array[:,:].flatten()
-    SaveArray[0, 2:nROI_H * nROI_W + 2] = AvgArray
+    nTotalFileSize = ((g_nColumnBound-g_nColumnIndex) * (g_nRowBound-g_nRowIndex) + 2)
+    SaveArray = np.zeros((1, nTotalFileSize))
+    SaveArray[0, 0] = g_nRowBound-g_nRowIndex
+    SaveArray[0, 1] = g_nColumnBound-g_nColumnIndex
+    AvgArray = Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].flatten()
+    SaveArray[0, 2:nTotalFileSize] = AvgArray
     print('SaveArray:{}, Shape:{}'.format(SaveArray, SaveArray.shape))
     SaveArray.astype(np.uint16).tofile(sAvgFile)
 
@@ -241,9 +254,20 @@ def ParsingPixel():
         #np.savetxt(sAvgFile, AvgArray, fmt = '%.2f', delimiter=',')
         #sStdFile = sSavePath.format('Total') +  sFileTempTime + '_Std.csv'
         #np.savetxt(sStdFile, StdArray, fmt = '%.8f', delimiter=',')
-        SaveAvgToCSV(AvgArray, x)
-        SaveAvgToBin(AvgArray, x)
-        SaveStdToCSV(StdArray, x)
+        if g_bSaveFile:
+            SaveAvgToCSV(AvgArray, x)
+        print("================== The average of AVG ==================")
+        print("The average of AVG: {}".format(np.average(AvgArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        print("================== The std of AVG ==================")
+        print("The average of AVG: {}".format(np.std(AvgArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+
+        if g_bSaveFile and nCount > 1:
+            SaveAvgToBin(AvgArray, x)
+
+        if g_bSaveFile:
+            SaveStdToCSV(StdArray, x)
+        print("================== The average of STD ==================")
+        print("The average of STD: {}".format(np.average(StdArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
 
         nEachIntervalTime = time.time()
         print("Durning Interval[{}] Time(sec): {}".format(x, nEachIntervalTime - StartTime))
