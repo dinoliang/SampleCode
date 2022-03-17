@@ -1,9 +1,9 @@
 #######################################################
-### Get one row data to calculate.
-### Calculate block(R1~4/Gr1~4/Gb1~4/B1~4) std and avg.
-### If R1/Gr1/Gb1/B1 only has only 1 pixel, the result is like to calculate one pixel. (nROI_W <= 4 && nROI_H <= 4)
-### If R1/Gr1/Gb1/B1 only has more 1 pixel, the result is to calculate all pixels of every R1~4/Gr1~4/Gb1~4/B1~4 channel.
-### If bCalMergeROIChannel is True, the result is to calculate all pixels of R(1+2+3+4)/Gr(1+2+3+4)/Gb(1+2+3+4)/B(1+2+3+4) channel.
+### Get all pixel information by multi-images
+### Calculate the value by different block (g_nCalRows)
+### Merge all block to one calculated image
+### Get ROI by (g_nRowIndex、g_nRowBound、g_nColumnIndex、g_nColumnBound)
+### Save ROI result to csv or bin file
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -36,7 +36,7 @@ g_nColumnIndex = 0
 g_nColumnBound = 7000
 
 nFileCount = 1
-sFilePath = '/home/dino/RawShared/2022031712_030_650nm/{}/'
+sFilePath = '/home/dino/RawShared/2022031714_1X_650nm/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
 #sFilePath = '/home/dino/IMX586_Bin/2022031710_0F0/{}/'
@@ -48,8 +48,8 @@ g_bAYAFile = True
 #Normal
 g_sFilePathFolder = [
                     #'50_1', '50_500', '55_1', '55_500', '60_1', '60_500', '65_1', '65_500', '70_1', '70_500', \
-                    '1X', '2X', '4X', '8X', '16X', \
-                    #'0008', '0100', '0200', '0300', '0400', '0500', '0600', '0700', '07FD', \
+                    #'1X', '2X', '4X', '8X', '16X', \
+                    '0008', '0100', '0200', '0300', '0400', '0500', '0600', '0700', '07FD', \
                     ]
 
 nROI_W = nWidth

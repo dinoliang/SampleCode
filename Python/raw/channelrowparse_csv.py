@@ -1,9 +1,5 @@
 #######################################################
-### Get one row data to calculate.
-### Calculate block(R1~4/Gr1~4/Gb1~4/B1~4) std and avg.
-### If R1/Gr1/Gb1/B1 only has only 1 pixel, the result is like to calculate one pixel. (nROI_W <= 4 && nROI_H <= 4)
-### If R1/Gr1/Gb1/B1 only has more 1 pixel, the result is to calculate all pixels of every R1~4/Gr1~4/Gb1~4/B1~4 channel.
-### If bCalMergeROIChannel is True, the result is to calculate all pixels of R(1+2+3+4)/Gr(1+2+3+4)/Gb(1+2+3+4)/B(1+2+3+4) channel.
+### Calculate the information by pixel csv file (not origin bin file (raw image))
 
 import numpy as np
 from matplotlib import pyplot as plt
