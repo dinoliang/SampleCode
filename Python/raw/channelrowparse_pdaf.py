@@ -25,19 +25,19 @@ nWidth = 9728
 nHeight = 8192
 
 nFileCount = 1
-#sFilePath = '/home/dino/RawShared/2022020816/{}/'
+sFilePath = '/home/dino/RawShared/2022041816_P8533_AngularTest/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
-#sFilePath = '/home/dino/IMX586_Raw2/2021113014/AngularSample/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022030410_angular_response_20percent_002F_145LSB_4x/{}/'
+#sFilePath = '/home/dino/IMX586_Raw2/2022041816_P8533_AngularTest/{}/'
+#sFilePath = '/home/dino/IMX586_Bin/2022041816_P8533_AngularTest/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
 
 #Subfolder
 #Normal
-#g_sFilePathFolder = [
-#                    '500_B'
-#                    ]
+g_sFilePathFolder = [
+                    '0'
+                    ]
 
 #LightIntensity
 #g_sFilePathFolder = [
@@ -50,21 +50,21 @@ g_bAYAFile = True
 #                    ]
                     
 #AngulerResponse
-g_sFilePathFolder = [
+#g_sFilePathFolder = [
 #                    '-40', '-39', '-38', '-37', '-36',\
 #                    '-35', '-34', '-33', '-32', '-31', '-30', \
 #                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-26', '-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-                    '0', \
-                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-                    '+21', '+22', '+23', '+24', \
+#                    '-26', '-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+#                    '0', \
+#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                    '+21', '+22', '+23', '+24', \
 #                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
 #                    '+31', '+32', '+33', '+34', '+35', \
 #                    '+36', '+37', '+38', '+39', '+40' \
-                    ]
+#                    ]
 
 #QuantumEfficiency
 #g_sFilePathFolder = [
@@ -92,16 +92,16 @@ g_sFilePathFolder = [
 #nROI_Y = 2900
 
 #Color TEG
-#Center R1: 4864,4094
-#nROI_X = 4864
-#nROI_Y = 4098
+#Center R1: 4866,4096
+nROI_X = 4466
+nROI_Y = 3696
 #PDAF: B3+Gb4
 #Center
 #Center
 #nROI_X = 4764
 #nROI_Y = 3998
-nROI_X = 4364
-nROI_Y = 3598
+#nROI_X = 4364
+#nROI_Y = 3598
 #Top-Left
 #nROI_X = 272
 #nROI_Y = 32
@@ -130,8 +130,10 @@ nROI_Y = 3598
 
 #nROI_W = 200    #multiple of 4
 #nROI_H = 200    #multiple of 4
-nROI_W = 800    #multiple of 16
-nROI_H = 800    #multiple of 16
+#nROI_W = 800    #multiple of 16
+#nROI_H = 800    #multiple of 16
+nROI_W = 16    #multiple of 16
+nROI_H = 16    #multiple of 16
 
 #Regular Expression for parsing file
 g_re_FilePattern = ""
@@ -141,11 +143,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022030410'
+sFileTempTime = '2022041816'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022030410_angular_response_20percent_002F_145LSB_4x/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022041816_P8533_AngularTest/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -279,6 +281,8 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, sSav
                 #print(ChannelArray[i,j])
                 ChannelAllPixel = ChannelArray[i,j].flatten()
                 ChannelAllPixel = np.delete(ChannelAllPixel, np.where(ChannelAllPixel == g_nArrayDefaultValue))
+                if np.size(ChannelAllPixel) == 0:
+                    continue
                 #if sColor == 'B':
                 #    print('Frame{:03d}_{}{}: {}:{}'.format(i, sColor, j+1, np.size(ChannelAllPixel), ChannelAllPixel))
                 #    for z in range(0, np.size(ChannelAllPixel)):
@@ -303,6 +307,9 @@ def Cal_Save_AllInformation(y, nCount, ChannelArray, sColor, sSaveFileName, sSav
                 #print("({},{},{})".format(i, j, sColor))
                 ChannelAllPixel = ChannelArray[:,j,:].flatten()
                 ChannelAllPixel = np.delete(ChannelAllPixel, np.where(ChannelAllPixel == g_nArrayDefaultValue))
+                if np.size(ChannelAllPixel) == 0:
+                    continue
+
                 if bShowDebugOutput:
                     print('OnePixel_{}{}: Count={} {}'.format(sColor, j+1, np.size(ChannelAllPixel), ChannelAllPixel))
                 #print(ChannelAllPixel)
@@ -465,27 +472,28 @@ def ParsingPixel():
                     #Get all pixel of one range row
                     input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W, sep="", offset=nPixelOffset)
                     input_file.close()
-                    #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
+                    print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
                     
                     # TEG
                     #if i%16==11:  #Gb3~4+B3~4
-                    if i%16==11:  #Gb3~4+B3~4
+                    if i%16==15:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
-                    
-                            if (l+nWOffset)%16==10: #Gb3
-                                #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
+                            
+                            if (l+nWOffset)%16==2: #Gb3
                                 ChannelGb_array[k,2,nGb2Index] = input_array[l]
                                 nGb2Index += 1
-                            elif (l+nWOffset)%16==11: #Gb4
+                            elif (l+nWOffset)%16==3: #Gb4
+                                print('Site: {0}, Gb4: {1}'.format(l+nWOffset, input_array[l]))
                                 ChannelGb_array[k,3,nGb3Index] = input_array[l]
                                 nGb3Index += 1
-                            elif (l+nWOffset)%16==12: #B3
+                            elif (l+nWOffset)%16==4: #B3
+                                #print('Site: {0}, B3: {1}'.format(l+nWOffset, input_array[l]))
                                 ChannelB_array[k,2,nB2Index] = input_array[l]
                                 nB2Index += 1
-                            elif (l+nWOffset)%16==13: #B4
+                            elif (l+nWOffset)%16==5: #B4
                                 ChannelB_array[k,3,nB3Index] = input_array[l]
                                 nB3Index += 1
 
@@ -513,9 +521,9 @@ def ParsingPixel():
                             
                 k = k + 1
 
-        Cal_Save_AllInformation(h, nCount, ChannelR_array, 'R', sSaveRFile, sSaveOrgRFile)
+        #Cal_Save_AllInformation(h, nCount, ChannelR_array, 'R', sSaveRFile, sSaveOrgRFile)
 
-        Cal_Save_AllInformation(h, nCount, ChannelGr_array, 'Gr', sSaveGrFile, sSaveOrgGrFile)
+        #Cal_Save_AllInformation(h, nCount, ChannelGr_array, 'Gr', sSaveGrFile, sSaveOrgGrFile)
 
         Cal_Save_AllInformation(h, nCount, ChannelGb_array, 'Gb', sSaveGbFile, sSaveOrgGbFile)
 

@@ -28,7 +28,7 @@ nFileCount = 1
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022030116_color_EQE_NoCG_1713/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022042009_P8533_EQE_#2/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -46,7 +46,10 @@ g_bAYAFile = True
 
 #ExposureTime
 #g_sFilePathFolder = [
-#                    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
+#                    #'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', \
+#                    '0x010', '0x080', '0x100', '0x180', '0x200', '0x280', '0x300', \
+#                    '0x310', '0x320', '0x330', '0x340', '0x350', '0x360', '0x370', '0x380', '0x390', '0x3A0', '0x3B0', '0x3C0', '0x3D0', '0x3E0', '0x3F0', '0x400', \
+#                    '0x480', '0x500', \
 #                    ]
                     
 #AngulerResponse
@@ -68,8 +71,8 @@ g_sFilePathFolder = [
                     '400', \
                     '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
                     '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-                   '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-                   '710', '720', '730', '740', '750',  '760', '770', '780' \
+                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+                    '710', '720', '730', '740', '750',  '760', '770', '780' \
                   ]
 
 #DarkCurrent
@@ -90,9 +93,11 @@ g_sFilePathFolder = [
 #nROI_Y = 2900
 
 #Color TEG
-#Center R1: 4864,4094
-nROI_X = 4864
-nROI_Y = 4098
+#Center R1: 4866,4096
+nROI_X = 4766
+nROI_Y = 3996
+#nROI_X = 3167
+#nROI_Y = 2397
 #PDAF: B3+Gb4
 #Center
 #Center
@@ -118,6 +123,15 @@ nROI_Y = 4098
 nROI_W = 200    #multiple of 4
 nROI_H = 200    #multiple of 4
 
+gCol1_Index = 0     #R1、R2、Gr1、Gr2
+gCol2_Index = 1     #R3、R4、Gr3、Gr4
+gCol3_Index = 2     #Gb1、Gb2、B1、B2
+gCol4_Index = 3     #Gb3、Gb4、B3、B4
+gRow1_Index = 2     #R1、R3、Gb1、Gb3
+gRow2_Index = 3     #R2、R4、Gb2、Gb4
+gRow3_Index = 0     #Gr1、Gr3、B1、B3
+gRow4_Index = 1     #Gr2、Gr4、B2、B4
+
 #Regular Expression for parsing file
 g_re_FilePattern = ""
 g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
@@ -126,11 +140,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022030116'
+sFileTempTime = '2022042009'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022030116_color_EQE_NoCG_1713/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022042009_P8533_EQE_#2/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -146,7 +160,7 @@ nDeleteMinCount = 3
 
 #(Test TEG)
 #TEG Bad Pixel
-g_bDeleteBadPixel = True
+g_bDeleteBadPixel = False
 g_nBadPixelLevel = 64
 
 
@@ -449,79 +463,79 @@ def ParsingPixel():
                     input_file.close()
                     #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
                     
-                    if i%4==0:  #R1~2+Gr1~2
+                    if i%4==gCol1_Index:  #R1~2+Gr1~2
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
-                            if (l+nWOffset)%4==0: #R1
+                            if (l+nWOffset)%4==gRow1_Index: #R1
                                 #print('h:{}, i:{}, k:{}, Index:{}, l:{}'.format(h, i, k, nR0Index, l))
                                 ChannelR_array[k,0,nR0Index] = input_array[l]
                                 nR0Index += 1
-                            elif (l+nWOffset)%4==1: #R2
+                            elif (l+nWOffset)%4==gRow2_Index: #R2
                                 ChannelR_array[k,1,nR1Index] = input_array[l]
                                 nR1Index += 1
-                            elif (l+nWOffset)%4==2: #Gr1
+                            elif (l+nWOffset)%4==gRow3_Index: #Gr1
                                 #if nGr0Index == 0:
                                 #    print('{}: {}'.format(k, input_array[l]))
                                 ChannelGr_array[k,0,nGr0Index] = input_array[l]
                                 nGr0Index += 1
-                            elif (l+nWOffset)%4==3: #Gr2
+                            elif (l+nWOffset)%4==gRow4_Index: #Gr2
                                 ChannelGr_array[k,1,nGr1Index] = input_array[l]
                                 nGr1Index += 1
-                    elif i%4==1:  #R3~4+Gr3~4
+                    elif i%4==gCol2_Index:  #R3~4+Gr3~4
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
-                            if (l+nWOffset)%4==0: #R3
+                            if (l+nWOffset)%4==gRow1_Index: #R3
                                 ChannelR_array[k,2,nR2Index] = input_array[l]
                                 nR2Index += 1
-                            elif (l+nWOffset)%4==1: #R4
+                            elif (l+nWOffset)%4==gRow2_Index: #R4
                                 ChannelR_array[k,3,nR3Index] = input_array[l]
                                 nR3Index += 1
-                            elif (l+nWOffset)%4==2: #Gr3
+                            elif (l+nWOffset)%4==gRow3_Index: #Gr3
                                 ChannelGr_array[k,2,nGr2Index] = input_array[l]
                                 nGr2Index += 1
-                            elif (l+nWOffset)%4==3: #Gr4
+                            elif (l+nWOffset)%4==gRow4_Index: #Gr4
                                 ChannelGr_array[k,3,nGr3Index] = input_array[l]
                                 nGr3Index += 1
-                    elif i%4==2:  #Gb1~2+B1~2
+                    elif i%4==gCol3_Index:  #Gb1~2+B1~2
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
-                            if (l+nWOffset)%4==0: #Gb1
+                            if (l+nWOffset)%4==gRow1_Index: #Gb1
                                 ChannelGb_array[k,0,nGb0Index] = input_array[l]
                                 nGb0Index += 1
-                            elif (l+nWOffset)%4==1: #Gb2
+                            elif (l+nWOffset)%4==gRow2_Index: #Gb2
                                 ChannelGb_array[k,1,nGb1Index] = input_array[l]
                                 nGb1Index += 1
-                            elif (l+nWOffset)%4==2: #B1
+                            elif (l+nWOffset)%4==gRow3_Index: #B1
                                 ChannelB_array[k,0,nB0Index] = input_array[l]
                                 nB0Index += 1
-                            elif (l+nWOffset)%4==3: #B2
+                            elif (l+nWOffset)%4==gRow4_Index: #B2
                                 ChannelB_array[k,1,nB1Index] = input_array[l]
                                 nB1Index += 1
-                    elif i%4==3:  #Gb3~4+B3~4
+                    elif i%4==gCol4_Index:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                             #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
 
-                            if (l+nWOffset)%4==0: #Gb3
+                            if (l+nWOffset)%4==gRow1_Index: #Gb3
                                 ChannelGb_array[k,2,nGb2Index] = input_array[l]
                                 nGb2Index += 1
-                            elif (l+nWOffset)%4==1: #Gb4
+                            elif (l+nWOffset)%4==gRow2_Index: #Gb4
                                 ChannelGb_array[k,3,nGb3Index] = input_array[l]
                                 nGb3Index += 1
-                            elif (l+nWOffset)%4==2: #B3
+                            elif (l+nWOffset)%4==gRow3_Index: #B3
                                 ChannelB_array[k,2,nB2Index] = input_array[l]
                                 nB2Index += 1
-                            elif (l+nWOffset)%4==3: #B4
+                            elif (l+nWOffset)%4==gRow4_Index: #B4
                                 ChannelB_array[k,3,nB3Index] = input_array[l]
                                 nB3Index += 1
                 k = k + 1

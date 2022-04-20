@@ -36,26 +36,27 @@ StartTime = time.time()
 
 #Color TEG
 nWidth = 9300
-nHeight = 7000
+nHeight = 6984
 g_nRowIndex = 0
 g_nRowBound  = 9300
 g_nColumnIndex = 0
-g_nColumnBound = 7000
+g_nColumnBound = 6984
 
-g_sFilePath = '/home/dino/RawShared/Output/2022031615_P8N533_DC/Output/'
-g_sFileName1 = '60_008/2022031615_60_008_Avg.csv'
-g_sFileName2 = '60_7FD/2022031615_60_7FD_Avg.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022032117_P9KY1924_1843_DC/Output/'
+g_sFileName1 = '60_008/2022032117_60_008_Std.csv'
+g_sFileName2 = '60_7FD/2022032117_60_7FD_Avg.csv'
 
-g_sOutputFileName = '202203615_60_7FD_008_Diff.csv'
+g_sOutputFileName = '2022031816_60_7FD_008_Diff.csv'
+g_sOutputBinName = '2022031816_60_7FD_008_Diff.bin'
 
-g_ActionType = ActionType.CaluTwoDiff
+g_ActionType = ActionType.CaluRN
 
 #nROI_W = nWidth
 #nROI_H = nHeight
 nROI_W = g_nRowBound - g_nRowIndex
 nROI_H = g_nColumnBound - g_nColumnIndex
 
-g_fTwoDiffBenchmark = 0.5 #Sec
+g_fTwoDiffBenchmark = 1.0 #Sec
 
 #Debug or not
 bShowDebugOutput = True
@@ -126,6 +127,9 @@ def CaluTwoDiff():
     
     #Save
     SaveArrayToCSV(DiffArray, g_sOutputFileName, '%.6f', ',')
+    
+    sFile = '{}{}'.format(g_sFilePath, g_sOutputBinName)
+    Save2DArrayToBin(DiffArray, sFile)
     pass
 
 def CaluStdOneFile(LoadArray):
@@ -183,9 +187,13 @@ def ChangeDiffBase(LoadArray):
     return
 
 def CaluRN(LoadArray):
-    RN = np.average(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
+    AVG = np.average(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
     if bShowDebugOutput:
-        print('RN: {0}'.format(RN))
+        print('RN (Average): {0}'.format(AVG))
+
+    RN = np.median(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
+    if bShowDebugOutput:
+        print('RN (Median): {0}'.format(RN))
     return RN
 
 
