@@ -28,7 +28,7 @@ nFileCount = 1
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022042009_P8533_EQE_#2/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022042114_P8533_Angle_#2/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -36,7 +36,7 @@ g_bAYAFile = True
 #Subfolder
 #Normal
 #g_sFilePathFolder = [
-#                    '500_B'
+#                    '-17'
 #                    ]
 
 #LightIntensity
@@ -53,27 +53,30 @@ g_bAYAFile = True
 #                    ]
                     
 #AngulerResponse
-#g_sFilePathFolder = [
-#                    '-40', \
-#                    '-39', '-38', '-37', '-36','-35', '-34', '-33', '-32', '-31', '-30', \
-#                   '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
-#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-#                    '0', \
-#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
-#                   '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-#                    '+31', '+32', '+33', '+34', '+35', '+36', '+37', '+38', '+39', '+40' \
-#                    ]
+g_sFilePathFolder = [
+#                    '-40', '-39', '-38', '-37', '-36',\
+                    '-35', '-34', '-33', '-32', '-31', '-30', \
+                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-26', '-25', '-24', '-23', '-22', '-21', '-20', \
+                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+                    '0', \
+                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                    '+21', '+22', '+23', '+24', \
+                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+                    '+31', '+32', '+33', '+34', '+35', \
+#                    '+36', '+37', '+38', '+39', '+40' \
+                    ]
 
 #QuantumEfficiency
-g_sFilePathFolder = [
-                    '400', \
-                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
-                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-                    '710', '720', '730', '740', '750',  '760', '770', '780' \
-                  ]
+#g_sFilePathFolder = [
+#                    '400', \
+#                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
+#                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
+#                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+#                    '710', '720', '730', '740', '750',  '760', '770', '780' \
+#                  ]
 
 #DarkCurrent
 #g_sFilePathFolder = [
@@ -127,6 +130,12 @@ gCol1_Index = 0     #R1、R2、Gr1、Gr2
 gCol2_Index = 1     #R3、R4、Gr3、Gr4
 gCol3_Index = 2     #Gb1、Gb2、B1、B2
 gCol4_Index = 3     #Gb3、Gb4、B3、B4
+#IMX586:
+#gRow1_Index = 0     #R1、R3、Gb1、Gb3
+#gRow2_Index = 1     #R2、R4、Gb2、Gb4
+#gRow3_Index = 2     #Gr1、Gr3、B1、B3
+#gRow4_Index = 3     #Gr2、Gr4、B2、B4
+#TEG:
 gRow1_Index = 2     #R1、R3、Gb1、Gb3
 gRow2_Index = 3     #R2、R4、Gb2、Gb4
 gRow3_Index = 0     #Gr1、Gr3、B1、B3
@@ -140,11 +149,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022042009'
+sFileTempTime = '2022042114'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022042009_P8533_EQE_#2/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022042114_P8533_Angle_#2/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -430,23 +439,23 @@ def ParsingPixel():
                 nB0Index, nB1Index, nB2Index, nB3Index = 0, 0, 0, 0
 
                 sFileTemp = sFile
-                rePattern = g_re_FilePattern
-
-                if not Check_File(sFileTemp, rePattern):
-                    continue
-                else:
-                    if g_nSelect_HSValue != 100:
-                        if g_nSelect_HSValue == 0:
-                            if not Check_FileHS(sFileTemp, g_FilePattern_HS0):
-                                continue
-                        elif g_nSelect_HSValue == -1:
-                            if not Check_FileHS(sFileTemp, g_FilePattern_HSN1):
-                                continue
-                        elif g_nSelect_HSValue == 1:
-                            if not Check_FileHS(sFileTemp, g_FilePattern_HSP1):
-                                continue
-                        else:
-                            continue
+                #rePattern = g_re_FilePattern
+                #
+                #if not Check_File(sFileTemp, rePattern):
+                #    continue
+                #else:
+                #    if g_nSelect_HSValue != 100:
+                #        if g_nSelect_HSValue == 0:
+                #            if not Check_FileHS(sFileTemp, g_FilePattern_HS0):
+                #                continue
+                #        elif g_nSelect_HSValue == -1:
+                #            if not Check_FileHS(sFileTemp, g_FilePattern_HSN1):
+                #                continue
+                #        elif g_nSelect_HSValue == 1:
+                #            if not Check_FileHS(sFileTemp, g_FilePattern_HSP1):
+                #                continue
+                #        else:
+                #            continue
 
                 sFileTemp = root + '/' + sFileTemp
                 print('sFileTemp: ', sFileTemp)
