@@ -77,6 +77,23 @@ File > Preferences > Settings，搜索pyqt integration
 9. pyinstaller
 
 
+10. Scipy
+SciPy是一個開源的Python演算法庫和數學工具包。 SciPy包含的模組有最佳化、線性代數、積分、插值、特殊函數、快速傅立葉轉換、訊號處理和圖像處理、常微分方程式求解和其他科學與工程中常用的計算。
+
+
+11. Python & 資料科學
+/*
+明確定義問題 (Problem Definition)
+獲取資料與探索性資料分析 (Get Data & Exploratory Data Analysis)
+資料預處理與特徵工程 (Data Clean/Preprocessing & Feature Engineering)
+訓練模型與校調 (Model Training)
+模型驗證 (Model Predict & Testing)
+模型優化 (Model Optimization)
+上線運行 (Deploy Model)
+*/
+=> Python 及其資料科學生態系（Numpy、Scipy、Pandas、Scikit-learn、Statsmodels、Matplotlib、Scrapy、Keras、TensorFlow 等）
+=> Pandas 正是扮演這個資料預處理和資料清洗的核心角色
+=> scikit-learn 這個機器學習和資料分析神兵利器
 
 
 
