@@ -28,7 +28,7 @@ nFileCount = 1
 #sFilePath = '/home/dino/RawShared/2022041816_P8533_AngularTest/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022041816_P8533_AngularTest/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022042114_P8533_Angle_#2/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022042914_P9KY1924#22_1730/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -50,20 +50,32 @@ g_bAYAFile = True
 #                    ]
                     
 #AngulerResponse
-g_sFilePathFolder = [
+#g_sFilePathFolder = [
 #                    '-40', '-39', '-38', '-37', '-36',\
-                    '-35', '-34', '-33', '-32', '-31', '-30', \
-                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-35', '-34', '-33', '-32', '-31', '-30', \
+#                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
 #                    '-26', '-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-                    '0', \
-                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+#                    '0', \
+#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
 #                    '+21', '+22', '+23', '+24', \
-                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-                    '+31', '+32', '+33', '+34', '+35', \
+#                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+#                    '+31', '+32', '+33', '+34', '+35', \
 #                    '+36', '+37', '+38', '+39', '+40' \
+#                    ]
+#AngulerResponse_VisEra
+g_sFilePathFolder = [
+                    '-34', '-32', '-30', \
+                    '-28', '-26', '-24', '-22', '-20', \
+                    '-18', '-16', '-14', '-12', '-10', \
+                    '-8', '-6', '-4', '-2', \
+                    '0', \
+                    '+2', '+4', '+6', '+8', '+10', \
+                    '+12', '+14', '+16', '+18', '+20', \
+                    '+22', '+24', '+26', '+28', '+30', \
+                    '+32', '+34', \
                     ]
 
 #QuantumEfficiency
@@ -94,7 +106,7 @@ g_sFilePathFolder = [
 #Color TEG
 #Center R1: 4866,4096
 nROI_X = 4466
-nROI_Y = 3696
+ROI_Y = 3696
 #PDAF: B3+Gb4
 #Top-Left
 #nROI_X = 642
@@ -129,11 +141,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022042114'
+sFileTempTime = '2022042914'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022042114_P8533_Angle_#2/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022042914_P9KY1924#22_1730/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False

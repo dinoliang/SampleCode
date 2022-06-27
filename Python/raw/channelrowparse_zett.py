@@ -24,11 +24,11 @@ StartTime = time.time()
 nWidth = 9728
 nHeight = 8192
 
-nFileCount = 1
+nFileCount = 7
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022042114_P8533_Angle_#2/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022051810_P8N533#2#1843_Lag/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -36,7 +36,7 @@ g_bAYAFile = True
 #Subfolder
 #Normal
 #g_sFilePathFolder = [
-#                    '-17'
+#                    '540'
 #                    ]
 
 #LightIntensity
@@ -45,29 +45,41 @@ g_bAYAFile = True
 #                    ]
 
 #ExposureTime
-#g_sFilePathFolder = [
-#                    #'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', \
+g_sFilePathFolder = [
+                    '0x0010', '0x0020', '0x0030', '0x0040', '0x0050', '0x0060', '0x0070', '0x0080', '0x0090', '0x00A0', '0x00B0', '0x00C0', \
 #                    '0x010', '0x080', '0x100', '0x180', '0x200', '0x280', '0x300', \
 #                    '0x310', '0x320', '0x330', '0x340', '0x350', '0x360', '0x370', '0x380', '0x390', '0x3A0', '0x3B0', '0x3C0', '0x3D0', '0x3E0', '0x3F0', '0x400', \
 #                    '0x480', '0x500', \
-#                    ]
+                    ]
                     
 #AngulerResponse
-g_sFilePathFolder = [
+#g_sFilePathFolder = [
 #                    '-40', '-39', '-38', '-37', '-36',\
-                    '-35', '-34', '-33', '-32', '-31', '-30', \
-                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
+#                    '-35', '-34', '-33', '-32', '-31', '-30', \
+#                    '-29', '-28', '-27', '-26','-25', '-24', '-23', '-22', '-21', '-20', \
 #                    '-26', '-25', '-24', '-23', '-22', '-21', '-20', \
-                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
-                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
-                    '0', \
-                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
-                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
+#                    '-19', '-18', '-17', '-16','-15', '-14', '-13', '-12', '-11', '-10', \
+#                    '-9', '-8', '-7', '-6','-5', '-4', '-3', '-2', '-1', \
+#                    '0', \
+#                    '+1', '+2', '+3', '+4', '+5', '+6', '+7', '+8', '+9', '+10', \
+#                    '+11', '+12', '+13', '+14', '+15', '+16', '+17', '+18', '+19', '+20', \
 #                    '+21', '+22', '+23', '+24', \
-                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
-                    '+31', '+32', '+33', '+34', '+35', \
+#                    '+21', '+22', '+23', '+24', '+25', '+26', '+27', '+28', '+29', '+30', \
+#                    '+31', '+32', '+33', '+34', '+35', \
 #                    '+36', '+37', '+38', '+39', '+40' \
-                    ]
+#                    ]
+#AngulerResponse_VisEra
+#g_sFilePathFolder = [
+#                    '-34', '-32', '-30', \
+#                    '-28', '-26', '-24', '-22', '-20', \
+#                    '-18', '-16', '-14', '-12', '-10', \
+#                    '-8', '-6', '-4', '-2', \
+#                    '0', \
+#                    '+2', '+4', '+6', '+8', '+10', \
+#                    '+12', '+14', '+16', '+18', '+20', \
+#                    '+22', '+24', '+26', '+28', '+30', \
+#                    '+32', '+34', \
+#                    ]
 
 #QuantumEfficiency
 #g_sFilePathFolder = [
@@ -76,7 +88,7 @@ g_sFilePathFolder = [
 #                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
 #                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
 #                    '710', '720', '730', '740', '750',  '760', '770', '780' \
-#                  ]
+#                    ]
 
 #DarkCurrent
 #g_sFilePathFolder = [
@@ -123,8 +135,8 @@ nROI_Y = 3996
 #nROI_X = 535
 #nROI_Y = 983
 
-nROI_W = 200    #multiple of 4
-nROI_H = 200    #multiple of 4
+nROI_W = 16    #multiple of 4
+nROI_H = 16    #multiple of 4
 
 gCol1_Index = 0     #R1、R2、Gr1、Gr2
 gCol2_Index = 1     #R3、R4、Gr3、Gr4
@@ -149,11 +161,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022042114'
+sFileTempTime = '2022051810'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022042114_P8533_Angle_#2/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022051810_P8N533#2#1843_Lag/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False

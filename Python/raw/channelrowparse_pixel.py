@@ -35,11 +35,11 @@ g_nRowBound  = 9540
 g_nColumnIndex = 16
 g_nColumnBound = 7000
 
-nFileCount = 26
+nFileCount = 25
 #sFilePath = '/home/dino/RawShared/2022031816_P8N533_1813_DC/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022032117_P9KY1924_1843_DC/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022051019_HTOL_T0_DC_N1515/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -50,7 +50,7 @@ g_sFilePathFolder = [
                     #'50_1', '50_500', '55_1', '55_500', '60_1', '60_500', '65_1', '65_500', '70_1', '70_500', \
                     #'1X', '2X', '4X', '8X', '16X', \
                     #'0008', '0100', '0200', '0300', '0400', '0500', '0600', '0700', '07FD', \
-                    '60_008', \
+                    'Room_0x0008_24db', \
                     ]
 
 nROI_W = nWidth
@@ -62,11 +62,11 @@ g_nCalRows = 1000
 g_bSaveFile = True
 
 #The path of saving file
-sFileTempTime = '2022032117'
+sFileTempTime = '2022051019'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022032117_P9KY1924_1843_DC/Output/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022051019_HTOL_T0_DC_N1515/Output/{}/'
 
 #Debug or not
 bShowDebugOutput = True
