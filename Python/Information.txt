@@ -43,6 +43,9 @@ pip3 install opencv-contrib-python
 5. pandas
 sudo pip3 install pandas
 
+https://pypi.org/project/pandas/
+
+
 6. matplotlib
 sudo pip3 install matplotlib
 
@@ -72,5 +75,8 @@ File > Preferences > Settings，搜索pyqt integration
 
 
 9. pyinstaller
+
+
+
 
 
