@@ -17,8 +17,8 @@ StartTime = time.time()
 ### Change the parameters to match the settings
 
 g_sFilePath = '/home/dino/RawShared/Other/'
-g_sCsvFile = 'Config_csv_Def-220125_reg_Default_temp.csv'
-g_sOutFile = 'Config_csv_Def-220125_reg_Default_temp.out'
+g_sCsvFile = 'Config_csv_Def-220628_reg_Default_temp.csv'
+g_sOutFile = 'Config_csv_Def-220628_reg_Default_temp.out'
 
 gbDoneIdentify = True
 
@@ -75,7 +75,10 @@ def LoadFileFromCSV2(strFileName):
 
             TempArray[Idx,0] = np.int64(int(string[1], 16))
             TempArray[Idx,1] = np.int64(int(string[3], 16))
-            TempArray[Idx,2] = np.int64(int(string[5], 16))
+            if string[5] == "0xXX" or string[5] == "0xxx":
+                TempArray[Idx,2] = 255
+            else:
+                TempArray[Idx,2] = np.int64(int(string[5], 16))
             #print(TempArray[Idx,:])
 
             for i in range(0,3):
@@ -95,25 +98,49 @@ def LoadFileFromCSV2(strFileName):
 
 def ConvertToMeTakOut(LoadArray):
     #print("g_TotalLines={}".format(g_TotalLines))
+    strOut = ""
+    with open(g_sFilePath+g_sOutFile, 'w') as f:
+        f.write(strOut)
     for Idx in range(0, g_TotalLines):
         #I2C start: "10"
+        bRead = False
         strOut = "10"
         for i in range(0,3): #i==0:Slave, i==1:Address, i==2:Data
+            if i == 0 and LoadArray[Idx,i,7] == 1:
+                bRead = True
+
             for j in range(0,8): #bit[0]:highest bit
                 #print("Idx={},i={},j={}".format(Idx, i, j))
                 if j < 7:
-                    strBit = '0{:d}1{:d}0{:d}'
-                    strOut = strOut + strBit.format(np.int64(LoadArray[Idx,i,j]),np.int64(LoadArray[Idx,i,j]),np.int64(LoadArray[Idx,i,j]))
+                    if bRead and i == 2:
+                        strOut = strOut + "0X1X0X"
+                    else:
+                        strBit = '0{:d}1{:d}0{:d}'
+                        strOut = strOut + strBit.format(np.int64(LoadArray[Idx,i,j]),np.int64(LoadArray[Idx,i,j]),np.int64(LoadArray[Idx,i,j]))
                 elif j == 7:
-                    strBit = '0{:d}1{:d}'
-                    strOut = strOut + strBit.format(np.int64(LoadArray[Idx,i,j]),np.int64(LoadArray[Idx,i,j]))
+                    if bRead and i == 2:
+                        strOut = strOut + "0X1X"
+                    else:
+                        strBit = '0{:d}1{:d}'
+                        strOut = strOut + strBit.format(np.int64(LoadArray[Idx,i,j]),np.int64(LoadArray[Idx,i,j]))
+                    
                 #print(strOut)
-            strOut = strOut + "0X0X1X1X0X01" #ACK + End of ACK
-            print(strOut)
+
+            if Idx < g_TotalLines - 2:
+                strOut = strOut + "0X0X1X1X0X01\n" #ACK + End of ACK
+            else:
+                strOut = strOut + "0X0X1X1X0X00\n" #ACK + Stop
+        print(strOut)
+        with open(g_sFilePath+g_sOutFile, 'a') as f:
+            f.write(strOut)
+    strOut = "1011" # Finish
+    print(strOut)
+    with open(g_sFilePath+g_sOutFile, 'a') as f:
+        f.write(strOut)
     pass
 
 if __name__ == "__main__":
-    LoadArray = LoadFileFromCSV2(g_sCsvFile)
+    LoadArray = LoadFileFromCSV2(g_sFilePath+g_sCsvFile)
     ConvertToMeTakOut(LoadArray)
     pass
 
