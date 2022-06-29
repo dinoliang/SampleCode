@@ -77,6 +77,7 @@ def LoadFileFromCSV2(strFileName):
             TempArray[Idx,1] = np.int64(int(string[3], 16))
             if string[5] == "0xXX" or string[5] == "0xxx":
                 TempArray[Idx,2] = 255
+                TempArray[Idx,0] = TempArray[Idx,0] + 1 #Read
             else:
                 TempArray[Idx,2] = np.int64(int(string[5], 16))
             #print(TempArray[Idx,:])
@@ -131,11 +132,11 @@ def ConvertToVectorOut(LoadArray, strWriteFileName):
                 strOut = strOut + "\"0X\"\n\"0X\"\n\"1X\"\n\"1X\"\n\"0X\"\n\"01\"\n" #ACK + End of ACK
             else: # The end of last line is 00
                 strOut = strOut + "\"0X\"\n\"0X\"\n\"1X\"\n\"1X\"\n\"0X\"\n\"00\"\n" #ACK + Stop
-        print(strOut)
+        #print(strOut)
         with open(sWriteFile, 'a') as f:
             f.write(strOut)
     strOut = "\"10\"\n\"11\"" # Finish
-    print(strOut)
+    #print(strOut)
     with open(sWriteFile, 'a') as f:
         f.write(strOut)
     pass
