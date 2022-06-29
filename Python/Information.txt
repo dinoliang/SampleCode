@@ -95,5 +95,10 @@ SciPy是一個開源的Python演算法庫和數學工具包。 SciPy包含的模
 => Pandas 正是扮演這個資料預處理和資料清洗的核心角色
 => scikit-learn 這個機器學習和資料分析神兵利器
 
+=> 與數值與科學運算有關的SciPy
+=> 與統計分析有關的StatsModels
+=> 與機器學習有關的 scikit-learn
+
+
 
 
