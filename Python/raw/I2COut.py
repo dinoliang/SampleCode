@@ -96,7 +96,7 @@ def LoadFileFromCSV2(strFileName):
     #print(sLoadArray)
     return sLoadArray
 
-def ConvertToMeTakOut(LoadArray):
+def ConvertToVectorOut(LoadArray):
     #print("g_TotalLines={}".format(g_TotalLines))
     strOut = ""
     with open(g_sFilePath+g_sOutFile, 'w') as f:
@@ -141,7 +141,7 @@ def ConvertToMeTakOut(LoadArray):
 
 if __name__ == "__main__":
     LoadArray = LoadFileFromCSV2(g_sFilePath+g_sCsvFile)
-    ConvertToMeTakOut(LoadArray)
+    ConvertToVectorOut(LoadArray)
     pass
 
 
