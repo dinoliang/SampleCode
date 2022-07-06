@@ -21,14 +21,14 @@ StartTime = time.time()
 #nHeight = 6000
 
 #Color TEG
-nWidth = 9728
-nHeight = 8192
+nWidth = 8000
+nHeight = 6000
 
-nFileCount = 1
+nFileCount = 20
 #sFilePath = '/home/dino/RawShared/2022041816_P8533_AngularTest/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022041816_P8533_AngularTest/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022042914_P9KY1924#22_1730/{}/'
+sFilePath = '/home/dino/USBRaw/202207041115_IMX586_PDAF/Raw/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -65,17 +65,19 @@ g_bAYAFile = True
 #                    '+31', '+32', '+33', '+34', '+35', \
 #                    '+36', '+37', '+38', '+39', '+40' \
 #                    ]
-#AngulerResponse_VisEra
+#AngulerResponse_IMX586
 g_sFilePathFolder = [
-                    '-34', '-32', '-30', \
+                    '-46', '-44', '-42', '-40', \
+                    '-38', '-36', '-34', '-32', '-30', \
                     '-28', '-26', '-24', '-22', '-20', \
                     '-18', '-16', '-14', '-12', '-10', \
-                    '-8', '-6', '-4', '-2', \
+                    '-08', '-06', '-04', '-02', \
                     '0', \
-                    '+2', '+4', '+6', '+8', '+10', \
+                    '+02', '+04', '+06', '+08', '+10', \
                     '+12', '+14', '+16', '+18', '+20', \
                     '+22', '+24', '+26', '+28', '+30', \
-                    '+32', '+34', \
+                    '+32', '+34', '+36', '+38', '+40', \
+                    '+42', '+44', '+46', \
                     ]
 
 #QuantumEfficiency
@@ -105,8 +107,8 @@ g_sFilePathFolder = [
 
 #Color TEG
 #Center R1: 4866,4096
-nROI_X = 4466
-ROI_Y = 3696
+nROI_X = 3968
+nROI_Y = 2976
 #PDAF: B3+Gb4
 #Top-Left
 #nROI_X = 642
@@ -128,8 +130,8 @@ ROI_Y = 3696
 
 #nROI_W = 200    #multiple of 4
 #nROI_H = 200    #multiple of 4
-nROI_W = 800    #multiple of 16
-nROI_H = 800    #multiple of 16
+nROI_W = 80    #multiple of 16
+nROI_H = 80    #multiple of 16
 #nROI_W = 16    #multiple of 16
 #nROI_H = 16    #multiple of 16
 
@@ -141,11 +143,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022042914'
+sFileTempTime = '2022070411'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022042914_P9KY1924#22_1730/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022070411_IMX586_PDAF/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -460,6 +462,7 @@ def ParsingPixel():
                 for i in range(nROI_Y, nROI_Y+nROI_H):
                     #if bShowDebugOutput:
                     #    print('ROW i: ', i)
+                    #    print('nWidth: ', i, 'nROI_X: ', nROI_X)
 
                     bNeedCal = False
 
@@ -472,51 +475,53 @@ def ParsingPixel():
                     input_file.close()
                     #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
                     
-                    # TEG
-                    #if i%16==11:  #Gb3~4+B3~4
-                    if i%16==15:  #Gb3~4+B3~4
-                    #if i%16==14:  #Gb3~4+B3~4 #Special case
-                        for l in range(0, nROI_W):
-                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
-                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
-                                continue
-                            
-                            if (l+nWOffset)%16==2: #Gb3
-                                ChannelGb_array[k,2,nGb2Index] = input_array[l]
-                                nGb2Index += 1
-                            elif (l+nWOffset)%16==3: #Gb4
-                                #print('Site: {0}, Gb4: {1}'.format(l+nWOffset, input_array[l]))
-                                ChannelGb_array[k,3,nGb3Index] = input_array[l]
-                                nGb3Index += 1
-                            elif (l+nWOffset)%16==4: #B3
-                                #print('Site: {0}, B3: {1}'.format(l+nWOffset, input_array[l]))
-                                ChannelB_array[k,2,nB2Index] = input_array[l]
-                                nB2Index += 1
-                            elif (l+nWOffset)%16==5: #B4
-                                ChannelB_array[k,3,nB3Index] = input_array[l]
-                                nB3Index += 1
-
-
-                    # IMX586
+                    ## TEG
+                    ##if i%16==11:  #Gb3~4+B3~4
                     #if i%16==15:  #Gb3~4+B3~4
+                    ##if i%16==14:  #Gb3~4+B3~4 #Special case
                     #    for l in range(0, nROI_W):
                     #        if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
                     #        #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                     #            continue
-                    #
-                    #        if (l+nWOffset)%16==10: #Gb3
-                    #            #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
+                    #        
+                    #        if (l+nWOffset)%16==2: #Gb3
                     #            ChannelGb_array[k,2,nGb2Index] = input_array[l]
                     #            nGb2Index += 1
-                    #        elif (l+nWOffset)%16==11: #Gb4
+                    #        elif (l+nWOffset)%16==3: #Gb4
+                    #            #print('Site: {0}, Gb4: {1}'.format(l+nWOffset, input_array[l]))
                     #            ChannelGb_array[k,3,nGb3Index] = input_array[l]
                     #            nGb3Index += 1
-                    #        elif (l+nWOffset)%16==12: #B3
+                    #        elif (l+nWOffset)%16==4: #B3
+                    #            #print('Site: {0}, B3: {1}'.format(l+nWOffset, input_array[l]))
                     #            ChannelB_array[k,2,nB2Index] = input_array[l]
                     #            nB2Index += 1
-                    #        elif (l+nWOffset)%16==13: #B4
+                    #        elif (l+nWOffset)%16==5: #B4
                     #            ChannelB_array[k,3,nB3Index] = input_array[l]
                     #            nB3Index += 1
+
+
+                    # IMX586
+                    #print('i%16: ', i%16)
+                    if i%16 == 7:  #Gb3~4+B3~4
+                        #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
+                        for l in range(0, nROI_W):
+                            if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                                continue
+                    
+                            if (l+nWOffset)%16==0: #Gb3
+                                #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
+                                ChannelGb_array[k,2,nGb2Index] = input_array[l]
+                                nGb2Index += 1
+                            elif (l+nWOffset)%16==1: #Gb4
+                                ChannelGb_array[k,3,nGb3Index] = input_array[l]
+                                nGb3Index += 1
+                            elif (l+nWOffset)%16==14: #B3
+                                ChannelB_array[k,2,nB2Index] = input_array[l]
+                                nB2Index += 1
+                            elif (l+nWOffset)%16==15: #B4
+                                ChannelB_array[k,3,nB3Index] = input_array[l]
+                                nB3Index += 1
                             
                 k = k + 1
 
@@ -524,8 +529,10 @@ def ParsingPixel():
 
         #Cal_Save_AllInformation(h, nCount, ChannelGr_array, 'Gr', sSaveGrFile, sSaveOrgGrFile)
 
+        #print('input_array: {0}, Len:{1}'.format(ChannelGb_array, np.size(ChannelGb_array)))
         Cal_Save_AllInformation(h, nCount, ChannelGb_array, 'Gb', sSaveGbFile, sSaveOrgGbFile)
 
+        #print('input_array: {0}, Len:{1}'.format(ChannelB_array, np.size(ChannelB_array)))
         Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, sSaveOrgBFile)
 
         h = h + 1
