@@ -100,5 +100,10 @@ SciPy是一個開源的Python演算法庫和數學工具包。 SciPy包含的模
 => 與機器學習有關的 scikit-learn
 
 
+12. Anaconda
+Anaconda提供簡單的安裝與豐富的套件，除了Pandas、Numpy、Matplotlib等資料分析與資料視覺化套件，也包含網路爬蟲最常使用的套件requests、Beautiful Soup等
+
+
+
 
 
