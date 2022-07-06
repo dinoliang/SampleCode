@@ -104,6 +104,8 @@ SciPy是一個開源的Python演算法庫和數學工具包。 SciPy包含的模
 Anaconda提供簡單的安裝與豐富的套件，除了Pandas、Numpy、Matplotlib等資料分析與資料視覺化套件，也包含網路爬蟲最常使用的套件requests、Beautiful Soup等
 
 
+13. 爬蟲資料
+https://www.learncodewithmike.com/2021/08/python-scraper-read-sqlite-database.html
 
 
 
