@@ -62,7 +62,10 @@ Server
   https://kalacloud.com/blog/how-to-install-nginx-on-ubuntu-20-04/
   
   1.4 Window docker
+  https://docs.docker.com/desktop/install/windows-install/#wsl-2-backend
   https://docs.microsoft.com/zh-TW/virtualization/hyper-v-on-windows/reference/hyper-v-requirements
+  https://docs.microsoft.com/zh-tw/virtualization/windowscontainers/manage-docker/configure-docker-daemon
+  https://blog.csdn.net/william_n/article/details/112753515
   
 
 
