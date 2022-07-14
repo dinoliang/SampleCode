@@ -4,5 +4,48 @@ https://frankknow.com/what-is-wordpress/
 2.  WordPress網站搬家 
 https://frankknow.com/move-to-hosting/
 
+3. 網頁設計資源彙整
+https://simular.co/resources/type/frontend-tools.html
+
+4. 從零開始遲來的Web開發筆記 系列
+https://ithelp.ithome.com.tw/users/20112470/ironman/2103
+
+5. Web 前端開發工具
+https://blog.51cto.com/wirelesscom/5132286
+
+6. 前端開發人員必備的頂級工具
+https://www.readfog.com/a/1631939692517756928
+
+7. *現代化前端開發工具
+https://www.xmind.net/m/j6vq/
+
+8. 好用的前端開發工具
+https://iter01.com/635528.html
+
+9. 前端線上開發工具
+https://www.gushiciku.cn/pl/gVaM/zh-tw
+
+10. 跨平台生存之道 — RWD
+https://ithelp.ithome.com.tw/articles/10260762
+
+11. Follow me! 來一場前端技能樹之旅 系列
+https://ithelp.ithome.com.tw/users/20139945/ironman/4310
+
+
+
+Html開發
+1. brackets
+https://medium.com/misa-design-%E5%A0%AF%E8%88%9C%E8%A8%AD%E8%A8%88/brackets-2020-%E5%B9%B4%E4%BD%A0%E4%B8%80%E5%AE%9A%E8%A6%81%E8%A3%9D%E7%9A%84-10-%E5%80%8B%E5%A4%96%E6%8E%9B-c04a3aafabdc
+
+2. Chrome 開發人員工具
+
+3. VSCode
+  3.1 Visual Studio Code開發網站入門教學
+  https://medium.com/@success85911/visual-studio-code%E9%96%8B%E7%99%BC%E7%B6%B2%E7%AB%99%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-7514ea9299bf
+  
+  3.2 Visual Studio Code(VSCode) 開發者必備的實用套件
+  https://israynotarray.com/vscode/20191212/2147775133/
+
+
 
 
