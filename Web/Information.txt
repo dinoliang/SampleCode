@@ -47,5 +47,22 @@ https://medium.com/misa-design-%E5%A0%AF%E8%88%9C%E8%A8%AD%E8%A8%88/brackets-202
   https://israynotarray.com/vscode/20191212/2147775133/
 
 
+Server
+1. nginx
+  https://www.nginx.com/
+  https://www.nginx.com/resources/wiki/start/topics/tutorials/install/
+  
+  1.1 Web Server & Nginx — (2)
+  https://ithelp.ithome.com.tw/articles/10241354
+  
+  1.2 使用Ubuntu Server架設Nginx伺服器
+  https://magiclen.org/ubuntu-server-nginx/
+  
+  1.3 如何在 Ubuntu 20.04 中安装和配置 Nginx
+  https://kalacloud.com/blog/how-to-install-nginx-on-ubuntu-20-04/
+  
+  1.4 Window docker
+  https://docs.microsoft.com/zh-TW/virtualization/hyper-v-on-windows/reference/hyper-v-requirements
+  
 
 
