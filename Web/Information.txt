@@ -88,6 +88,8 @@ Server
   * https://www.twblogs.net/a/5b894da52b71775d1ce11818
     => 在Apache中使用執行ASP.NET
     https://posture925.pixnet.net/blog/post/6462025
+    http://archive.apache.org/dist/httpd/mod_aspdotnet/
+  Kestrel ?
     
     
 ASP
