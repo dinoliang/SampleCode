@@ -78,5 +78,26 @@ Server
   https://docs.microsoft.com/zh-tw/virtualization/windowscontainers/manage-docker/configure-docker-daemon
   https://blog.csdn.net/william_n/article/details/112753515
   
+  1.5 Only windows
+  https://rookiesavior.net/2022/04/20/program-yiru-web-server-nginx-implementation-on-windows/
+  https://www.796t.com/article.php?id=229244
+    => nginx + mono for ASP
+    https://developer.aliyun.com/article/298027
+    https://www.coderstudy.co/zh-Hant/article/151go_161k1.html
+    "C:\Program Files\Mono\bin\fastcgi-mono-server2" /socket=tcp:127.0.0.1:8282 /root="I:\Work\Web\nginx-1.22.0\html\aspnetwww" /applications=/:. /multiplex=True
+  * https://www.twblogs.net/a/5b894da52b71775d1ce11818
+    => 在Apache中使用執行ASP.NET
+    https://posture925.pixnet.net/blog/post/6462025
+    
+    
+ASP
+1. ASP.NET Core 從入門到實用 系列
+https://ithelp.ithome.com.tw/users/20107461/ironman/1372
+
+2. Blazor ?
+https://blog.darkthread.net/blog/blazor-preview/
+=> 微軟而言，最佳 WebAssembly 開發語言自然是 C#，而融合 WebAssembly 開發網頁的新技術叫 Blazor。
+  
+  
 
 
