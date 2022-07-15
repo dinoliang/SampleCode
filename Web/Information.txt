@@ -90,6 +90,9 @@ Server
     https://posture925.pixnet.net/blog/post/6462025
     http://archive.apache.org/dist/httpd/mod_aspdotnet/
   Kestrel ?
+  
+  1.6 List of Portable ASP.NET Servers
+  https://www.codeproject.com/Reference/1085768/List-of-Portable-ASP-NET-Servers
     
     
 ASP
