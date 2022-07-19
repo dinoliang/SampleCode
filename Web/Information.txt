@@ -93,9 +93,14 @@ Server
   
   1.6 List of Portable ASP.NET Servers
   https://www.codeproject.com/Reference/1085768/List-of-Portable-ASP-NET-Servers
+  
+  
+JavaScript + CSS (+ JQuery)
     
     
 ASP
+0. ASP.NET MVC
+
 1. ASP.NET Core 從入門到實用 系列
 https://ithelp.ithome.com.tw/users/20107461/ironman/1372
 
@@ -104,5 +109,23 @@ https://blog.darkthread.net/blog/blazor-preview/
 => 微軟而言，最佳 WebAssembly 開發語言自然是 C#，而融合 WebAssembly 開發網頁的新技術叫 Blazor。
   
   
+ 
+Python
+1. Django
+https://ithelp.ithome.com.tw/users/20111829/ironman/1804
+
+2. Flask
+https://devs.tw/post/448
+
+*想構建健壯的全棧式網站，那麼 Django 是完美的選擇，因爲它具有多種功能並且在生產中運行良好。
+ 對於需要快速原型化 Web 應用程序並輕鬆快速地構建 API 的機器學習工程師或開發人員而言，Flask 是理想的選擇。
+ 
+3. PyWebIO
+https://blog.51cto.com/u_15465080/4852938
+
+4. Remi
+https://blog.csdn.net/weixin_43474474/article/details/119576934
+https://blog.51cto.com/u_15294888/2989876
+
 
 
