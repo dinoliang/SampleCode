@@ -68,6 +68,9 @@ Start: designer (/usr/lib/x86_64-linux-gnu/qt5/bin/designer)
 pyqt5 designer:
 pyuic5 UI.ui -o UI.py
 
+https://ithelp.ithome.com.tw/users/20120424/ironman/4879
+
+
 vs code配置
 添加pyqt integration插件
 File > Preferences > Settings，搜索pyqt integration
