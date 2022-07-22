@@ -16,9 +16,9 @@ StartTime = time.time()
 #######################################################
 ### Change the parameters to match the settings
 
-g_sFilePath = '/home/dino/RawShared/Other/'
+g_sFilePath = 'D:\\Python\\I2C\\'
 g_sCsvFile = 'Config_csv_Def-220125_reg_Default_csv.csv'
-g_sOutFile = 'Config_csv_Def-220125_reg_Default_csv_Single_220715.out'
+g_sOutFile = 'Config_csv_Def-220125_reg_Default_csv_220712.out'
 
 gbDoneIdentify = True
 
@@ -101,17 +101,51 @@ def ConvertToVectorOut(LoadArray, strWriteFileName):
     #print("g_TotalLines={}".format(g_TotalLines))
     sWriteFile = '{}{}'.format(g_sFilePath, strWriteFileName)
     strOut = ""
+    bChangeSequence = False
+    nSequenceSlaveNum = -1
+    nSequenceAddrNum = -1
     with open(sWriteFile, 'w') as f:
         f.write(strOut)
     for Idx in range(0, g_TotalLines):
-        
         strOut = ""
-        #I2C start: "10"
-        strOut = strOut + "\"10\"\n"
-
         bRead = False
-        for i in range(0,3): #i==0:Slave, i==1:Address, i==2:Data
-            if i == 0 and LoadArray[Idx,i,7] == 1:
+
+        nWriteIdx = 0
+        nLineSlaveNumber = 0
+        nLineAddrNumber = 0
+        for x in range(0,8): #bit[0]:highest bit
+            #print("LoadArray[Idx,0,x]={}, (2 ** x)={}".format(LoadArray[Idx,0,x], (2 ** (7-x))))
+            nLineSlaveNumber = nLineSlaveNumber + LoadArray[Idx,0,x] * (2 ** (7-x))
+            #print("LoadArray[Idx,1,x]={}, (2 ** x)={}".format(LoadArray[Idx,1,x], (2 ** (7-x))))
+            nLineAddrNumber = nLineAddrNumber + LoadArray[Idx,1,x] * (2 ** (7-x))
+        #print("nLineSlaveNumber=0x{:x}, nLineAddrNumber=0x{:x}".format(np.int64(nLineSlaveNumber), np.int64(nLineAddrNumber)))
+        #print("nSequenceSlaveNum=0x{:x}, nSequenceAddrNum=0x{:x}".format(np.int64(nSequenceSlaveNum), np.int64(nSequenceAddrNum)))
+        if nSequenceSlaveNum != nLineSlaveNumber or nSequenceAddrNum != nLineAddrNumber - 1:    # not sequence
+            nWriteIdx = 0
+            if nSequenceSlaveNum != -1: # not first, need to write stop code
+                strLineOut = "\"10\"\n\"11\"\n" # Stop Code
+                #print(strLineOut)
+                with open(sWriteFile, 'a') as f:
+                    f.write(strLineOut)
+        else:                                                                                   # sequence, only write data
+            nWriteIdx = 2
+        nSequenceSlaveNum = nLineSlaveNumber
+        nSequenceAddrNum = nLineAddrNumber
+
+        for i in range(nWriteIdx,3): #i==0:Slave, i==1:Address, i==2:Data      
+            ## Dino test
+            #if i == 0:
+            #    strOut = strOut + "Slave \n"
+            #elif i == 1:
+            #    strOut = strOut + "Addr \n"
+            #elif i == 2:
+            #    strOut = strOut + "Data \n"
+
+            if i == 0: # Write Start Code
+                #I2C start: "10"
+                strOut = strOut + "\"10\"\n"
+
+            if i == 0 and LoadArray[Idx,i,7] == 1: # Check write or read
                 bRead = True
 
             for j in range(0,8): #bit[0]:highest bit
@@ -139,10 +173,10 @@ def ConvertToVectorOut(LoadArray, strWriteFileName):
         #print(strOut)
         with open(sWriteFile, 'a') as f:
             f.write(strOut)
-        strLineOut = "\"10\"\n\"11\"\n" # Stop Code
-        #print(strLineOut)
-        with open(sWriteFile, 'a') as f:
-            f.write(strLineOut)
+    strLineOut = "\"10\"\n\"11\"\n" # Stop Code
+    #print(strLineOut)
+    with open(sWriteFile, 'a') as f:
+        f.write(strLineOut)
     pass
 
 if __name__ == "__main__":

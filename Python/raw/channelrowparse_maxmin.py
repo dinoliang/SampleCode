@@ -21,6 +21,10 @@ sFilePath = '/home/dino/RawShared/20211111_fulldark/'
 sFileTempTime = '20211111160205'
 sFileTempFormat = 'P10'
 
+g_sFilePathFolder = [
+                    '0x0010', '0x0020', '0x0030', '0x0040', '0x0050', '0x0060', '0x0070', '0x0080', '0x0090', '0x00A0', '0x00B0', '0x00C0', \
+                    ]
+
 bExposureRaw = False # True/False
 nFileExposureIM = 1
 nFileExposureID = 30
@@ -377,13 +381,13 @@ def ParsingPixel():
         print("Durning Each Interval Time(sec): {}".format(nEachIntervalTime - StartTime))
   
 
-def TransMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H):
+def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nFileCounts, FileTimeStamp, InputFolder, ArrayFolder, OutputFolder):
     listVarOfGlobals = globals()
     listVarOfGlobals['nWidth']                      = nWidth
     listVarOfGlobals['nHeight']                     = nHeight
 
-    listVarOfGlobals['nFileCount']                  = 100
-    listVarOfGlobals['sFilePath']                   = '/home/dino/RawShared/20211111_fulldark/'
+    listVarOfGlobals['nFileCount']                  = nFileCounts
+    listVarOfGlobals['sFilePath']                   = InputFolder
     listVarOfGlobals['sFileTempTime']               = '20211111160205'
     listVarOfGlobals['sFileTempFormat']             = 'P10'
 
@@ -399,13 +403,18 @@ def TransMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H):
     listVarOfGlobals['nROI_W']                      = nROI_W
     listVarOfGlobals['nROI_H']                      = nROI_H
 
-    listVarOfGlobals['sSavePath']                   = '/home/dino/RawShared/Output/'
+    listVarOfGlobals['sSavePath']                   = OutputFolder
 
-    ParsingPixel()
+    #print(listVarOfGlobals['g_sFilePathFolder'])
+    listVarOfGlobals['g_sFilePathFolder']           = ArrayFolder
+    #print(listVarOfGlobals['g_sFilePathFolder'])
+
+    #ParsingPixel()
     pass
 
 
 if __name__ == "__main__":
+    print("Main")
     ParsingPixel()
 
 

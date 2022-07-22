@@ -573,6 +573,39 @@ def ParsingPixel():
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
+def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder):
+    listVarOfGlobals = globals()
+    listVarOfGlobals['nWidth']                      = nWidth
+    listVarOfGlobals['nHeight']                     = nHeight
+
+    listVarOfGlobals['nROI_X']                      = nX
+    listVarOfGlobals['nROI_Y']                      = nY
+    listVarOfGlobals['nROI_W']                      = nROI_W
+    listVarOfGlobals['nROI_H']                      = nROI_H
+
+    listVarOfGlobals['gCol1_Index']                 = nColIndex
+    listVarOfGlobals['gCol2_Index']                 = (nColIndex + 1) % 4
+    listVarOfGlobals['gCol3_Index']                 = (nColIndex + 2) % 4
+    listVarOfGlobals['gCol4_Index']                 = (nColIndex + 3) % 4
+
+    listVarOfGlobals['gRow1_Index']                 = nRowIndex
+    listVarOfGlobals['gRow2_Index']                 = (nRowIndex + 1) % 4
+    listVarOfGlobals['gRow3_Index']                 = (nRowIndex + 2) % 4
+    listVarOfGlobals['gRow4_Index']                 = (nRowIndex + 3) % 4
+
+    listVarOfGlobals['nFileCount']                  = nFileCounts
+    listVarOfGlobals['sFilePath']                   = InputFolder
+    listVarOfGlobals['sFileTempTime']               = FileTimeStamp
+
+    listVarOfGlobals['sSavePath']                   = OutputFolder
+
+    print(listVarOfGlobals['g_sFilePathFolder'])
+    listVarOfGlobals['g_sFilePathFolder']           = ArrayFolder
+    print(listVarOfGlobals['g_sFilePathFolder'])
+
+    #ParsingPixel()
+    pass
+
 if __name__ == "__main__":
     ParsingPixel()
 
