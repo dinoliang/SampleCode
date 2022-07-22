@@ -1,3 +1,5 @@
+# UI Command: pyuic5 -x untitled.ui -o ui_untitled.py
+
 from PyQt5 import QtWidgets
 from controller import MainWindow
 import sys
