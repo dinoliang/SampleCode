@@ -576,7 +576,7 @@ def ParsingPixel():
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
-        if gCallbackMessageFunc != None and gCaller != None:
+        if gCallbackMessageFunc is not None and gCaller is not None:
             gCallbackMessageFunc(gCaller, 'Parse finish. (zett)')
 
         return

@@ -6,3 +6,5 @@ __pycache__/
 Python/raw/__pycache__/
 Python/raw/__pycache__/*
 Python/raw/QuardBayer_GRBG.bin
+Python/raw/GUI/SampleInstaller/build/*
+Python/raw/GUI/SampleInstaller/dist/*
