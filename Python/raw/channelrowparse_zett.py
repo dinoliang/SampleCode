@@ -28,7 +28,7 @@ nFileCount = 7
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022051810_P8N533#2#1843_Lag/{}/'
+sFilePath = '/home/dino/IMX586_Bin/2022042009_P8533_EQE_#2/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -45,12 +45,12 @@ g_bAYAFile = True
 #                    ]
 
 #ExposureTime
-g_sFilePathFolder = [
-                    '0x0010', '0x0020', '0x0030', '0x0040', '0x0050', '0x0060', '0x0070', '0x0080', '0x0090', '0x00A0', '0x00B0', '0x00C0', \
+#g_sFilePathFolder = [
+#                    '0x0010', '0x0020', '0x0030', '0x0040', '0x0050', '0x0060', '0x0070', '0x0080', '0x0090', '0x00A0', '0x00B0', '0x00C0', \
 #                    '0x010', '0x080', '0x100', '0x180', '0x200', '0x280', '0x300', \
 #                    '0x310', '0x320', '0x330', '0x340', '0x350', '0x360', '0x370', '0x380', '0x390', '0x3A0', '0x3B0', '0x3C0', '0x3D0', '0x3E0', '0x3F0', '0x400', \
 #                    '0x480', '0x500', \
-                    ]
+#                    ]
                     
 #AngulerResponse
 #g_sFilePathFolder = [
@@ -82,13 +82,13 @@ g_sFilePathFolder = [
 #                    ]
 
 #QuantumEfficiency
-#g_sFilePathFolder = [
-#                    '400', \
-#                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
-#                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-#                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-#                    '710', '720', '730', '740', '750',  '760', '770', '780' \
-#                    ]
+g_sFilePathFolder = [
+                    '400', \
+                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
+                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
+                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+                    '710', '720', '730', '740', '750',  '760', '770', '780' \
+                    ]
 
 #DarkCurrent
 #g_sFilePathFolder = [
@@ -135,8 +135,8 @@ nROI_Y = 3996
 #nROI_X = 535
 #nROI_Y = 983
 
-nROI_W = 16    #multiple of 4
-nROI_H = 16    #multiple of 4
+nROI_W = 200    #multiple of 4
+nROI_H = 200    #multiple of 4
 
 gCol1_Index = 0     #R1、R2、Gr1、Gr2
 gCol2_Index = 1     #R3、R4、Gr3、Gr4
@@ -161,11 +161,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022051810'
+sFileTempTime = '2022072510'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022051810_P8N533#2#1843_Lag/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022042009_P8533_EQE_#2_Python/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -187,6 +187,9 @@ g_nBadPixelLevel = 64
 
 ### Change the parameters to match the settings
 #######################################################
+
+gCaller = None
+gCallbackMessageFunc = None
 
 #Regular Expression of raw file
 g_re_FilePattern_raw = "[a-zA-Z0-9-_]+(.raw)"
@@ -573,7 +576,12 @@ def ParsingPixel():
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
-def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder):
+        if gCallbackMessageFunc != None and gCaller != None:
+            gCallbackMessageFunc(gCaller, 'Parse finish. (zett)')
+
+        return
+
+def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):
     listVarOfGlobals = globals()
     listVarOfGlobals['nWidth']                      = nWidth
     listVarOfGlobals['nHeight']                     = nHeight
@@ -596,6 +604,7 @@ def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFil
     listVarOfGlobals['nFileCount']                  = nFileCounts
     listVarOfGlobals['sFilePath']                   = InputFolder
     listVarOfGlobals['sFileTempTime']               = FileTimeStamp
+    listVarOfGlobals['TimeInfo']                    = FileTimeStamp
 
     listVarOfGlobals['sSavePath']                   = OutputFolder
 
@@ -603,11 +612,22 @@ def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFil
     listVarOfGlobals['g_sFilePathFolder']           = ArrayFolder
     print(listVarOfGlobals['g_sFilePathFolder'])
 
+    listVarOfGlobals['gCaller']                     = Caller
+    listVarOfGlobals['gCallbackMessageFunc']        = CallbackMsgFunc
+    #gCallbackMessageFunc(gCaller, 'Test Message')
+
     #ParsingPixel()
     pass
 
+#def CallMes(CallbackMsg):
+#    listVarOfGlobals = globals()
+#    listVarOfGlobals['gCallbackMessageFunc']        = CallbackMsg
+#    gCallbackMessageFunc('Callback test')
+#    return
+
 if __name__ == "__main__":
     ParsingPixel()
+    pass
 
 
 EndTime = time.time()

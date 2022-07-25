@@ -78,11 +78,9 @@ class MainWindow(QtWidgets.QMainWindow):
                             FileTimeStamp=textFileTimestamp, \
                             InputFolder=self.input_Folder, \
                             OutputFolder=self.output_Folder, \
-                            ArrayFolder=self.condition_Array, \
-                            Caller = self, \
-                            CallbackMsgFunc = MainWindow.Message_Callback)
+                            ArrayFolder=self.condition_Array)
         #print(zettmain.g_sFilePathFolder)
-        print("Start Finish!!!")
+        print("Finish!!!")
 
         return
 
@@ -113,10 +111,4 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.condition_Array = row
                 print(self.condition_Array)
 
-        return
-
-    def Message_Callback(self, strMessage):
-        print(strMessage)
-        strShowMsg = 'Msg: ' + strMessage
-        self.ui.lineEdit_Msg.setText(strShowMsg)
         return
