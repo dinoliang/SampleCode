@@ -414,7 +414,7 @@ def ParsingPixel():
     Save_CSV(sSaveOrgGbFile, lRawInfo)
     Save_CSV(sSaveOrgBFile, lRawInfo)
 
-    h = 0
+    #h = 0
     for x in g_sFilePathFolder:
         sTempFilePath = sFilePath.format(x)
         
@@ -572,7 +572,7 @@ def ParsingPixel():
 
         Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, sSaveOrgBFile)
 
-        h = h + 1
+        #h = h + 1
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
