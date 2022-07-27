@@ -1,6 +1,7 @@
 import time
 import os
 import numpy as np
+import datetime
 
 import sys
 sys.path.append('/home/dino/PythonShared/raw/')
@@ -10,7 +11,7 @@ StartTime = time.time()
 
 #######################################################
 ### Change the parameters to match the settings
-gResultFolder = '/home/dino/PythonShared/raw/STDFResult/Test002/'
+gResultFolder = '/home/dino/PythonShared/raw/STDFResult/Test001/'
 gResultOutFile = 'Out.csv'
 
 #######################################################
@@ -24,6 +25,10 @@ class ResultHandler:
         nWaferHeight = -1
         for root, dirs, files in os.walk(resultFolder):
             for sFile in files:
+                if '.csv' not in sFile:
+                    continue
+                if 'Result_' in sFile:
+                    continue
                 filepathe = os.path.join(resultFolder, sFile)
                 csvfile = csvhandle.csvhandle()
                 csvRows = csvfile.ReadCSV(filepathe, 3)
@@ -48,6 +53,11 @@ class ResultHandler:
 
         for root, dirs, files in os.walk(resultFolder):
             for sFile in files:
+                if '.csv' not in sFile:
+                    continue
+                if 'Result_' in sFile:
+                    continue
+                #print(sFile)
                 filepathe = os.path.join(resultFolder, sFile)
                 csvfile = csvhandle.csvhandle()
                 csvRows = csvfile.ReadCSV(filepathe, 3)
@@ -75,9 +85,12 @@ class ResultHandler:
                             pass
 
         #print(Result_Array[45, 29])      
-        print('Result_Array:{}, Shape:{}'.format(Result_Array, Result_Array.shape))
+        #print('Result_Array:{}, Shape:{}'.format(Result_Array, Result_Array.shape))
 
-        outFile = os.path.join(resultFolder, resultOutFile)
+        NowDate = datetime.datetime.now()
+        TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
+        OutFilename = 'Result_{}.csv'.format(TimeInfo)
+        outFile = os.path.join(resultFolder, OutFilename)
         csvfile = csvhandle.csvhandle()
         csvfile.WriteCSVToNumpy(outFile, Result_Array)
         return
