@@ -127,13 +127,19 @@ nROI_Y = 2976
 #nROI_X = 535
 #nROI_Y = 983
 
-
 #nROI_W = 200    #multiple of 4
 #nROI_H = 200    #multiple of 4
 nROI_W = 80    #multiple of 16
 nROI_H = 80    #multiple of 16
 #nROI_W = 16    #multiple of 16
 #nROI_H = 16    #multiple of 16
+
+# Set PDAF Column and Row Index
+g_nPDAFColumnIndex  = 7  # 0~15
+g_nPDAFRowIndex_Gb3 = 0  # 0~15
+g_nPDAFRowIndex_Gb4 = 1  # 0~15
+g_nPDAFRowIndex_B3 = 14  # 0~15
+g_nPDAFRowIndex_B4 = 15  # 0~15
 
 #Regular Expression for parsing file
 g_re_FilePattern = ""
@@ -148,6 +154,8 @@ sFileTempTime = '2022070411'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
 sSavePath = '/home/dino/RawShared/Output/2022070411_IMX586_PDAF/{}/'
+
+
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -168,6 +176,9 @@ g_nBadPixelLevel = 64
 
 ### Change the parameters to match the settings
 #######################################################
+# Set Callback Information
+gCaller = None
+gCallbackMessageFunc = None
 
 #Regular Expression of raw file
 g_re_FilePattern_raw = "[a-zA-Z0-9-_]+(.raw)"
@@ -431,11 +442,6 @@ def ParsingPixel():
                 if k >= nCount:
                     continue
 
-                nR0Index, nR1Index, nR2Index, nR3Index = 0, 0, 0, 0
-                nGr0Index, nGr1Index, nGr2Index, nGr3Index = 0, 0, 0, 0
-                nGb0Index, nGb1Index, nGb2Index, nGb3Index = 0, 0, 0, 0
-                nB0Index, nB1Index, nB2Index, nB3Index = 0, 0, 0, 0
-
                 sFileTemp = sFile
                 #rePattern = g_re_FilePattern
                 #
@@ -500,26 +506,45 @@ def ParsingPixel():
                     #            nB3Index += 1
 
 
-                    # IMX586
+                    ## IMX586
+                    ##print('i%16: ', i%16)
+                    #if i%16 == 7:  #Gb3~4+B3~4
+                    #    #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
+                    #    for l in range(0, nROI_W):
+                    #        if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
+                    #        #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
+                    #            continue
+                    #
+                    #        if (l+nWOffset)%16==0: #Gb3
+                    #            #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
+                    #            ChannelGb_array[k,2,nGb2Index] = input_array[l]
+                    #            nGb2Index += 1
+                    #        elif (l+nWOffset)%16==1: #Gb4
+                    #            ChannelGb_array[k,3,nGb3Index] = input_array[l]
+                    #            nGb3Index += 1
+                    #        elif (l+nWOffset)%16==14: #B3
+                    #            ChannelB_array[k,2,nB2Index] = input_array[l]
+                    #            nB2Index += 1
+                    #        elif (l+nWOffset)%16==15: #B4
+                    #            ChannelB_array[k,3,nB3Index] = input_array[l]
+                    #            nB3Index += 1
+
                     #print('i%16: ', i%16)
-                    if i%16 == 7:  #Gb3~4+B3~4
-                        #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
+                    if i%16 == g_nPDAFColumnIndex:  #Gb3~4+B3~4
                         for l in range(0, nROI_W):
                             if g_bDeleteBadPixel and input_array[l] < g_nBadPixelLevel:
-                            #    print('Bad Pixel {0}, {1}'.format(l, input_array[l]))
                                 continue
                     
-                            if (l+nWOffset)%16==0: #Gb3
-                                #print('Site: {0}, Gb3: {1}'.format(l+nWOffset, input_array[l]))
+                            if (l+nWOffset)%16==g_nPDAFRowIndex_Gb3:    #Gb3
                                 ChannelGb_array[k,2,nGb2Index] = input_array[l]
                                 nGb2Index += 1
-                            elif (l+nWOffset)%16==1: #Gb4
+                            elif (l+nWOffset)%16==g_nPDAFRowIndex_Gb4:  #Gb4
                                 ChannelGb_array[k,3,nGb3Index] = input_array[l]
                                 nGb3Index += 1
-                            elif (l+nWOffset)%16==14: #B3
+                            elif (l+nWOffset)%16==g_nPDAFRowIndex_B3:   #B3
                                 ChannelB_array[k,2,nB2Index] = input_array[l]
                                 nB2Index += 1
-                            elif (l+nWOffset)%16==15: #B4
+                            elif (l+nWOffset)%16==g_nPDAFRowIndex_B4:   #B4
                                 ChannelB_array[k,3,nB3Index] = input_array[l]
                                 nB3Index += 1
                             
@@ -538,6 +563,47 @@ def ParsingPixel():
         h = h + 1
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
+
+        if gCallbackMessageFunc is not None and gCaller is not None:
+            gCallbackMessageFunc(gCaller, 'PDAF Parse finish. (pdaf)')
+
+
+def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowGb3Index, nRowB3Index, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):
+    listVarOfGlobals = globals()
+    listVarOfGlobals['nWidth']                      = nWidth
+    listVarOfGlobals['nHeight']                     = nHeight
+
+    listVarOfGlobals['nROI_X']                      = nX
+    listVarOfGlobals['nROI_Y']                      = nY
+    listVarOfGlobals['nROI_W']                      = nROI_W
+    listVarOfGlobals['nROI_H']                      = nROI_H
+
+    listVarOfGlobals['g_nPDAFColumnIndex']          = nColIndex
+
+    listVarOfGlobals['g_nPDAFRowIndex_Gb3']         = nRowGb3Index
+    listVarOfGlobals['g_nPDAFRowIndex_Gb4']         = nRowGb3Index + 1
+    listVarOfGlobals['g_nPDAFRowIndex_B3']          = nRowB3Index
+    listVarOfGlobals['g_nPDAFRowIndex_B4']          = nRowB3Index + 1
+
+    listVarOfGlobals['nFileCount']                  = nFileCounts
+    listVarOfGlobals['sFilePath']                   = InputFolder
+    listVarOfGlobals['sFileTempTime']               = FileTimeStamp
+    listVarOfGlobals['TimeInfo']                    = FileTimeStamp
+
+    listVarOfGlobals['sSavePath']                   = OutputFolder
+
+    #print(listVarOfGlobals['g_sFilePathFolder'])
+    listVarOfGlobals['g_sFilePathFolder']           = ArrayFolder
+    #print(listVarOfGlobals['g_sFilePathFolder'])
+
+    listVarOfGlobals['gCaller']                     = Caller
+    listVarOfGlobals['gCallbackMessageFunc']        = CallbackMsgFunc
+    gCallbackMessageFunc(gCaller, 'PDAF Test Message')
+    pass
+
+def StartParse():
+    ParsingPixel()
+    pass
 
 if __name__ == "__main__":
     ParsingPixel()

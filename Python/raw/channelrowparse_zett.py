@@ -148,10 +148,10 @@ gCol4_Index = 3     #Gb3、Gb4、B3、B4
 #gRow3_Index = 2     #Gr1、Gr3、B1、B3
 #gRow4_Index = 3     #Gr2、Gr4、B2、B4
 #TEG:
-gRow1_Index = 2     #R1、R3、Gb1、Gb3
-gRow2_Index = 3     #R2、R4、Gb2、Gb4
-gRow3_Index = 0     #Gr1、Gr3、B1、B3
-gRow4_Index = 1     #Gr2、Gr4、B2、B4
+gRow1_Index = 0     #R1、R3、Gb1、Gb3
+gRow2_Index = 1     #R2、R4、Gb2、Gb4
+gRow3_Index = 2     #Gr1、Gr3、B1、B3
+gRow4_Index = 3     #Gr2、Gr4、B2、B4
 
 #Regular Expression for parsing file
 g_re_FilePattern = ""
@@ -187,7 +187,7 @@ g_nBadPixelLevel = 64
 
 ### Change the parameters to match the settings
 #######################################################
-
+# Set Callback Information
 gCaller = None
 gCallbackMessageFunc = None
 
@@ -414,7 +414,7 @@ def ParsingPixel():
     Save_CSV(sSaveOrgGbFile, lRawInfo)
     Save_CSV(sSaveOrgBFile, lRawInfo)
 
-    #h = 0
+    h = 0
     for x in g_sFilePathFolder:
         sTempFilePath = sFilePath.format(x)
         
@@ -572,16 +572,16 @@ def ParsingPixel():
 
         Cal_Save_AllInformation(h, nCount, ChannelB_array, 'B', sSaveBFile, sSaveOrgBFile)
 
-        #h = h + 1
+        h = h + 1
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
         if gCallbackMessageFunc is not None and gCaller is not None:
-            gCallbackMessageFunc(gCaller, 'Parse finish. (zett)')
+            gCallbackMessageFunc(gCaller, 'QE Parse finish. (zett)')
 
         return
 
-def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):
+def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):
     listVarOfGlobals = globals()
     listVarOfGlobals['nWidth']                      = nWidth
     listVarOfGlobals['nHeight']                     = nHeight
@@ -608,15 +608,17 @@ def CallMain(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFil
 
     listVarOfGlobals['sSavePath']                   = OutputFolder
 
-    print(listVarOfGlobals['g_sFilePathFolder'])
+    #print(listVarOfGlobals['g_sFilePathFolder'])
     listVarOfGlobals['g_sFilePathFolder']           = ArrayFolder
-    print(listVarOfGlobals['g_sFilePathFolder'])
+    #print(listVarOfGlobals['g_sFilePathFolder'])
 
     listVarOfGlobals['gCaller']                     = Caller
     listVarOfGlobals['gCallbackMessageFunc']        = CallbackMsgFunc
-    #gCallbackMessageFunc(gCaller, 'Test Message')
+    gCallbackMessageFunc(gCaller, 'QE Test Message')
+    pass
 
-    #ParsingPixel()
+def StartParse():
+    ParsingPixel()
     pass
 
 #def CallMes(CallbackMsg):
