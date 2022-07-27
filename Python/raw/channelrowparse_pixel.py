@@ -84,6 +84,10 @@ g_nBadPixelLevel = 64
 
 ### Change the parameters to match the settings
 #######################################################
+# Set Callback Information
+gCaller = None
+gCallbackMessageFunc = None
+
 g_nRawBeginIndex = 0
 
 if not g_bAYAFile:
@@ -278,6 +282,45 @@ def ParsingPixel():
 
         nEachIntervalTime = time.time()
         print("Durning Interval[{}] Time(sec): {}".format(x, nEachIntervalTime - StartTime))
+
+
+def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, bIsAYABin, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):
+    listVarOfGlobals = globals()
+    listVarOfGlobals['nWidth']                      = nWidth
+    listVarOfGlobals['nHeight']                     = nHeight
+    nROI_W = nWidth
+    nROI_H = nHeight
+
+    listVarOfGlobals['g_nRowIndex']                 = nX
+    listVarOfGlobals['g_nColumnIndex']              = nY
+    listVarOfGlobals['g_nRowBound']                 = nX + nROI_W
+    listVarOfGlobals['g_nColumnBound']              = nY + nROI_H
+
+    listVarOfGlobals['g_bAYAFile']                  = bIsAYABin
+    if not listVarOfGlobals['g_bAYAFile']:
+        listVarOfGlobals['g_nRawBeginIndex'] = 0
+    else:
+        listVarOfGlobals['g_nRawBeginIndex'] = 4    # header (width + height)
+
+    listVarOfGlobals['nFileCount']                  = nFileCounts
+    listVarOfGlobals['sFilePath']                   = InputFolder
+    listVarOfGlobals['sFileTempTime']               = FileTimeStamp
+    listVarOfGlobals['TimeInfo']                    = FileTimeStamp
+
+    listVarOfGlobals['sSavePath']                   = OutputFolder
+
+    #print(listVarOfGlobals['g_sFilePathFolder'])
+    listVarOfGlobals['g_sFilePathFolder']           = ArrayFolder
+    #print(listVarOfGlobals['g_sFilePathFolder'])
+
+    listVarOfGlobals['gCaller']                     = Caller
+    listVarOfGlobals['gCallbackMessageFunc']        = CallbackMsgFunc
+    gCallbackMessageFunc(gCaller, 'Pixel Test Message')
+    pass
+
+def StartParse():
+    ParsingPixel()
+    pass
 
 if __name__ == "__main__":
     ParsingPixel()

@@ -204,6 +204,10 @@ class Ui_MainWindow(object):
         self.lineEdit_RowIndex_2 = QtWidgets.QLineEdit(self.layoutWidget_13)
         self.lineEdit_RowIndex_2.setObjectName("lineEdit_RowIndex_2")
         self.horizontalLayout_15.addWidget(self.lineEdit_RowIndex_2)
+        self.checkBox_AYABin = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_AYABin.setGeometry(QtCore.QRect(290, 70, 92, 23))
+        self.checkBox_AYABin.setChecked(True)
+        self.checkBox_AYABin.setObjectName("checkBox_AYABin")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 722, 22))
@@ -235,6 +239,7 @@ class Ui_MainWindow(object):
         self.pushButton_Condition.setText(_translate("MainWindow", "CSV"))
         self.label_Evaluate.setText(_translate("MainWindow", "Evaluate:"))
         self.label_RowIndex_2.setText(_translate("MainWindow", "Row Index:"))
+        self.checkBox_AYABin.setText(_translate("MainWindow", "AYA Bin"))
 
 
 if __name__ == "__main__":

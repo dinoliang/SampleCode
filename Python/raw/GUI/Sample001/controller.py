@@ -12,6 +12,7 @@ import csv
 sys.path.append('/home/dino/PythonShared/raw/')
 import channelrowparse_zett as zettmain
 import channelrowparse_pdaf as pdafmain
+import channelrowparse_pixel as pixelmain
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -33,43 +34,131 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.pushButton_Condition.clicked.connect(self.buttonClick_Condition)
 
         #Select Evaluation
-        self.ui.comboBox_Evaluate.addItems(['QE', 'PDAF'])
+        self.ui.comboBox_Evaluate.addItems(['QE', 'PDAF', 'Pixel'])
         self.ui.comboBox_Evaluate.currentIndexChanged.connect(self.onComboBoxChanged)
+        self.ShowAllUI()
+        self.HideUIbyQE()
+        return
+
+    def ShowAllUI(self):
+        self.ui.label_Width.setHidden(False)
+        self.ui.lineEdit_Width.setHidden(False)
+
+        self.ui.label_Height.setHidden(False)
+        self.ui.lineEdit_Height.setHidden(False)
+
+        self.ui.label_X.setHidden(False)
+        self.ui.lineEdit_X.setHidden(False)
+
+        self.ui.label_Y.setHidden(False)
+        self.ui.lineEdit_Y.setHidden(False)
+
+        self.ui.label_ROIWidth.setHidden(False)
+        self.ui.lineEdit_ROIWidth.setHidden(False)
+
+        self.ui.label_ROIHeight.setHidden(False)
+        self.ui.lineEdit_ROIHeight.setHidden(False)
+
+        self.ui.label_ColumnIndex.setHidden(False)
+        self.ui.lineEdit_ColumnIndex.setHidden(False)
+
+        self.ui.label_RowIndex.setHidden(False)
+        self.ui.lineEdit_RowIndex.setHidden(False)
+
+        self.ui.label_RowIndex_2.setHidden(False)
+        self.ui.lineEdit_RowIndex_2.setHidden(False)
+
+        self.ui.label_FileCounts.setHidden(False)
+        self.ui.lineEdit_FileCounts.setHidden(False)
+
+        self.ui.label_FileTimestamp.setHidden(False)
+        self.ui.lineEdit_FileTimestamp.setHidden(False)
+
+        self.ui.lineEdit_InputFolder.setHidden(False)
+        self.ui.pushButton_InputFolder.setHidden(False)
+
+        self.ui.lineEdit_OutputFolder.setHidden(False)
+        self.ui.pushButton_OutputFolder.setHidden(False)
+
+        self.ui.lineEdit_Condition.setHidden(False)
+        self.ui.pushButton_Condition.setHidden(False)
+
+        self.ui.checkBox_AYABin.setHidden(False)
+
+        self.ui.label_RowIndex.setText('Row Index:')
+        return
+
+    def HideUIbyQE(self):
         self.ui.label_RowIndex_2.setHidden(True)
         self.ui.lineEdit_RowIndex_2.setHidden(True)
+        self.ui.checkBox_AYABin.setHidden(True)
+        return
 
+    def HideUIbyPDAF(self):
+        self.ui.checkBox_AYABin.setHidden(True)
+        self.ui.label_RowIndex.setText('Row(Gb3) Index:')
+        self.ui.label_RowIndex_2.setText('Row(B3) Index:')
+        return
+
+    def HideUIbyPixel(self):
+        self.ui.label_ColumnIndex.setHidden(True)
+        self.ui.lineEdit_ColumnIndex.setHidden(True)
+
+        self.ui.label_RowIndex.setHidden(True)
+        self.ui.lineEdit_RowIndex.setHidden(True)
+
+        self.ui.label_RowIndex_2.setHidden(True)
+        self.ui.lineEdit_RowIndex_2.setHidden(True)
         return
 
     def buttonClick_Start(self):
-        textWidth = self.ui.lineEdit_Width.text()
-        print("Image Width: {:d}".format(np.int64(int(textWidth, 10))))
+        if self.ui.lineEdit_Width.isVisible():
+            textWidth = self.ui.lineEdit_Width.text()
+            print("Image Width: {:d}".format(np.int64(int(textWidth, 10))))
 
-        textHeight = self.ui.lineEdit_Height.text()
-        print("Image Height: {:d}".format(np.int64(int(textHeight, 10))))
+        if self.ui.lineEdit_Height.isVisible():
+            textHeight = self.ui.lineEdit_Height.text()
+            print("Image Height: {:d}".format(np.int64(int(textHeight, 10))))
 
-        textX = self.ui.lineEdit_X.text()
-        print("X: {:d}".format(np.int64(int(textX, 10))))
+        if self.ui.lineEdit_X.isVisible():
+            textX = self.ui.lineEdit_X.text()
+            print("X: {:d}".format(np.int64(int(textX, 10))))
 
-        textY = self.ui.lineEdit_Y.text()
-        print("Y: {:d}".format(np.int64(int(textY, 10))))
+        if self.ui.lineEdit_Y.isVisible():
+            textY = self.ui.lineEdit_Y.text()
+            print("Y: {:d}".format(np.int64(int(textY, 10))))
 
-        textROIWidth = self.ui.lineEdit_ROIWidth.text()
-        print("ROI Width: {:d}".format(np.int64(int(textROIWidth, 10))))
+        if self.ui.lineEdit_ROIWidth.isVisible():
+            textROIWidth = self.ui.lineEdit_ROIWidth.text()
+            print("ROI Width: {:d}".format(np.int64(int(textROIWidth, 10))))
 
-        textROIHeight = self.ui.lineEdit_ROIHeight.text()
-        print("ROI Height: {:d}".format(np.int64(int(textROIHeight, 10))))
+        if self.ui.lineEdit_ROIHeight.isVisible():
+            textROIHeight = self.ui.lineEdit_ROIHeight.text()
+            print("ROI Height: {:d}".format(np.int64(int(textROIHeight, 10))))
 
-        textColumnIndex = self.ui.lineEdit_ColumnIndex.text()
-        print("Column Index: {:d}".format(np.int64(int(textColumnIndex, 10))))
+        if self.ui.lineEdit_ColumnIndex.isVisible():
+            textColumnIndex = self.ui.lineEdit_ColumnIndex.text()
+            print("Column Index: {:d}".format(np.int64(int(textColumnIndex, 10))))
 
-        textRowIndex = self.ui.lineEdit_RowIndex.text()
-        print("Row Index: {:d}".format(np.int64(int(textRowIndex, 10))))
+        if self.ui.lineEdit_RowIndex.isVisible():
+            textRowIndex = self.ui.lineEdit_RowIndex.text()
+            print("Row Index: {:d}".format(np.int64(int(textRowIndex, 10))))
 
-        textFileCounts = self.ui.lineEdit_FileCounts.text()
-        print("File Counts: {:d}".format(np.int64(int(textFileCounts, 10))))
+        if self.ui.lineEdit_RowIndex_2.isVisible():
+            textRow2Index = self.ui.lineEdit_RowIndex_2.text()
+            print("Row2 Index: {:d}".format(np.int64(int(textRow2Index, 10))))
 
-        textFileTimestamp = self.ui.lineEdit_FileTimestamp.text()
-        print("File Timestamp: {}".format(textFileTimestamp))
+        if self.ui.lineEdit_FileCounts.isVisible():
+            textFileCounts = self.ui.lineEdit_FileCounts.text()
+            print("File Counts: {:d}".format(np.int64(int(textFileCounts, 10))))
+
+        if self.ui.lineEdit_FileTimestamp.isVisible():
+            textFileTimestamp = self.ui.lineEdit_FileTimestamp.text()
+            print("File Timestamp: {}".format(textFileTimestamp))
+
+        if self.ui.checkBox_AYABin.isVisible():
+            bAYABin = self.ui.checkBox_AYABin.isChecked()
+            print("Is AYA Bin: {}".format(bAYABin))
 
         print(self.input_Folder)
         print(self.output_Folder)
@@ -93,9 +182,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                     CallbackMsgFunc = MainWindow.Message_Callback)
             #zettmain.StartParse()
         elif self.evaluation_Item == 1: #PDAF
-            textRow2Index = self.ui.lineEdit_RowIndex_2.text()
-            print("Row2 Index: {:d}".format(np.int64(int(textRow2Index, 10))))
-
             pdafmain.SetParameters( nWidth=np.int64(int(textWidth, 10)), \
                                     nHeight=np.int64(int(textHeight, 10)), \
                                     nX=np.int64(int(textX, 10)), \
@@ -113,6 +199,23 @@ class MainWindow(QtWidgets.QMainWindow):
                                     Caller = self, \
                                     CallbackMsgFunc = MainWindow.Message_Callback)
             #pdafmain.StartParse()
+
+        elif self.evaluation_Item == 2: #Pixel
+           pixelmain.SetParameters( nWidth=np.int64(int(textWidth, 10)), \
+                                    nHeight=np.int64(int(textHeight, 10)), \
+                                    nX=np.int64(int(textX, 10)), \
+                                    nY=np.int64(int(textY, 10)), \
+                                    nROI_W=np.int64(int(textROIWidth, 10)), \
+                                    nROI_H=np.int64(int(textROIHeight, 10)), \
+                                    bIsAYABin=bAYABin, \
+                                    nFileCounts=np.int64(int(textFileCounts, 10)), \
+                                    FileTimeStamp=textFileTimestamp, \
+                                    InputFolder=self.input_Folder, \
+                                    OutputFolder=self.output_Folder, \
+                                    ArrayFolder=self.condition_Array, \
+                                    Caller = self, \
+                                    CallbackMsgFunc = MainWindow.Message_Callback)
+            #pixelmain.StartParse()
         
         #print(zettmain.g_sFilePathFolder)
         print("Evaluate Finish!!!")
@@ -149,16 +252,14 @@ class MainWindow(QtWidgets.QMainWindow):
         return
 
     def onComboBoxChanged(self):
+        self.ShowAllUI()
         self.evaluation_Item = self.ui.comboBox_Evaluate.currentIndex() #self.ui.comboBox_Evaluate.currentText()
         if self.evaluation_Item == 0: #QE
-            self.ui.label_RowIndex_2.setHidden(True)
-            self.ui.lineEdit_RowIndex_2.setHidden(True)
-            self.ui.label_RowIndex.setText('Row Index:')
+            self.HideUIbyQE()
         elif self.evaluation_Item == 1: #PDAF
-            self.ui.label_RowIndex_2.setHidden(False)
-            self.ui.lineEdit_RowIndex_2.setHidden(False)
-            self.ui.label_RowIndex.setText('Row(Gb3) Index:')
-            self.ui.label_RowIndex_2.setText('Row(B3) Index:')
+            self.HideUIbyPDAF()
+        elif self.evaluation_Item == 2: #Pixel
+            self.HideUIbyPixel()
         return
 
     def Message_Callback(self, strMessage):
