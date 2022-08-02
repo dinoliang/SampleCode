@@ -17,8 +17,16 @@ gResultOutFile = 'Out.csv'
 #######################################################
 
 class ResultHandler:
+    callback_Caller = None
+    callback_Func = None
+    
     def __init__(self) -> None:
         pass
+
+    def SetCallback(self, cCaller, cFunc):
+        self.callback_Caller = cCaller
+        self.callback_Func = cFunc
+        return
 
     def StartCombine(self, resultFolder, resultOutFile):
         nWaferWidth = -1
@@ -68,16 +76,16 @@ class ResultHandler:
                     for j in range(0, nWaferWidth): 
                         try:
                             #print('Result_Array[{}, {}]:{}, csvMatrix[{}, {}]:{}'.format(i, j, Result_Array[i, j], i+1, j+1, csvMatrix[i+1, j+1]))
-                            nResultNum = np.int64(Result_Array[i, j]) #np.int64(int(Result_Array[i, j], 10))
-                            nNum = np.int64(csvMatrix[i+1, j+1]) #np.int64(int(csvMatrix[i+1, j+1], 10))
+                            nResultNum = np.int64(Result_Array[i, j])
+                            nNum = np.int64(csvMatrix[i+1, j+1])
                             #print('nResultNum:{}, nNum:{}'.format(nResultNum, nNum))
                             if nResultNum == -1 and nNum == 1: #Pass
                                 Result_Array[i, j] = 0
-                            elif nResultNum != -1 and nNum == 1:
-                                pass
-                            elif nResultNum == -1 and nNum != 1:
+                            #elif nResultNum != -1 and nNum == 1: #Pass again
+                            #    pass
+                            elif nResultNum == -1 and nNum != 1: #Fail
                                 Result_Array[i, j] = 1
-                            elif nResultNum != -1 and nNum != 1:
+                            elif nResultNum != -1 and nNum != 1: #Fail again
                                 Result_Array[i, j] = nResultNum + 1
                         except:
                             pass
@@ -89,10 +97,17 @@ class ResultHandler:
 
         NowDate = datetime.datetime.now()
         TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
-        OutFilename = 'Result_{}.csv'.format(TimeInfo)
+        if resultOutFile == '':
+            OutFilename = 'Result_{}.csv'.format(TimeInfo)
+        else:
+            OutFilename = resultOutFile
         outFile = os.path.join(resultFolder, OutFilename)
         csvfile = csvhandle.csvhandle()
         csvfile.WriteCSVToNumpy(outFile, Result_Array)
+
+        print('Combine finish!!')
+        if self.callback_Func is not None and self.callback_Caller is not None:
+            self.callback_Func(self.callback_Caller, 'Combine finish!!')
         return
 
 if __name__ == "__main__":
