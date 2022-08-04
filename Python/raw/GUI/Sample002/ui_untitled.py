@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         self.label_CPFolder.setText(_translate("MainWindow", "CP Folder:"))
         self.pushButton_CPFolder.setText(_translate("MainWindow", "Choose"))
         self.label_OutputName.setText(_translate("MainWindow", "OutputName:"))
-        self.lineEdit_OutputName.setText(_translate("MainWindow", "Out.csv"))
+        self.lineEdit_OutputName.setText(_translate("MainWindow", "Result_.csv"))
 
 
 if __name__ == "__main__":

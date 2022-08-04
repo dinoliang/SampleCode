@@ -76,7 +76,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_OutputName">
        <property name="text">
-        <string>Out.csv</string>
+        <string>Result_.csv</string>
        </property>
       </widget>
      </item>

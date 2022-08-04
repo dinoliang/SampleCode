@@ -1,9 +1,3 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication, QWidget,QPushButton, QHBoxLayout, QVBoxLayout
-from PyQt5.QtWidgets import QLineEdit, QMessageBox, QFileDialog
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem, QHeaderView
-from PyQt5 import QtCore
-
 from ui_untitled import Ui_MainWindow
 import sys
 import csv
