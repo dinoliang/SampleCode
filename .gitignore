@@ -10,3 +10,5 @@ Python/raw/GUI/SampleInstaller/build/*
 Python/raw/GUI/SampleInstaller/dist/*
 Python/stdf2map-master/*
 Python/raw/STDFResult/*
+*/build/*
+*/dist/*
