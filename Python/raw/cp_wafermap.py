@@ -35,7 +35,7 @@ class ResultHandler:
             for sFile in files:
                 if '.csv' not in sFile:
                     continue
-                if 'Result_' in sFile:
+                if 'Result' in sFile or 'Out' in sFile:
                     continue
                 filepathe = os.path.join(resultFolder, sFile)
                 csvfile = csvhandle.csvhandle()
