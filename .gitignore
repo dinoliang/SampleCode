@@ -10,6 +10,9 @@ Python/raw/GUI/SampleInstaller/build/*
 Python/raw/GUI/SampleInstaller/dist/*
 Python/stdf2map-master/*
 Python/raw/STDFResult/*
+Python/raw/GUI/Sample001/*.spec
+Python/raw/GUI/Sample001/build/*
+Python/raw/GUI/Sample001/dist/*
 Python/raw/GUI/Sample002/*.spec
 Python/raw/GUI/Sample002/build/*
 Python/raw/GUI/Sample002/dist/*
