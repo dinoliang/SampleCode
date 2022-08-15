@@ -23,7 +23,7 @@ class Stock:
         *stock_numbers not only one parameter, maybe more
         '''
         self.stock_numbers = stock_numbers
-        print(self.stock_numbers)
+        #print(self.stock_numbers)
         pass
 
     def EmptyFunc(self):
@@ -62,7 +62,12 @@ class Stock:
 
     def Scrape2(self):
         url = "https://partner-query.finance.yahoo.com/v8/finance/chart/%5EDJI?range=1d&comparisons=undefined&includePrePost=false&interval=2m&corsDomain=tw.stock.yahoo.com&.tsrc=yahoo-tw"
-        response = requests.get(url)
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+        response = requests.get(url, headers=headers)
+
+        #print(response)
+        #print(response.content.decode())
+        #print(response.json())
         
         close = response.json()["chart"]["result"][0]["indicators"]["quote"][0]["close"] #美股指數
         volume = response.json()["chart"]["result"][0]["indicators"]["quote"][0]["volume"]  #成交量
@@ -70,11 +75,17 @@ class Stock:
         tw_time = []  #存放日期格式的台灣時間
         timestamps = response.json()["chart"]["result"][0]["timestamp"]
         for index in range(len(timestamps)):
-        tw_time.append(datetime.datetime.utcfromtimestamp(timestamps[index]-18000)) #將時間戳記轉為台灣時間
+            tw_time.append(datetime.datetime.utcfromtimestamp(timestamps[index]-18000)) #將時間戳記轉為台灣時間
+        #print(tw_time)
+
+        data = { "tw_time": tw_time, "close": close, "volumn": volume }
+        df = pd.DataFrame(data)
+        print(df)
+
         pass
 
 if __name__ == "__main__":
-    st = Stock('2451', '2454')
+    st = Stock()
 
     '''
     st.GetStock()
@@ -85,6 +96,7 @@ if __name__ == "__main__":
     print(result)
     '''
     
+    st.Scrape2()
     
     pass
 
