@@ -18,9 +18,9 @@ class ActionType(Enum):
     CaluStdOneFile      = 4
     CaluColumnStd       = 5
     CaluRowStd          = 6
-    CaluFPN             = 7
+    CaluFPN             = 7         # One *Avg.csv
     ChangeDiffBase      = 8
-    CaluRN              = 9
+    CaluRN              = 9         # One *Std.csv
     ActionNone          = 100
 
 StartTime = time.time()
@@ -42,12 +42,12 @@ g_nRowBound  = 9300
 g_nColumnIndex = 0
 g_nColumnBound = 6984
 
-g_sFilePath = '/home/dino/RawShared/Output/2022032117_P9KY1924_1843_DC/Output/'
-g_sFileName1 = '60_008/2022032117_60_008_Std.csv'
-g_sFileName2 = '60_7FD/2022032117_60_7FD_Avg.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022081814_HTOL_T168_1515_DC/'
+g_sFileName1 = '60DC_0x03FD_24db/2022081814_60DC_0x03FD_24db_Std.csv'
+g_sFileName2 = 'Room_0x03FD_24db/2022081814_Room_0x03FD_24db_Avg.csv'
 
-g_sOutputFileName = '2022031816_60_7FD_008_Diff.csv'
-g_sOutputBinName = '2022031816_60_7FD_008_Diff.bin'
+g_sOutputFileName = '2022081814_Room_24db_Avg_Diff.csv'
+g_sOutputBinName = '2022081814_Room_24db_Avg_Diff.bin'
 
 g_ActionType = ActionType.CaluRN
 

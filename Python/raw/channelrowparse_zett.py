@@ -24,20 +24,20 @@ StartTime = time.time()
 nWidth = 9728
 nHeight = 8192
 
-nFileCount = 7
+nFileCount = 1
 #sFilePath = '/home/dino/RawShared/2022020816/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp5/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022042009_P8533_EQE_#2/{}/'
+sFilePath = '/home/dino/RawShared/Temp/0121/QE/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
 
 #Subfolder
 #Normal
-#g_sFilePathFolder = [
-#                    '540'
-#                    ]
+g_sFilePathFolder = [
+                    '460', '530', '590', '720'
+                    ]
 
 #LightIntensity
 #g_sFilePathFolder = [
@@ -82,13 +82,13 @@ g_bAYAFile = True
 #                    ]
 
 #QuantumEfficiency
-g_sFilePathFolder = [
-                    '400', \
-                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
-                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
-                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
-                    '710', '720', '730', '740', '750',  '760', '770', '780' \
-                    ]
+#g_sFilePathFolder = [
+#                    '400', \
+#                    '410', '420', '430', '440', '450',  '460', '470', '480', '490', '500', \
+#                    '510', '520', '530', '540', '550',  '560', '570', '580', '590', '600', \
+#                    '610', '620', '630', '640', '650',  '660', '670', '680', '690', '700', \
+#                    '710', '720', '730', '740', '750',  '760', '770', '780' \
+#                    ]
 
 #DarkCurrent
 #g_sFilePathFolder = [
@@ -109,8 +109,8 @@ g_sFilePathFolder = [
 
 #Color TEG
 #Center R1: 4866,4096
-nROI_X = 4766
-nROI_Y = 3996
+nROI_X = 4762
+nROI_Y = 3992
 #nROI_X = 3167
 #nROI_Y = 2397
 #PDAF: B3+Gb4
@@ -135,10 +135,10 @@ nROI_Y = 3996
 #nROI_X = 535
 #nROI_Y = 983
 
-nROI_W = 200    #multiple of 4
-nROI_H = 200    #multiple of 4
+nROI_W = 4    #multiple of 4
+nROI_H = 4    #multiple of 4
 
-gCol1_Index = 0     #R1、R2、Gr1、Gr2
+gCol1_Index = 0    #R1、R2、Gr1、Gr2
 gCol2_Index = 1     #R3、R4、Gr3、Gr4
 gCol3_Index = 2     #Gb1、Gb2、B1、B2
 gCol4_Index = 3     #Gb3、Gb4、B3、B4
@@ -148,10 +148,10 @@ gCol4_Index = 3     #Gb3、Gb4、B3、B4
 #gRow3_Index = 2     #Gr1、Gr3、B1、B3
 #gRow4_Index = 3     #Gr2、Gr4、B2、B4
 #TEG:
-gRow1_Index = 0     #R1、R3、Gb1、Gb3
-gRow2_Index = 1     #R2、R4、Gb2、Gb4
-gRow3_Index = 2     #Gr1、Gr3、B1、B3
-gRow4_Index = 3     #Gr2、Gr4、B2、B4
+gRow1_Index = 2     #R1、R3、Gb1、Gb3
+gRow2_Index = 3     #R2、R4、Gb2、Gb4
+gRow3_Index = 0     #Gr1、Gr3、B1、B3
+gRow4_Index = 1     #Gr2、Gr4、B2、B4
 
 #Regular Expression for parsing file
 g_re_FilePattern = ""
@@ -161,11 +161,11 @@ g_nSelect_HSValue = 100 #0:select 0, -1:select -1, 1:select 1, 100:not select
 bSaveCSV = True
 
 #The path of saving file
-sFileTempTime = '2022072510'
+sFileTempTime = '2022081711'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022042009_P8533_EQE_#2_Python/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022081712_HTOL_T168_0121_QE/{}/'
 
 #CalROI: R:R1+R2+R3+R4 / Gr:Gr1+Gr2+Gr3+Gr4 / Gb:Gb1+Gb2+Gb3+Gb4 / B:B1+B2+B3+B4
 bCalMergeROIChannel = False
@@ -576,10 +576,10 @@ def ParsingPixel():
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
-        if gCallbackMessageFunc is not None and gCaller is not None:
-            gCallbackMessageFunc(gCaller, 'QE Parse finish. (zett)')
+    if gCallbackMessageFunc is not None and gCaller is not None:
+        gCallbackMessageFunc(gCaller, 'QE Parse finish. (zett)')
 
-        return
+    return
 
 def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowIndex, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):
     listVarOfGlobals = globals()

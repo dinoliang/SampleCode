@@ -564,8 +564,8 @@ def ParsingPixel():
         nEachIntervalTime = time.time()
         print("Durning Each Interval:{} Time(sec): {}".format(h, nEachIntervalTime - StartTime))
 
-        if gCallbackMessageFunc is not None and gCaller is not None:
-            gCallbackMessageFunc(gCaller, 'PDAF Parse finish. (pdaf)')
+    if gCallbackMessageFunc is not None and gCaller is not None:
+        gCallbackMessageFunc(gCaller, 'PDAF Parse finish. (pdaf)')
 
 
 def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, nColIndex, nRowGb3Index, nRowB3Index, nFileCounts, FileTimeStamp, InputFolder, OutputFolder, ArrayFolder, Caller, CallbackMsgFunc):

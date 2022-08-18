@@ -39,7 +39,7 @@ nFileCount = 25
 #sFilePath = '/home/dino/RawShared/2022031816_P8N533_1813_DC/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022012517/{}/'
-sFilePath = '/home/dino/IMX586_Bin/2022051019_HTOL_T0_DC_N1515/{}/'
+sFilePath = '/home/dino/RawShared/Temp/2022051019_HTOL_T0_DC_N1515_OK/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -50,7 +50,8 @@ g_sFilePathFolder = [
                     #'50_1', '50_500', '55_1', '55_500', '60_1', '60_500', '65_1', '65_500', '70_1', '70_500', \
                     #'1X', '2X', '4X', '8X', '16X', \
                     #'0008', '0100', '0200', '0300', '0400', '0500', '0600', '0700', '07FD', \
-                    'Room_0x0008_24db', \
+                    'Room_0x0008_24db', 'Room_0x07FD_24db', '60DC_0x0008_24db', '60DC_0x07FD_24db', \
+                    #'Room_0x0008_24db', \
                     ]
 
 nROI_W = nWidth
@@ -66,7 +67,7 @@ sFileTempTime = '2022051019'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022051019_HTOL_T0_DC_N1515/Output/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022081814_HTOL_T168_1515_DC/{}/'
 
 #Debug or not
 bShowDebugOutput = True
@@ -128,10 +129,30 @@ def SaveAvgToCSV(Avg_Array, folder):
     sAvgFile = '{}{}_{}_Avg.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
     np.savetxt(sAvgFile, Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound], fmt = '%.2f', delimiter=',')
 
+    sAvgInfoFile = '{}{}_{}_AvgInfo.txt'.format(sSavePath.format(folder), sFileTempTime, folder)
+    if os.path.exists(sAvgInfoFile):
+        os.remove(sAvgInfoFile)
+    with open(sAvgInfoFile, "a") as f:
+        f.write('========== Average Array Shape:{} ==========\n'.format(Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape))
+        f.write('================== The average of AVG ==================\n')
+        f.write('The average of AVG: {}\n'.format(np.average(Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        f.write('================== The std of AVG ==================\n')
+        f.write('The std of AVG: {}\n'.format(np.std(Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+
 def SaveStdToCSV(Std_Array, folder):
     #sStdFile = sSavePath.format(folder) +  sFileTempTime + '_Std.csv'
     sStdFile = '{}{}_{}_Std.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
     np.savetxt(sStdFile, Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound], fmt = '%.8f', delimiter=',')
+
+    sStdInfoFile = '{}{}_{}_StdInfo.txt'.format(sSavePath.format(folder), sFileTempTime, folder)
+    if os.path.exists(sStdInfoFile):
+        os.remove(sStdInfoFile)
+    with open(sStdInfoFile, "a") as f:
+        f.write('========== Average Array Shape:{} ==========\n'.format(Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape))
+        f.write('================== The average of STD ==================\n')
+        f.write('The average of STD: {}\n'.format(np.average(Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        f.write('================== The std of AVG ==================\n')
+        f.write('The median of STD: {}\n'.format(np.median(Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
 
 def LoadAvgFromCSV(folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
@@ -293,8 +314,8 @@ def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, bIsAYABin, nFileCount
 
     listVarOfGlobals['g_nRowIndex']                 = nX
     listVarOfGlobals['g_nColumnIndex']              = nY
-    listVarOfGlobals['g_nRowBound']                 = nX + nROI_W
-    listVarOfGlobals['g_nColumnBound']              = nY + nROI_H
+    listVarOfGlobals['g_nRowBound']                 = nROI_W
+    listVarOfGlobals['g_nColumnBound']              = nROI_H
 
     listVarOfGlobals['g_bAYAFile']                  = bIsAYABin
     if not listVarOfGlobals['g_bAYAFile']:

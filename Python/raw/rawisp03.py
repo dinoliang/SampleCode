@@ -13,6 +13,9 @@ import cv2
 
 import ispawb001
 
+import png
+from scipy.ndimage import gaussian_filter
+
 StartTime = time.time()
 
 class RawFormat(enum.IntEnum):
@@ -39,11 +42,14 @@ g_nHeight = 8192
 #g_nWidth = 8000
 #g_nHeight = 6000
 
-g_InputPath = '//home/dino/RawShared/TEG_Output/20220122/'
-g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835.bin'
+#g_InputPath = '//home/dino/RawShared/TEG_Output/20220122/'
+#g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835.bin'
 #g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220122_151835_ReMosaic.bin'
 #g_InputPath = '//home/dino/RawShared/Temp/'
 #g_InputFile = 'FrameID0_W8000_H6000_20211130153042_P10_0000.bin'
+
+g_InputPath = '//home/dino/RawShared/TEG_Output/20220124/'
+g_InputFile = 'SamplingData_DESKTOP-D5MOV6A_FULL_20220124_170605_12db.bin'
 
 g_rawBayer = RawBayer.Q_GRBG#RawBayer.Q_RGGB
 
@@ -91,6 +97,33 @@ TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.m
 
 def SaveTiff(RawImage):
     cv2.imwrite(g_InputPath + g_SavingFileName, RawImage)
+
+def SavePng(RawImage):
+    #write_png('example1.png', RawImage, bitdepth=16)
+    # Use pypng to write zgray as a grayscale PNG.
+    #with open('example1.png', 'wb') as f:
+    #    writer = png.Writer(width=g_nWidth, height=g_nHeight, bitdepth=16, greyscale=True)
+    #    #zgray2list = RawImage.tolist()
+    #    #print(zgray2list)
+    #    writer.write(f, RawImage)
+    nrows = 240
+    ncols = 320
+    np.random.seed(12345)
+    x = np.random.randn(nrows, ncols, 3)
+
+    # y is our floating point demonstration data.
+    y = gaussian_filter(x, (16, 16, 0))
+
+    # Convert y to 16 bit unsigned integers.
+    z = (65535*((y - y.min())/y.ptp())).astype(np.uint16)
+
+    # Use pypng to write z as a color PNG.
+    with open('foo_color.png', 'wb') as f:
+        writer = png.Writer(width=z.shape[1], height=z.shape[0], bitdepth=16)
+        # Convert z to the Python list of lists expected by
+        # the png writer.
+        z2list = z.reshape(-1, z.shape[1]*z.shape[2]).tolist()
+        writer.write(f, z2list)
 
 def SaveRaw(RawImage):
     output_array_header = np.array([g_nWidth, g_nHeight])
@@ -224,21 +257,23 @@ def ReadRaw(rawFormat):
 
 if __name__ == "__main__":    
     input_array = ReadRaw(RawFormat.Raw10)
-    OutputImage = ISP(input_array)
-    ISPTime = time.time()
-    print("Durning ISP Time(sec): ", ISPTime - StartTime)
+    #OutputImage = ISP(input_array)
+    #ISPTime = time.time()
+    #print("Durning ISP Time(sec): ", ISPTime - StartTime)
 
-    if g_bSaveTiff:
-        SaveTiff(OutputImage)
+    #if g_bSaveTiff:
+    #    SaveTiff(OutputImage)
+
+    SavePng(input_array)
 
     #Displayed the image
-    if g_bDisplay:
-        cv2.namedWindow("ISP Img",0);
-        cv2.resizeWindow("ISP Img", 64, 48);
-        cv2.imshow("ISP Img", OutputImage)
-        cv2.waitKey(0)
-
-    cv2.destroyAllWindows()
+    #if g_bDisplay:
+    #    cv2.namedWindow("ISP Img",0);
+    #    cv2.resizeWindow("ISP Img", 64, 48);
+    #    cv2.imshow("ISP Img", OutputImage)
+    #    cv2.waitKey(0)
+    #
+    #cv2.destroyAllWindows()
 
     
         

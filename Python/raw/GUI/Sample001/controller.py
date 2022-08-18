@@ -190,7 +190,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                     ArrayFolder=self.condition_Array, \
                                     Caller = self, \
                                     CallbackMsgFunc = MainWindow.Message_Callback)
-            #zettmain.StartParse()
+            zettmain.StartParse()
         elif self.evaluation_Item == 1: #PDAF
             pdafmain.SetParameters( nWidth=np.int64(int(textWidth, 10)), \
                                     nHeight=np.int64(int(textHeight, 10)), \
@@ -208,10 +208,10 @@ class MainWindow(QtWidgets.QMainWindow):
                                     ArrayFolder=self.condition_Array, \
                                     Caller = self, \
                                     CallbackMsgFunc = MainWindow.Message_Callback)
-            #pdafmain.StartParse()
+            pdafmain.StartParse()
 
         elif self.evaluation_Item == 2: #Pixel
-           pixelmain.SetParameters( nWidth=np.int64(int(textWidth, 10)), \
+            pixelmain.SetParameters( nWidth=np.int64(int(textWidth, 10)), \
                                     nHeight=np.int64(int(textHeight, 10)), \
                                     nX=np.int64(int(textX, 10)), \
                                     nY=np.int64(int(textY, 10)), \
@@ -225,7 +225,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                     ArrayFolder=self.condition_Array, \
                                     Caller = self, \
                                     CallbackMsgFunc = MainWindow.Message_Callback)
-            #pixelmain.StartParse()
+            pixelmain.StartParse()
         
         #print(zettmain.g_sFilePathFolder)
         print("Evaluate Finish!!!")

@@ -45,7 +45,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_Width"/>
+      <widget class="QLineEdit" name="lineEdit_Width">
+       <property name="text">
+        <string>9728</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -67,7 +71,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_Height"/>
+      <widget class="QLineEdit" name="lineEdit_Height">
+       <property name="text">
+        <string>8192</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -89,7 +97,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_X"/>
+      <widget class="QLineEdit" name="lineEdit_X">
+       <property name="text">
+        <string>4762</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -111,7 +123,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_Y"/>
+      <widget class="QLineEdit" name="lineEdit_Y">
+       <property name="text">
+        <string>3992</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -133,7 +149,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_ROIHeight"/>
+      <widget class="QLineEdit" name="lineEdit_ROIHeight">
+       <property name="text">
+        <string>200</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -155,7 +175,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_ROIWidth"/>
+      <widget class="QLineEdit" name="lineEdit_ROIWidth">
+       <property name="text">
+        <string>200</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -177,7 +201,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_ColumnIndex"/>
+      <widget class="QLineEdit" name="lineEdit_ColumnIndex">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -199,7 +227,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_RowIndex"/>
+      <widget class="QLineEdit" name="lineEdit_RowIndex">
+       <property name="text">
+        <string>2</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -221,7 +253,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_FileCounts"/>
+      <widget class="QLineEdit" name="lineEdit_FileCounts">
+       <property name="text">
+        <string>1</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -243,7 +279,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_FileTimestamp"/>
+      <widget class="QLineEdit" name="lineEdit_FileTimestamp">
+       <property name="text">
+        <string>2022081808</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
