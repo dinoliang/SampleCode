@@ -35,19 +35,19 @@ StartTime = time.time()
 #g_nColumnBound = 6000
 
 #Color TEG
-nWidth = 150
-nHeight = 6880
+nWidth = 9300
+nHeight = 6984
 g_nRowIndex = 0
-g_nRowBound  = 150
+g_nRowBound  = 9300
 g_nColumnIndex = 0
-g_nColumnBound = 6880
+g_nColumnBound = 6984
 
-g_sFilePath = '/home/dino/RawShared/Output/2022082216_ES1_HOPB_60DC/Right/'
-g_sFileName1 = 'LongExposure/2022082216_LongExposure_Std.csv'
-g_sFileName2 = 'LongExposure/2022082216_LongExposure_Avg.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022082213_HTOL_T168_1515_DC/'
+g_sFileName1 = 'Room_0x07FD_24db/2022082213_Room_0x07FD_24db_Std.csv'
+g_sFileName2 = 'Room_0x07FD_24db/2022082213_Room_0x07FD_24db_Avg.csv'
 
-g_sOutputFileName = '2022082216_HOPB_RIGHT_60DC_Avg_Diff.csv'
-g_sOutputBinName = '2022082216_HOPB_RIGHT_60DC_Avg_Diff.bin'
+g_sOutputFileName = '2022082213_Room_24db_Avg_Diff.csv'
+g_sOutputBinName = '2022082213_Room_24db_Avg_Diff.bin'
 
 g_ActionType = ActionType.CaluRN
 

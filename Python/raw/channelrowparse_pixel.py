@@ -309,13 +309,15 @@ def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, bIsAYABin, nFileCount
     listVarOfGlobals = globals()
     listVarOfGlobals['nWidth']                      = nWidth
     listVarOfGlobals['nHeight']                     = nHeight
-    nROI_W = nWidth
-    nROI_H = nHeight
+    #nROI_W = nWidth
+    #nROI_H = nHeight
+    listVarOfGlobals['nROI_W']                      = nWidth
+    listVarOfGlobals['nROI_H']                      = nHeight
 
     listVarOfGlobals['g_nRowIndex']                 = nX
     listVarOfGlobals['g_nColumnIndex']              = nY
-    listVarOfGlobals['g_nRowBound']                 = nROI_W
-    listVarOfGlobals['g_nColumnBound']              = nROI_H
+    listVarOfGlobals['g_nRowBound']                 = nX + nROI_W
+    listVarOfGlobals['g_nColumnBound']              = nY + nROI_H
 
     listVarOfGlobals['g_bAYAFile']                  = bIsAYABin
     if not listVarOfGlobals['g_bAYAFile']:
