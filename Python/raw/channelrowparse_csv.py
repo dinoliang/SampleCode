@@ -21,6 +21,7 @@ class ActionType(Enum):
     CaluFPN             = 7         # One *Avg.csv
     ChangeDiffBase      = 8
     CaluRN              = 9         # One *Std.csv
+    CaluFPN_RowHis      = 10        # One *Avg.csv
     ActionNone          = 100
 
 StartTime = time.time()
@@ -42,14 +43,16 @@ g_nRowBound  = 150
 g_nColumnIndex = 0
 g_nColumnBound = 6880
 
-g_sFilePath = '/home/dino/RawShared/Output/2022082216_ES1_HOPB_60DC/Right/'
-g_sFileName1 = 'LongExposure/2022082216_LongExposure_Std.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022082216_ES1_HOPB_60DC/Left/'
+g_sFileName1 = 'LongExposure/2022082216_LongExposure_Avg.csv'
 g_sFileName2 = 'LongExposure/2022082216_LongExposure_Avg.csv'
 
 g_sOutputFileName = '2022082216_HOPB_RIGHT_60DC_Avg_Diff.csv'
 g_sOutputBinName = '2022082216_HOPB_RIGHT_60DC_Avg_Diff.bin'
 
-g_ActionType = ActionType.CaluRN
+g_sOutputFPNRowHisName = 'LongExposure/2022082216_HOPB_LEFT_Room_0x0008_24db_FPN_RowHis.csv'
+
+g_ActionType = ActionType.CaluFPN_RowHis
 
 #nROI_W = nWidth
 #nROI_H = nHeight
@@ -149,6 +152,16 @@ def CaluColumnStd(LoadArray):
     AllColumnPixel_Std = np.std(ColumnArray)
     if bShowDebugOutput:
         print('Array: {0}, Len:{1}, shape:{2}, STD:{3}'.format(ColumnArray, np.size(ColumnArray), ColumnArray.shape, AllColumnPixel_Std))
+
+    AllColumnPixel_Avg = np.average(ColumnArray)
+    if bShowDebugOutput:
+        print('AllColumnPixel (Avg): {0}'.format(AllColumnPixel_Avg))
+
+    square = np.square(ColumnArray)
+    MSE = square.mean()
+    RMSE = np.sqrt(MSE)
+    if bShowDebugOutput:
+        print('AllColumnPixel (RMS): {0}'.format(RMSE))
     return AllColumnPixel_Std
 
 def CaluRowStd(LoadArray):
@@ -161,6 +174,16 @@ def CaluRowStd(LoadArray):
     AllRowPixel_Std = np.std(RowArray)
     if bShowDebugOutput:
         print('Array: {0}, Len:{1}, shape:{2}, STD:{3}'.format(RowArray, np.size(RowArray), RowArray.shape, AllRowPixel_Std))
+
+    AllRowPixel_Avg = np.average(RowArray)
+    if bShowDebugOutput:
+        print('AllRowPixel (Avg): {0}'.format(AllRowPixel_Avg))
+
+    square = np.square(RowArray)
+    MSE = square.mean()
+    RMSE = np.sqrt(MSE)
+    if bShowDebugOutput:
+        print('AllRowPixel (RMS): {0}'.format(RMSE))
     return AllRowPixel_Std
 
 def CaluFPN(LoadArray):
@@ -174,6 +197,15 @@ def CaluFPN(LoadArray):
     FPN = (FPN)**0.5
     if bShowDebugOutput:
         print('FPN^0.5: {0}'.format(FPN))
+
+    if bShowDebugOutput:
+        print('AllPixel (STD): {0}'.format(AllPixel_STD))
+
+    AllPixel_square = np.square(LoadArray)
+    AllPixel_MSE = AllPixel_square.mean()
+    AllPixel_RMSE = np.sqrt(AllPixel_MSE)
+    if bShowDebugOutput:
+        print('AllPixel (RMS): {0}'.format(AllPixel_RMSE))
 
     return FPN
 
@@ -194,7 +226,27 @@ def CaluRN(LoadArray):
     RN = np.median(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
     if bShowDebugOutput:
         print('RN (Median): {0}'.format(RN))
+
+    STD = np.std(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
+    if bShowDebugOutput:
+        print('RN (STD): {0}'.format(STD))
+
+    square = np.square(LoadArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])
+    MSE = square.mean()
+    RMSE = np.sqrt(MSE)
+    if bShowDebugOutput:
+        print('RN (RMS): {0}'.format(RMSE))
+
     return RN
+
+def CaluFPN_RowHis(LoadArray):
+    SaveArray = np.zeros((nROI_H, 1))
+    for RowIdx in range(0, nROI_H):
+        SaveArray[RowIdx, 0] = np.average(LoadArray[RowIdx, g_nRowIndex:g_nRowBound])
+        #print('SaveArray Array[{},0] ={}'.format(RowIdx, SaveArray[RowIdx, 0]))
+    #print('FPN_RowHis Array:{} Shape:{}'.format(SaveArray, SaveArray.shape))
+    SaveArrayToCSV(SaveArray, g_sOutputFPNRowHisName, '%.6f', ',')
+    return
 
 
 if __name__ == "__main__":
@@ -230,6 +282,9 @@ if __name__ == "__main__":
     elif g_ActionType == ActionType.CaluRN:
         LoadArray = LoadFileFromCSV(g_sFileName1)
         CaluRN(LoadArray)
+    elif g_ActionType == ActionType.CaluFPN_RowHis:
+        LoadArray = LoadFileFromCSV(g_sFileName1)
+        CaluFPN_RowHis(LoadArray)
     elif g_ActionType == ActionType.ActionNone:
         pass
 

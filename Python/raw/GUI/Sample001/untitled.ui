@@ -99,7 +99,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_X">
        <property name="text">
-        <string>4762</string>
+        <string>258</string>
        </property>
       </widget>
      </item>
@@ -125,7 +125,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_Y">
        <property name="text">
-        <string>3992</string>
+        <string>32</string>
        </property>
       </widget>
      </item>
@@ -151,7 +151,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_ROIHeight">
        <property name="text">
-        <string>200</string>
+        <string>6944</string>
        </property>
       </widget>
      </item>
@@ -177,7 +177,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_ROIWidth">
        <property name="text">
-        <string>200</string>
+        <string>9248</string>
        </property>
       </widget>
      </item>
@@ -255,7 +255,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_FileCounts">
        <property name="text">
-        <string>1</string>
+        <string>25</string>
        </property>
       </widget>
      </item>
@@ -281,7 +281,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_FileTimestamp">
        <property name="text">
-        <string>2022081808</string>
+        <string>2022082600</string>
        </property>
       </widget>
      </item>
