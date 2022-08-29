@@ -135,8 +135,8 @@ nROI_Y = 3992
 #nROI_X = 535
 #nROI_Y = 983
 
-nROI_W = 4    #multiple of 4
-nROI_H = 4    #multiple of 4
+nROI_W = 200    #multiple of 4
+nROI_H = 200    #multiple of 4
 
 gCol1_Index = 0    #R1、R2、Gr1、Gr2
 gCol2_Index = 1     #R3、R4、Gr3、Gr4

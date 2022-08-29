@@ -36,21 +36,21 @@ StartTime = time.time()
 #g_nColumnBound = 6000
 
 #Color TEG
-nWidth = 9248
-nHeight = 6944
+nWidth = 9488
+nHeight = 8176
 g_nRowIndex = 0
 g_nRowBound  = 9248
 g_nColumnIndex = 0
 g_nColumnBound = 6944
 
-g_sFilePath = '/home/dino/RawShared/Output/2022082514_HTOL_T168_0117/DC/'
-g_sFileName1 = '60DC_0x07FD_24db/2022082611_60DC_0x07FD_24db_Avg.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022082213_HTOL_T168_1515_DC/'
+g_sFileName1 = 'Room_0x07FD_24db/2022082213_Room_0x07FD_24db_Avg.csv'
 g_sFileName2 = '60DC_0x07FD_24db/2022082611_60DC_0x07FD_24db_Avg.csv'
 
 g_sOutputFileName = '2022082611_60DC_24db_Avg_Diff.csv'
 g_sOutputBinName = '2022082611_60DC_24db_Avg_Diff.bin'
 
-g_sOutputFPNRowHisName = '60DC_0x07FD_24db/2022082611_60DC_0x07FD_24db_FPN_RowHis.csv'
+g_sOutputFPNRowHisName = 'Room_0x07FD_24db/2022082213_Room_0x07FD_24db_FPN_RowHis.csv'
 
 g_ActionType = ActionType.CaluFPN_RowHis
 
