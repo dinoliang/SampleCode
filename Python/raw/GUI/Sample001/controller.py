@@ -13,7 +13,8 @@ import os
 sys.path.append('/home/dino/PythonShared/raw/')
 import channelrowparse_zett as zettmain
 import channelrowparse_pdaf as pdafmain
-import channelrowparse_pixel as pixelmain
+#import channelrowparse_pixel as pixelmain
+import channelrowparse_pixel_roi as pixelmain
 
 
 class MainWindow(QtWidgets.QMainWindow):

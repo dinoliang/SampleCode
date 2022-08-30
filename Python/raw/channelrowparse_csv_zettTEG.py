@@ -36,21 +36,21 @@ StartTime = time.time()
 #g_nColumnBound = 6000
 
 #Color TEG
-nWidth = 150
-nHeight = 6880
+nWidth = 9248
+nHeight = 6944
 g_nRowIndex = 0
-g_nRowBound  = 150
+g_nRowBound  = 9248
 g_nColumnIndex = 0
-g_nColumnBound = 6880
+g_nColumnBound = 6944
 
-g_sFilePath = '/home/dino/RawShared/Output/2022082216_ES1_HOPB_60DC/Left/'
-g_sFileName1 = 'LongExposure/2022082216_LongExposure_Avg.csv'
-g_sFileName2 = 'LongExposure/2022082216_LongExposure_Avg.csv'
+g_sFilePath = '/home/dino/RawShared/Output/2022082213_HTOL_T168_1515_DC/'
+g_sFileName1 = '60DC_0x07FD_24db/2022082213_60DC_0x07FD_24db_Avg.csv'
+g_sFileName2 = '60DC_0x07FD_24db/2022082611_60DC_0x07FD_24db_Avg.csv'
 
-g_sOutputFileName = '2022082216_HOPB_RIGHT_60DC_Avg_Diff.csv'
-g_sOutputBinName = '2022082216_HOPB_RIGHT_60DC_Avg_Diff.bin'
+g_sOutputFileName = '2022082611_60DC_24db_Avg_Diff.csv'
+g_sOutputBinName = '2022082611_60DC_24db_Avg_Diff.bin'
 
-g_sOutputFPNRowHisName = 'LongExposure/2022082216_HOPB_LEFT_Room_0x0008_24db_FPN_RowHis.csv'
+g_sOutputFPNRowHisName = '60DC_0x07FD_24db/2022082213_60DC_0x07FD_24db_FPN_RowHis.csv'
 
 g_ActionType = ActionType.CaluFPN_RowHis
 

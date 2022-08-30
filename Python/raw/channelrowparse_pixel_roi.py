@@ -26,6 +26,17 @@ StartTime = time.time()
 #g_nColumnIndex = 0
 #g_nColumnBound = 7000
 
+'''
+#ES1
+nWidth = 9248
+nHeight = 6944
+
+g_nRowIndex = 10
+g_nRowBound  = 170
+g_nColumnIndex = 20
+g_nColumnBound = 6920
+'''
+
 #Color TEG
 nWidth = 9728
 nHeight = 8192
@@ -35,12 +46,13 @@ g_nRowBound  = 6470
 g_nColumnIndex = 100
 g_nColumnBound = 6950
 
+
 nFileCount = 25
 #sFilePath = '/home/dino/RawShared/2022031816_P8N533_1813_DC/{}/'
 #sFilePath = '/home/dino/RawShared/Temp/Temp6/{}/'
 #sFilePath = '/home/dino/IMX586_Raw2/2022082514_HTOL_T168_0117/DC/{}/'
 sFilePath = '/home/dino/IMX586_Bin/TEG_HTOL_T0/N0117/2022050615_HTOL_T0_DC_N0117_OK/{}/'
-#sFilePath = '/home/dino/RawShared/Temp/2022051019_HTOL_T0_DC_N1515_OK/{}/'
+#sFilePath = '/home/dino/RawShared/2022082216_ES1_HOPB_60DC/Left/{}/'
 
 #There is header data, and the extenstion file name is *.bin in AYA file
 g_bAYAFile = True
@@ -55,8 +67,10 @@ g_sFilePathFolder = [
                     'Room_0x0008_24db', \
                     ]
 
-nROI_W = nWidth
-nROI_H = nHeight
+#nROI_W = nWidth
+#nROI_H = nHeight
+nROI_W = g_nRowBound - g_nRowIndex
+nROI_H = g_nColumnBound - g_nColumnIndex
 
 g_nCalRows = 1000
 
@@ -68,7 +82,7 @@ sFileTempTime = '2022082514'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021111810/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/2021112914/4000_3000/600/{}/'
 #sSavePath = '/home/dino/RawShared/Output/Temp/Temp/{}/'
-sSavePath = '/home/dino/RawShared/Output/2022082514_HTOL_T168_0117_testpy/DC/{}/'
+sSavePath = '/home/dino/RawShared/Output/2022082514_HTOL_T168_0117_testpy2/DC/{}/'
 
 #Debug or not
 bShowDebugOutput = True
@@ -128,32 +142,32 @@ def Cal_Pixel_Std(ChannelArray, x, y):
 def SaveAvgToCSV(Avg_Array, folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
     sAvgFile = '{}{}_{}_Avg.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
-    np.savetxt(sAvgFile, Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound], fmt = '%.2f', delimiter=',')
+    np.savetxt(sAvgFile, Avg_Array[0:nROI_H, 0:nROI_W], fmt = '%.2f', delimiter=',')
 
     sAvgInfoFile = '{}{}_{}_AvgInfo.txt'.format(sSavePath.format(folder), sFileTempTime, folder)
     if os.path.exists(sAvgInfoFile):
         os.remove(sAvgInfoFile)
     with open(sAvgInfoFile, "a") as f:
-        f.write('========== Average Array Shape:{} ==========\n'.format(Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape))
+        f.write('========== Average Array Shape:{} ==========\n'.format(Avg_Array[0:nROI_H, 0:nROI_W].shape))
         f.write('================== The average of AVG ==================\n')
-        f.write('The average of AVG: {}\n'.format(np.average(Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        f.write('The average of AVG: {}\n'.format(np.average(Avg_Array[0:nROI_H, 0:nROI_W])))
         f.write('================== The std of AVG ==================\n')
-        f.write('The std of AVG: {}\n'.format(np.std(Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        f.write('The std of AVG: {}\n'.format(np.std(Avg_Array[0:nROI_H, 0:nROI_W])))
 
 def SaveStdToCSV(Std_Array, folder):
     #sStdFile = sSavePath.format(folder) +  sFileTempTime + '_Std.csv'
     sStdFile = '{}{}_{}_Std.csv'.format(sSavePath.format(folder), sFileTempTime, folder)
-    np.savetxt(sStdFile, Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound], fmt = '%.8f', delimiter=',')
+    np.savetxt(sStdFile, Std_Array[0:nROI_H, 0:nROI_W], fmt = '%.8f', delimiter=',')
 
     sStdInfoFile = '{}{}_{}_StdInfo.txt'.format(sSavePath.format(folder), sFileTempTime, folder)
     if os.path.exists(sStdInfoFile):
         os.remove(sStdInfoFile)
     with open(sStdInfoFile, "a") as f:
-        f.write('========== Average Array Shape:{} ==========\n'.format(Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape))
+        f.write('========== Average Array Shape:{} ==========\n'.format(Std_Array[0:nROI_H, 0:nROI_W].shape))
         f.write('================== The average of STD ==================\n')
-        f.write('The average of STD: {}\n'.format(np.average(Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        f.write('The average of STD: {}\n'.format(np.average(Std_Array[0:nROI_H, 0:nROI_W])))
         f.write('================== The std of AVG ==================\n')
-        f.write('The median of STD: {}\n'.format(np.median(Std_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        f.write('The median of STD: {}\n'.format(np.median(Std_Array[0:nROI_H, 0:nROI_W])))
 
 def LoadAvgFromCSV(folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
@@ -178,11 +192,11 @@ def SaveAvgToBin(Avg_Array, folder):
     #sAvgFile = sSavePath.format(folder) + sFileTempTime + '_Avg.csv'
     sAvgFile = '{}{}_{}_Avg.bin'.format(sSavePath.format(folder), sFileTempTime, folder)
     print('SaveArray to Bin file ({})'.format(sAvgFile))
-    nTotalFileSize = ((g_nColumnBound-g_nColumnIndex) * (g_nRowBound-g_nRowIndex) + 2)
+    nTotalFileSize = ((nROI_H) * (nROI_W) + 2)
     SaveArray = np.zeros((1, nTotalFileSize))
-    SaveArray[0, 0] = g_nRowBound-g_nRowIndex
-    SaveArray[0, 1] = g_nColumnBound-g_nColumnIndex
-    AvgArray = Avg_Array[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].flatten()
+    SaveArray[0, 0] = nROI_W
+    SaveArray[0, 1] = nROI_H
+    AvgArray = Avg_Array[0:nROI_H, 0:nROI_W].flatten()
     SaveArray[0, 2:nTotalFileSize] = AvgArray
     #print('SaveArray:{}, Shape:{}'.format(SaveArray, SaveArray.shape))
     print('SaveArray Shape:{}'.format(SaveArray.shape))
@@ -204,19 +218,15 @@ def ParsingPixel():
         StdArray = np.zeros((nROI_H, nROI_W))
 
         #Every row
-        for i in range(0, nROI_H, g_nCalRows):
+        for i in range(g_nColumnIndex, g_nColumnIndex+nROI_H, g_nCalRows):
 
             nCalRows = g_nCalRows
             if nROI_H - i < g_nCalRows:
-                nCalRows = nROI_H - i
+                nCalRows = g_nColumnIndex + nROI_H - i
             if bShowDebugOutput:
                 print('Pixel_array Size[{},{},{}]'.format(nCount, nCalRows, nROI_W))
             Pixel_array = None
             Pixel_array = np.zeros((nCount, nCalRows, nROI_W))
-
-            nPixelOffset = nROI_W * i * 2 + nRawBeginIndex
-            if bShowDebugOutput:
-                print('nPixelOffset: ', nPixelOffset)
 
             k = 0
             for root, dirs, files in os.walk(sTempFilePath):
@@ -229,11 +239,26 @@ def ParsingPixel():
                     if bShowDebugOutput:
                         print('sFileTemp: ', sFileTemp)
 
+                    OneCalArray = np.zeros((nCalRows, nROI_W))
+
+                    nPixelOffset = nWidth * i * 2 + nRawBeginIndex
                     input_file = open(sFileTemp, 'rb')
-                    #Get all pixel of one range row
-                    input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W * nCalRows, sep="", offset=nPixelOffset)
+                    input_array = np.fromfile(input_file, dtype=np.uint16, count=nWidth*nCalRows, sep="", offset=nPixelOffset)
                     input_file.close()
-                    #print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
+                    #print('input_array:{}, {}'.format(np.size(input_array), input_array.shape))
+
+                    for ColIdx in range(0, nCalRows):
+                        input_array_Idx = nWidth * ColIdx + g_nRowIndex
+                        OneCalArray[ColIdx,:] = input_array[input_array_Idx:input_array_Idx+nROI_W]
+
+                    ## Dino test
+                    #print('OneCalArray[0, 0]: {0}'.format(OneCalArray[0, 0]))
+
+                    #input_file = open(sFileTemp, 'rb')
+                    ##Get all pixel of one range row
+                    #input_array = np.fromfile(input_file, dtype=np.uint16, count=nROI_W * nCalRows, sep="", offset=nPixelOffset)
+                    #input_file.close()
+                    ##print('input_array: {0}, Len:{1}'.format(input_array, np.size(input_array)))
 
                     #for m in range(0, nCalRows):
                     #    for n in range(0, nROI_W):
@@ -245,11 +270,10 @@ def ParsingPixel():
                     #        #    print('Pixel_array[{},{},{}]: Value:{}'.format(k,m,n,input_array[m*nCalRows + n]))
                     #        Pixel_array[k,m,n] = input_array[m*nCalRows + n]
 
-                    Pixel_array[k,:,:] = np.reshape(input_array, (nCalRows, nROI_W))
+                    #Pixel_array[k,:,:] = np.reshape(input_array, (nCalRows, nROI_W))
+                    ##print('Pixel_array: {0}, Len:{1}, shape:{2}'.format(Pixel_array[k,:,:], np.size(Pixel_array[k,:,:]), Pixel_array[k,:,:].shape))
+                    Pixel_array[k,:,:] = OneCalArray
                     #print('Pixel_array: {0}, Len:{1}, shape:{2}'.format(Pixel_array[k,:,:], np.size(Pixel_array[k,:,:]), Pixel_array[k,:,:].shape))
-
-                    ## Dino test
-                    #print('Pixel_array[k, g_nColumnIndex, g_nRowIndex]: {0}'.format(Pixel_array[k, g_nColumnIndex, g_nRowIndex]))
 
                     k = k + 1
 
@@ -268,9 +292,9 @@ def ParsingPixel():
             #        #if bShowDebugOutput:
             #        #    print('Site[{},{}]: AVG:{}, STD:{}'.format(i+m,l,Pixel_AVG,Pixel_STD))
             AvgTempArray = np.average(Pixel_array, axis=0)
-            AvgArray[i:i+nCalRows,0:nROI_W] = AvgTempArray
+            AvgArray[i-g_nColumnIndex:i-g_nColumnIndex+nCalRows,0:nROI_W] = AvgTempArray
             StdTempArray = np.std(Pixel_array, axis=0)
-            StdArray[i:i+nCalRows,0:nROI_W] = StdTempArray
+            StdArray[i-g_nColumnIndex:i-g_nColumnIndex+nCalRows,0:nROI_W] = StdTempArray
             #print('AVG:{}, STD:{}'.format(np.size(AvgArray), np.size(StdArray)))
             print('NonZero AVG:{}, STD:{}'.format(np.count_nonzero(AvgArray), np.count_nonzero(StdArray)))
             #print('Temp AVG:{}, Count:{}'.format(np.size(AvgTempArray), AvgTempArray.shape))
@@ -291,22 +315,22 @@ def ParsingPixel():
         #np.savetxt(sStdFile, StdArray, fmt = '%.8f', delimiter=',')
         if g_bSaveFile:
             SaveAvgToCSV(AvgArray, x)
-        print('========== Average Array Shape:{} =========='.format(AvgArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape))
+        print('========== Average Array Shape:{} =========='.format(AvgArray[0:nROI_H, 0:nROI_W].shape))
         print("================== The average of AVG ==================")
-        print("The average of AVG: {}".format(np.average(AvgArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        print("The average of AVG: {}".format(np.average(AvgArray[0:nROI_H, 0:nROI_W])))
         print("================== The std of AVG ==================")
-        print("The std of AVG: {}".format(np.std(AvgArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        print("The std of AVG: {}".format(np.std(AvgArray[0:nROI_H, 0:nROI_W])))
 
         if g_bSaveFile and nCount > 1:
             SaveAvgToBin(AvgArray, x)
 
         if g_bSaveFile:
             SaveStdToCSV(StdArray, x)
-        print('========== Average Array Shape:{} =========='.format(StdArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound].shape))
+        print('========== Average Array Shape:{} =========='.format(StdArray[0:nROI_H, 0:nROI_W].shape))
         print("================== The average of STD ==================")
-        print("The average of STD: {}".format(np.average(StdArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        print("The average of STD: {}".format(np.average(StdArray[0:nROI_H, 0:nROI_W])))
         print("================== The median of STD ==================")
-        print("The median of STD: {}".format(np.median(StdArray[g_nColumnIndex:g_nColumnBound, g_nRowIndex:g_nRowBound])))
+        print("The median of STD: {}".format(np.median(StdArray[0:nROI_H, 0:nROI_W])))
 
         nEachIntervalTime = time.time()
         print("Durning Interval[{}] Time(sec): {}".format(x, nEachIntervalTime - StartTime))
@@ -318,8 +342,8 @@ def SetParameters(nWidth, nHeight, nX, nY, nROI_W, nROI_H, bIsAYABin, nFileCount
     listVarOfGlobals['nHeight']                     = nHeight
     #nROI_W = nWidth
     #nROI_H = nHeight
-    listVarOfGlobals['nROI_W']                      = nWidth
-    listVarOfGlobals['nROI_H']                      = nHeight
+    listVarOfGlobals['nROI_W']                      = nROI_W
+    listVarOfGlobals['nROI_H']                      = nROI_H
 
     listVarOfGlobals['g_nRowIndex']                 = nX
     listVarOfGlobals['g_nColumnIndex']              = nY
