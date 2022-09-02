@@ -76,6 +76,7 @@ def SaveArrayToCSV(SaveArray, strFileName, fmtType, delimiterType):
     np.savetxt(sFile, SaveArray, fmt = fmtType, delimiter = delimiterType)
 
 def LoadFileFromCSV(strFileName):
+    print('Load File:{}'.format(strFileName))
     sFile = '{}{}'.format(g_sFilePath, strFileName)
     sLoadArray = np.loadtxt(sFile, delimiter=',')
     print('Load File:{}, Array:{} Shape:{}'.format(sFile, sLoadArray, sLoadArray.shape))
@@ -243,7 +244,8 @@ def CaluFPN_RowHis(LoadArray):
     SaveArray = np.zeros((nROI_H, 1))
     for RowIdx in range(0, nROI_H):
         SaveArray[RowIdx, 0] = np.average(LoadArray[RowIdx, g_nRowIndex:g_nRowBound])
-        #print('SaveArray Array[{},0] ={}'.format(RowIdx, SaveArray[RowIdx, 0]))
+        if bShowDebugOutput:
+            print('Avg of SaveArray Array[{},0] ={}'.format(RowIdx, SaveArray[RowIdx, 0]))
     #print('FPN_RowHis Array:{} Shape:{}'.format(SaveArray, SaveArray.shape))
     SaveArrayToCSV(SaveArray, g_sOutputFPNRowHisName, '%.6f', ',')
     return
