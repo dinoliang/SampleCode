@@ -11,7 +11,7 @@ import time
 import csv
 import datetime
 #import enum
-import os
+import os, sys
 import re
 
 StartTime = time.time()
@@ -207,6 +207,8 @@ def ParsingPixel():
     nCount = nFileCount
     nRawBeginIndex = g_nRawBeginIndex
 
+    nOneFileSize = nWidth * nHeight * 2 + g_nRawBeginIndex
+
     #Check file
     #if os.path.exists(sSaveOrgRFile):
     #    os.remove(sSaveOrgRFile)
@@ -238,6 +240,11 @@ def ParsingPixel():
                     sFileTemp = root + '/' + sFileTemp
                     if bShowDebugOutput:
                         print('sFileTemp: ', sFileTemp)
+
+                    nFileSize = os.path.getsize(sFileTemp)
+                    if nFileSize != nOneFileSize:
+                        print('[{}][{}] File:{} size{}!={} is not correct!!'.format(os.path.basename(__file__), sys._getframe().f_lineno, sFileTemp, nFileSize, nOneFileSize))
+                        continue
 
                     OneCalArray = np.zeros((nCalRows, nROI_W))
 

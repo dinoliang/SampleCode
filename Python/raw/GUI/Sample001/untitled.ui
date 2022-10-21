@@ -255,7 +255,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_FileCounts">
        <property name="text">
-        <string>25</string>
+        <string>24</string>
        </property>
       </widget>
      </item>
@@ -281,7 +281,7 @@
      <item>
       <widget class="QLineEdit" name="lineEdit_FileTimestamp">
        <property name="text">
-        <string>2022082900</string>
+        <string>2022091314</string>
        </property>
       </widget>
      </item>

@@ -43,14 +43,15 @@ g_nRowBound  = 9248
 g_nColumnIndex = 0
 g_nColumnBound = 6944
 
-g_sFilePath = '/home/dino/RawShared/Output/2022082213_HTOL_T168_1515_DC/'
-g_sFileName1 = '60DC_0x07FD_24db/2022082213_60DC_0x07FD_24db_Avg.csv'
-g_sFileName2 = '60DC_0x07FD_24db/2022082611_60DC_0x07FD_24db_Avg.csv'
+g_sFolderName = 'Room_0x0008_24db/'
+g_sFilePath = '/home/dino/RawShared/Output/2022091309_HTOL_T0_0505/DC/'
+g_sFileName1 = g_sFolderName + '/2022091309_Room_0x0008_24db_Avg.csv'
+g_sFileName2 = g_sFolderName + '/2022091309_Room_0x0008_24db_Avg.csv'
 
-g_sOutputFileName = '2022082611_60DC_24db_Avg_Diff.csv'
-g_sOutputBinName = '2022082611_60DC_24db_Avg_Diff.bin'
+g_sOutputFileName = '2022091309_60DC_24db_Avg_Diff.csv'
+g_sOutputBinName = '2022091309_60DC_24db_Avg_Diff.bin'
 
-g_sOutputFPNRowHisName = '60DC_0x07FD_24db/2022082213_60DC_0x07FD_24db_FPN_RowHis.csv'
+g_sOutputFPNRowHisName = g_sFolderName + '/2022091309_24db_FPN_RowHis.csv'
 
 g_ActionType = ActionType.CaluFPN_RowHis
 

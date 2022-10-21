@@ -1,0 +1,195 @@
+import time
+import os
+import datetime
+import sys
+
+import csv
+import numpy as np
+import pandas as pd
+
+StartTime = time.time()
+
+#######################################################
+### Change the parameters to match the settings
+gResultFolder = 'I:\\Work\\Zettmage\\Data\\Work\\ZP6024\\CP\\Chroma\\STDFSample\\CPResult_P8P125.00(#6_#9)_20221020\\P8P125.00(#6_#9)\\P8P125.00#06\\P8P125.00_P8P125.00-6_20221019_184807_stdf\\'
+gResultOutFile = 'Out.csv'
+
+#######################################################
+
+class ResultHandler:
+    callback_Caller = None
+    callback_Func = None
+    
+    def __init__(self) -> None:
+        pass
+
+    def SetCallback(self, cCaller, cFunc):
+        self.callback_Caller = cCaller
+        self.callback_Func = cFunc
+        return
+
+    def StartCombine(self, resultFolder, resultOutFile):
+        # 1. Get the width & height of WaferMap 2. Combine all stdf
+        nWaferWidth = -1
+        nWaferHeight = -1
+        for root, dirs, files in os.walk(resultFolder):
+            for sFile in files:
+                if '.csv' not in sFile:
+                    continue
+                if 'Result' in sFile or 'Out' in sFile or 'Output' in sFile:
+                    continue
+                filepathe = os.path.join(resultFolder, sFile)
+                print('Wafer map csv:{}'.format(filepathe))
+
+                '''
+                #df = pd.read_csv(filepathe, error_bad_lines=False)
+                df = pd.read_csv(filepathe, on_bad_lines='skip')
+                print('df:{}'.format(df))
+                print('df.info:{}'.format(df.info()))
+                print('df.shape:{}'.format(df.shape))
+                '''
+
+                '''
+                with open(filepathe, encoding="utf-8") as f:
+                    np.genfromtxt(f, dtype=object, delimiter=',')
+                '''
+
+                OneWafer_Array = None
+                with open(filepathe, newline='', encoding="utf-8") as csvfile:
+                    # Read CSV Content
+                    rows = csv.reader(csvfile)
+
+                    nArrayWidth = 0
+                    nArrayHeight = 0
+                    for row in rows:
+                        nArrayHeight = nArrayHeight + 1
+                        if len(row) > nArrayWidth:
+                            nArrayWidth = len(row)
+
+                    OneWafer_Array = np.empty([nArrayHeight, nArrayWidth], dtype=object)
+
+                    # Get every row
+                    csvfile.seek(0)
+                    RowIdx = 0
+                    for row in rows:
+                        #OneRaw = np.empty([1, len(row)], dtype=object)
+                        line_array = np.array(row)
+                        #print('line_array:{}, shape:{}'.format(line_array, line_array.shape))
+                        OneWafer_Array[RowIdx, 0:line_array.shape[0]] = line_array[:]
+                        RowIdx = RowIdx + 1
+                #print('OneWafer_Array:{}'.format(OneWafer_Array))
+                print('OneWafer_Array shape:{}'.format(OneWafer_Array.shape))
+
+                '''
+                for i in range(OneWafer_Array.shape[0]):
+                    #print('OneWafer_Array[{}, 0]:{}'.format(i, OneWafer_Array[i, 0]))
+                    if str(OneWafer_Array[i, 0]) == 'Wafer maxinum X':
+                        nWaferWidth = np.int64(OneWafer_Array[i, 1])
+                    if str(OneWafer_Array[i, 0]) == 'Wafer maxinum Y':
+                        nWaferHeight = np.int64(OneWafer_Array[i, 1])
+                '''
+
+                if nWaferWidth == -1 or nWaferHeight == -1:
+                    nWaferWidth = OneWafer_Array.shape[1] - 2
+                    nWaferHeight = -1
+                    nWaferHeightBegin = -1
+                    nWaferHeightEnd = -1
+                    for i in range(OneWafer_Array.shape[0]):
+                        #print('OneWafer_Array[{}, 0]:{}'.format(i, OneWafer_Array[i, 0]))
+                        if str(OneWafer_Array[i, 1]) == '0' and str(OneWafer_Array[i, 2]) == '1' and str(OneWafer_Array[i, 3]) == '2' and nWaferHeightBegin == -1:
+                            nWaferHeightBegin = i
+                        elif str(OneWafer_Array[i, 1]) == '0' and str(OneWafer_Array[i, 2]) == '1' and str(OneWafer_Array[i, 3]) == '2':
+                            nWaferHeightEnd = i
+                    nWaferHeight = nWaferHeightEnd - nWaferHeightBegin - 1
+                print('Wafer width:{}, height:{}'.format(nWaferWidth, nWaferHeight))
+
+                # Test
+                X = (OneWafer_Array.shape[1] - nWaferWidth - 1)
+                Y = (OneWafer_Array.shape[0] - nWaferHeight - 2)
+                print('Wafer X:{}, Y:{}'.format(X, Y))
+                print('WaferMap:{}'.format(OneWafer_Array[Y:Y+nWaferHeight, X:X+nWaferWidth]))
+                print('WaferMap[1,11]:{}'.format(OneWafer_Array[Y+1, X+11]))
+                print('WaferMap[16,:]:{}'.format(OneWafer_Array[Y+16, X:X+nWaferWidth]))
+                print('WaferMap[17,:]:{}'.format(OneWafer_Array[Y+17, X:X+nWaferWidth]))
+                print('WaferMap[18,:]:{}'.format(OneWafer_Array[Y+18, X:X+nWaferWidth]))
+
+                break
+            break
+
+        if nWaferWidth <= 0 or nWaferHeight <= 0:
+            return
+
+        '''
+        # ChannelR_array = np.zeros((len(files), 4, nR_Gb_Len)) or ndarray = numpy.ndarray((20, 21))
+        # .fill
+        Result_Array = np.ndarray((nWaferHeight, nWaferWidth))
+        Result_Array.fill(-1)
+        #print('Result_Array:{}, Shape:{}'.format(Result_Array, Result_Array.shape))
+
+        # Combine all stdf
+        for root, dirs, files in os.walk(resultFolder):
+            for sFile in files:
+                if '.csv' not in sFile:
+                    continue
+                if 'Result' in sFile or 'Out' in sFile:
+                    continue
+                #print(sFile)
+                filepathe = os.path.join(resultFolder, sFile)
+                csvfile = csvhandle.csvhandle()
+                csvRows = csvfile.ReadCSV(filepathe, 3)
+                csvMatrix = np.array(csvRows)
+                #print('csvMatrix:{}, Shape:{}'.format(csvMatrix, csvMatrix.shape))
+
+                for i in range(0, nWaferHeight):
+                    for j in range(0, nWaferWidth): 
+                        try:
+                            #print('Result_Array[{}, {}]:{}, csvMatrix[{}, {}]:{}'.format(i, j, Result_Array[i, j], i+1, j+1, csvMatrix[i+1, j+1]))
+                            nResultNum = np.int64(Result_Array[i, j])
+                            nNum = np.int64(csvMatrix[i+1, j+1])
+                            #print('nResultNum:{}, nNum:{}'.format(nResultNum, nNum))
+                            if nResultNum == -1 and nNum == 1: #Pass
+                                Result_Array[i, j] = 0
+                            #elif nResultNum != -1 and nNum == 1: #Pass again
+                            #    pass
+                            elif nResultNum == -1 and nNum != 1: #Fail
+                                Result_Array[i, j] = 1
+                            elif nResultNum != -1 and nNum != 1: #Fail again
+                                Result_Array[i, j] = nResultNum + 1
+                        except:
+                            pass
+                        finally:
+                            pass
+
+        #print(Result_Array[45, 29])      
+        #print('Result_Array:{}, Shape:{}'.format(Result_Array, Result_Array.shape))
+        '''
+
+        '''
+        # Output to CSV
+        NowDate = datetime.datetime.now()
+        TimeInfo = '{:04d}{:02d}{:02d}{:02d}{:02d}{:02d}'.format(NowDate.year, NowDate.month, NowDate.day, NowDate.hour, NowDate.minute, NowDate.second)
+        if resultOutFile == '':
+            OutFilename = 'Result_{}.csv'.format(TimeInfo)
+        else:
+            OutFilename = resultOutFile
+        outFile = os.path.join(resultFolder, OutFilename)
+        csvfile = csvhandle.csvhandle()
+        csvfile.WriteCSVToNumpy(outFile, Result_Array)
+        '''
+
+        print('Combine finish!!')
+        if self.callback_Func is not None and self.callback_Caller is not None:
+            self.callback_Func(self.callback_Caller, 'Combine finish!!')
+        return
+
+    def StartTest(self):
+        self.StartCombine(gResultFolder, gResultOutFile)
+        return
+
+if __name__ == "__main__":
+    result = ResultHandler()
+    result.StartCombine(gResultFolder, gResultOutFile)
+    pass
+
+EndTime = time.time()
+print("Durning Program Time(sec): ", EndTime - StartTime)
